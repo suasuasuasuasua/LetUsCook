@@ -1,8 +1,8 @@
-# The Cookbook
+# Let Us Cook
 
 ## Overview
 
-The Cookbook is an app written for macOS that allows user to plan and budget
+Let Us Cook is an app written for macOS that allows user to plan and budget
 meals around a recipe system. This app was written for final project for the
 Spring 2024 session of macOS development at the Colorado School of Mines.
 
