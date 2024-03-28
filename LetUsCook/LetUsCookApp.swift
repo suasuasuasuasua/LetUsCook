@@ -1,6 +1,6 @@
 //
-//  TheCookbookApp.swift
-//  TheCookbook
+//  LetUsCookApp.swift
+//  LetUsCook
 //
 //  Created by Justin Hoang on 3/28/24.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct TheCookbookApp: App {
+struct LetUsCookApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
