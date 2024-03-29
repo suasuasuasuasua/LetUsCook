@@ -30,7 +30,7 @@ jobs:
           xcodebuild clean build
   docs:
     name: Generate swift documentation
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     
     steps:
       - name: Generate Swift Docs
