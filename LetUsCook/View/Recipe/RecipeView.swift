@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Focus on a single recipe in the app
+///
 /// - Allow the user to read and scroll through the recipe
 /// - The user should be able to preview everything about the recipe like...
 ///     - the creation date
