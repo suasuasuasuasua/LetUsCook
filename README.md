@@ -1,5 +1,7 @@
 # Let Us Cook
 
+![Let Him Cook Photo](./Doc/let_him_cook.jpg)
+
 ## Overview
 
 Let Us Cook is an app written for macOS that allows user to plan and budget
