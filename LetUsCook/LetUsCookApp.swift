@@ -10,9 +10,11 @@ import SwiftUI
 
 @main
 struct LetUsCookApp: App {
+    /// Define a model container to store the context for the data in the
+    /// application
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Ingredient.self,
+            Recipe.self,
         ])
         let modelConfiguration = ModelConfiguration(
             schema: schema,
@@ -29,16 +31,21 @@ struct LetUsCookApp: App {
         }
     }()
 
+    /// Define the navigation context for the whole application
+    /// This keeps track of which menus and tabs are open and have been clicked
+    /// on
+    @State var navigationContext = NavigationContext()
+
     var body: some Scene {
         WindowGroup {
-            NavigationSplitView {
-                RecipeGalleryView()
-                CalendarView()
-            }
-            detail: {
-                Text("Select an item")
-            }
+            ContentView()
         }
+        .environment(navigationContext)
         .modelContainer(sharedModelContainer)
+        #if os(macOS)
+            .commands {
+                SidebarCommands()
+            }
+        #endif
     }
 }
