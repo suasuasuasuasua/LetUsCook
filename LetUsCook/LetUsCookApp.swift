@@ -5,19 +5,25 @@
 //  Created by Justin Hoang on 3/28/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct LetUsCookApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Ingredient.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: schema,
+                configurations: [modelConfiguration]
+            )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -25,7 +31,13 @@ struct LetUsCookApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationSplitView {
+                RecipeGalleryView()
+                CalendarView()
+            }
+            detail: {
+                Text("Select an item")
+            }
         }
         .modelContainer(sharedModelContainer)
     }

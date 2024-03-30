@@ -8,20 +8,32 @@
 
 /* Begin PBXBuildFile section */
 		D806B7502BB6039F0043400B /* LetUsCookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B74F2BB6039F0043400B /* LetUsCookApp.swift */; };
-		D806B7522BB6039F0043400B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B7512BB6039F0043400B /* ContentView.swift */; };
-		D806B7542BB6039F0043400B /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B7532BB6039F0043400B /* Item.swift */; };
+		D806B7542BB6039F0043400B /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806B7532BB6039F0043400B /* Ingredient.swift */; };
 		D806B7562BB603A00043400B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D806B7552BB603A00043400B /* Assets.xcassets */; };
 		D806B7592BB603A00043400B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D806B7582BB603A00043400B /* Preview Assets.xcassets */; };
+		D8675D142BB8B312002D0844 /* RecipeGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */; };
+		D8675D162BB8B325002D0844 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D152BB8B325002D0844 /* RecipeView.swift */; };
+		D8675D182BB8B342002D0844 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D172BB8B342002D0844 /* CalendarView.swift */; };
+		D8675D392BB8B4DE002D0844 /* RecipeFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D382BB8B4DE002D0844 /* RecipeFeedView.swift */; };
+		D8675D3B2BB8B6CF002D0844 /* GroceriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D3A2BB8B6CF002D0844 /* GroceriesView.swift */; };
+		D8675D3F2BB8B84E002D0844 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D3E2BB8B84E002D0844 /* Recipe.swift */; };
+		D8675D412BB8B8A3002D0844 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D402BB8B8A3002D0844 /* Instruction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D806B74C2BB6039F0043400B /* LetUsCook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LetUsCook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D806B74F2BB6039F0043400B /* LetUsCookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetUsCookApp.swift; sourceTree = "<group>"; };
-		D806B7512BB6039F0043400B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		D806B7532BB6039F0043400B /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		D806B7532BB6039F0043400B /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
 		D806B7552BB603A00043400B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D806B7582BB603A00043400B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D806B75A2BB603A00043400B /* LetUsCook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LetUsCook.entitlements; sourceTree = "<group>"; };
+		D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGalleryView.swift; sourceTree = "<group>"; };
+		D8675D152BB8B325002D0844 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		D8675D172BB8B342002D0844 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		D8675D382BB8B4DE002D0844 /* RecipeFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeFeedView.swift; sourceTree = "<group>"; };
+		D8675D3A2BB8B6CF002D0844 /* GroceriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceriesView.swift; sourceTree = "<group>"; };
+		D8675D3E2BB8B84E002D0844 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		D8675D402BB8B8A3002D0844 /* Instruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +67,9 @@
 			isa = PBXGroup;
 			children = (
 				D806B74F2BB6039F0043400B /* LetUsCookApp.swift */,
-				D806B7512BB6039F0043400B /* ContentView.swift */,
-				D806B7532BB6039F0043400B /* Item.swift */,
+				D8675D192BB8B350002D0844 /* Model */,
+				D8675D0F2BB8B2E3002D0844 /* View */,
+				D8675D1A2BB8B358002D0844 /* ViewModel */,
 				D806B7552BB603A00043400B /* Assets.xcassets */,
 				D806B75A2BB603A00043400B /* LetUsCook.entitlements */,
 				D806B7572BB603A00043400B /* Preview Content */,
@@ -70,6 +83,35 @@
 				D806B7582BB603A00043400B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D8675D0F2BB8B2E3002D0844 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */,
+				D8675D152BB8B325002D0844 /* RecipeView.swift */,
+				D8675D382BB8B4DE002D0844 /* RecipeFeedView.swift */,
+				D8675D172BB8B342002D0844 /* CalendarView.swift */,
+				D8675D3A2BB8B6CF002D0844 /* GroceriesView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D8675D192BB8B350002D0844 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D8675D3E2BB8B84E002D0844 /* Recipe.swift */,
+				D8675D402BB8B8A3002D0844 /* Instruction.swift */,
+				D806B7532BB6039F0043400B /* Ingredient.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D8675D1A2BB8B358002D0844 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,9 +184,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D806B7522BB6039F0043400B /* ContentView.swift in Sources */,
-				D806B7542BB6039F0043400B /* Item.swift in Sources */,
+				D8675D412BB8B8A3002D0844 /* Instruction.swift in Sources */,
+				D8675D182BB8B342002D0844 /* CalendarView.swift in Sources */,
+				D806B7542BB6039F0043400B /* Ingredient.swift in Sources */,
+				D8675D3B2BB8B6CF002D0844 /* GroceriesView.swift in Sources */,
+				D8675D142BB8B312002D0844 /* RecipeGalleryView.swift in Sources */,
+				D8675D162BB8B325002D0844 /* RecipeView.swift in Sources */,
+				D8675D392BB8B4DE002D0844 /* RecipeFeedView.swift in Sources */,
 				D806B7502BB6039F0043400B /* LetUsCookApp.swift in Sources */,
+				D8675D3F2BB8B84E002D0844 /* Recipe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,7 +323,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LetUsCook/LetUsCook.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
