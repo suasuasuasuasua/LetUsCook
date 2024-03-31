@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationContext.self) private var navigationContext
+
     /// Check if the editor needs to be opened
     @State var isEditorPresented = false
 
@@ -22,10 +23,16 @@ struct ContentView: View {
         .sheet(isPresented: $isEditorPresented) {
             RecipeEditorView(recipe: nil)
         }
-
+        // TODO: try to refactor to another struct view like AddXButton(...)
+        // For some reason, the model context could not be found as a binding
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                AddRecipeButton(isActive: $isEditorPresented)
+                Button {
+                    isEditorPresented = true
+                } label: {
+                    Label("Add a recipe", systemImage: "plus")
+                        .help("Add a recipe")
+                }
             }
             // TODO: take this out when we're done debugging
             // Or leave it in with a warning
@@ -46,27 +53,6 @@ struct ContentView: View {
     }
 }
 
-private struct AddRecipeButton: View {
-    @Binding var isActive: Bool
-
-    var body: some View {
-        Button {
-            isActive = true
-        } label: {
-            Label("Add a recipe", systemImage: "plus")
-                .help("Add a recipe")
-        }
-    }
-}
-
-// TODO: ideally i want the delete all items to be in another struct like this
-// too
-// private struct AddClearButton: View {
-//     @Binding var modelContext: ModelContext
-//
-//     var body: some View {}
-// }
-//
 #Preview {
     ContentView()
 }
