@@ -42,10 +42,8 @@ struct LetUsCookApp: App {
         }
         .environment(navigationContext)
         .modelContainer(sharedModelContainer)
-        #if os(macOS)
-            .commands {
-                SidebarCommands()
-            }
-        #endif
+        .commands {
+            SidebarCommands()
+        }
     }
 }

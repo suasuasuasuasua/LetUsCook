@@ -24,10 +24,11 @@ struct RecipeGalleryView: View {
 //        List(selection: $navigationContext.sidebarTitle) {
 //            
 //        }
+        Text("Recipe Gallery")
         Table(recipes) {
-            TableColumn("Recipe Name") {
-                Text("\($0.name)")
-            }
+            TableColumn("Name", value: \.name)
+            TableColumn("Preparation Time", value: \.prepTime)
+            TableColumn("Cooking Time", value: \.cookTime)
         }
     }
 }

@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(NavigationContext.self) private var navigationContext
     /// Check if the editor needs to be opened
     @State var isEditorPresented = false
+    
 
     var body: some View {
         // TODO: put this in a NavigationSplitView
@@ -42,6 +46,16 @@ private struct AddRecipeButton: View {
     }
 }
 
+//func clearModel(modelContext: ModelContainer) {
+//    do {
+//        try modelContext.delete(model: Recipe.self)
+//        try modelContext.delete(model: Instruction.self)
+//        try modelContext.delete(model: Ingredient.self)
+//    } catch {
+//        print("Failed to delete all the data")
+//    }
+//}
+//
 #Preview {
     ContentView()
 }
