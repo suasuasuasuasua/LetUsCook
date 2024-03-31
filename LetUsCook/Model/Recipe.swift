@@ -62,14 +62,17 @@ final class Recipe {
         self.cookTime = cookTime
         self.comments = comments
         self.ingredients = ingredients
-        self.instructions = instructions
 
         // TODO: cannot do it this way because of mutability rules
         // Point the ingredients and instructions back to the recipe
         for (i, instruction) in instructions.enumerated() {
-//            instruction.index = i
+            // Start indexing from 1
+            let i = i + 1
+            instruction.index = i
 //            instruction.recipe = self
         }
+
+        self.instructions = instructions
     }
 }
 

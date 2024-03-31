@@ -38,7 +38,9 @@ struct RecipeView: View {
                 // TODO: these need to be sorted by index
                 VStack {
                     if let instructions = recipe.instructions {
-                        ForEach(instructions) { instruction in
+                        ForEach(instructions.sorted(by: { i1, i2 in
+                            i1.index < i2.index
+                        })) { instruction in
                             let text = "\(instruction.index). \(instruction.text)"
                             Text("\(text)")
                         }
@@ -47,7 +49,9 @@ struct RecipeView: View {
                 // TODO: these need to be sorted by alphabetically
                 VStack {
                     if let ingredients = recipe.ingredients {
-                        ForEach(ingredients) { ingredient in
+                        ForEach(ingredients.sorted(by: { i1, i2 in
+                            i1.name < i2.name
+                        })) { ingredient in
                             let text = "\(ingredient.name)"
                             Text("\(text)")
                         }
