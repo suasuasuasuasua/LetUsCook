@@ -20,9 +20,9 @@ final class Recipe {
     // TODO: store the photo not as a string
     var photo: String
 
-    // TODO: should we be tracking the dates for the recipes?
-    var creationDate: Date = Date()
-    var updatedDate: Date? = nil
+//    // TODO: should we be tracking the dates for the recipes?
+//    var creationDate: Date
+//    var updatedDate: Date?
 
     // TODO: find a way to make categories unique as well
     var categories: [String] = []
@@ -37,17 +37,13 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    // TODO: Probably need a helper function for this because we'll add the
-    // ingredients line by line
-    @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipe)
-    var ingredients: [Ingredient]
+    @Relationship(deleteRule: .cascade)
+    var ingredients: [Ingredient]?
 
     /// The list of the instructions on how to make the recipe
     /// instructions one by one instead of adding all the instructions at once
-    // TODO: Probably need a helper function for this because we'll add the
-    // instructions line by line
     @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
-    var instructions: [Instruction]
+    var instructions: [Instruction]?
 
     init(
         name: String,
@@ -56,8 +52,8 @@ final class Recipe {
         prepTime: String,
         cookTime: String,
         comments: String,
-        ingredients: [Ingredient] = [],
-        instructions: [Instruction] = []
+        ingredients: [Ingredient],
+        instructions: [Instruction]
     ) {
         self.name = name
         self.photo = photo
@@ -68,16 +64,12 @@ final class Recipe {
         self.ingredients = ingredients
         self.instructions = instructions
 
-//        // TODO: cannot do it this way because of mutability rules
-//        // Point the ingredients and instructions back to the recipe
-//        for ingredient in ingredients {
-//            ingredient.recipe = self
-//        }
-//        
-//        for (i, instruction) in instructions.enumerated() {
+        // TODO: cannot do it this way because of mutability rules
+        // Point the ingredients and instructions back to the recipe
+        for (i, instruction) in instructions.enumerated() {
 //            instruction.index = i
 //            instruction.recipe = self
-//        }
+        }
     }
 }
 

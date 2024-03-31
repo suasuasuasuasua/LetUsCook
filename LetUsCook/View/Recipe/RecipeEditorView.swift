@@ -140,13 +140,21 @@ struct RecipeEditorView: View {
     /// Save the recipe in the model context
     /// If we are editing a recipe, then update the recipe's properties
     private func save() {
+        name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         // TODO: do more input validation here...
         if name.isEmpty {
             return
         }
 
-        print(ingredientsArray)
-        print(instructionsArray)
+        print("Ingredients")
+        for ingredient in ingredientsArray {
+            print(ingredient)
+        }
+        print("Instructions")
+        for instruction in instructionsArray {
+            print(instruction)
+        }
 
         if let recipe {
             // Edit the recipe
@@ -199,7 +207,3 @@ struct IngredientEditor: View {
             .padding()
     }
 }
-
-// #Preview {
-//    RecipeEditorView()
-// }

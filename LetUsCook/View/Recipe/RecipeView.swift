@@ -35,8 +35,24 @@ struct RecipeView: View {
                 Text("Comments: \(recipe.comments)")
             }
             GridRow {
-                Text("\(recipe.instructions)")
-                Text("\(recipe.ingredients)")
+                // TODO: these need to be sorted by index
+                VStack {
+                    if let instructions = recipe.instructions {
+                        ForEach(instructions) { instruction in
+                            let text = "\(instruction.index). \(instruction.text)"
+                            Text("\(text)")
+                        }
+                    }
+                }
+                // TODO: these need to be sorted by alphabetically
+                VStack {
+                    if let ingredients = recipe.ingredients {
+                        ForEach(ingredients) { ingredient in
+                            let text = "\(ingredient.name)"
+                            Text("\(text)")
+                        }
+                    }
+                }
             }
         }
         .navigationTitle("\(recipe.name)")

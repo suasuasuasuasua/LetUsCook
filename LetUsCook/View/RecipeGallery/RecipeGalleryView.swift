@@ -34,6 +34,7 @@ struct RecipeGalleryView: View {
                             // TODO: i want to be able to preview images here
                             label: { Text("\(recipe.name)") }
                         )
+                        .padding()
                     }
                 }
             }
