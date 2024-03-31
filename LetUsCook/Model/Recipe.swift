@@ -19,6 +19,7 @@ final class Recipe {
     var name: String
 
     /// Store the image as a string of bytes or just `Data`
+    @Attribute(.externalStorage)
     var image: Data? = nil
 
 //    // TODO: should we be tracking the dates for the recipes?

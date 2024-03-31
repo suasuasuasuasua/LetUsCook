@@ -50,6 +50,8 @@ struct RecipeEditorView: View {
     /// Or maybe they can add a picture of their own dish after they've cooked
     /// it once
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    // TODO: I have a feeling that the reason for the lag is because the image
+    // is a state variable
     @State private var selectedPhotoData: Data? = nil
 
     /// The categories that the recipe falls under
@@ -122,15 +124,19 @@ struct RecipeEditorView: View {
 
     /// The model context contains the data for the application
     @Environment(\.modelContext) private var modelContext
-    
+
     /// The size of the preview image
     var imageSize = 50.0
 
     var body: some View {
         NavigationStack {
             Form {
-                // The name of the proposed recipe
-                TextField("Name:", text: $name)
+                Section {
+                    // The name of the proposed recipe
+                    TextField("Name:", text: $name)
+                } header: {
+                    HeaderSectionText(text: "What is this recipe called?")
+                }
 
                 // Image Picker
                 Section {
@@ -143,25 +149,28 @@ struct RecipeEditorView: View {
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize)
                     }
-                    HStack {
-                        // Photo selector option
-                        PhotosPicker(selection: $selectedPhoto,
-                                     matching: .images,
-                                     photoLibrary: .shared())
-                        {
-                            Label("Add Image", systemImage: "photo")
-                        }
-                        // Delete button
-                        if selectedPhotoData != nil {
-                            Button(role: .destructive) {
-                                withAnimation {
-                                    self.selectedPhoto = nil
-                                    self.selectedPhotoData = nil
-                                }
-                            } label: {
-                                Label("Remove Image", systemImage: "xmark")
-                                    .foregroundStyle(.red)
+                    // Photo selector option
+                    PhotosPicker(selection: $selectedPhoto,
+                                 matching: .images,
+                                 photoLibrary: .shared())
+                    {
+                        Label("Add Image", systemImage: "photo")
+                    }
+                } header: {
+                    HeaderSectionText(text: "Add an image!")
+                        .italic()
+                        .foregroundStyle(.secondary)
+                } footer: {
+                    // Delete button
+                    if selectedPhotoData != nil {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                self.selectedPhoto = nil
+                                self.selectedPhotoData = nil
                             }
+                        } label: {
+                            Label("Remove Image", systemImage: "xmark")
+                                .foregroundStyle(.red)
                         }
                     }
                 }
@@ -170,12 +179,24 @@ struct RecipeEditorView: View {
 
                 // Time Related Attributes
                 Section {
-                    TextField("Preparation Time:", text: $prepTime)
-                    TextField("Cooking Time:", text: $cookTime)
-                }
+                    TextField("Preparation Time", text: $prepTime)
+                    TextField("Cooking Time", text: $cookTime)
+                } header: {
+                    HeaderSectionText(
+                        text: "How long does this recipe take to cook?"
+                    )
+                    .italic()
+                    .foregroundStyle(.secondary)
+                }.frame(alignment: .leading)
 
-                TextField("Comments:", text: $comments, axis: .vertical)
-                    .lineLimit(1 ... 3)
+                Section {
+                    TextField("Comments:", text: $comments, axis: .vertical)
+                        .lineLimit(1 ... 3)
+                } header: {
+                    HeaderSectionText(
+                        text: "Any final comments about the recipe?"
+                    )
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -218,6 +239,7 @@ struct RecipeEditorView: View {
                 }
             }
             .navigationTitle("Recipe Editor")
+            .padding()
 
             // TODO: don't make it on another page like this...lol
             NavigationLink(
@@ -296,5 +318,15 @@ struct IngredientEditor: View {
             .foregroundStyle(.secondary)
             .navigationTitle("Ingredients")
             .padding()
+    }
+}
+
+struct HeaderSectionText: View {
+    var text: String
+
+    var body: some View {
+        Text("\(text)")
+            .italic()
+            .foregroundStyle(.secondary)
     }
 }

@@ -17,45 +17,44 @@ struct ContentView: View {
 
     var body: some View {
         // TODO: put this in a NavigationSplitView
-        Grid {
-            RecipeGalleryView()
-        }
-        .sheet(isPresented: $isEditorPresented) {
-            RecipeEditorView(recipe: nil)
-        }
-        // TODO: try to refactor to another struct view like AddXButton(...)
-        // For some reason, the model context could not be found as a binding
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    isEditorPresented = true
-                } label: {
-                    Label("Add a recipe", systemImage: "plus")
-                        .help("Add a recipe")
-                }
-                // TODO: make this in the App itself so that we can put the hint
-                // in the menu bar
-                // cmd+n to create an entry
-                .keyboardShortcut("n")
+        RecipeGalleryView()
+            .sheet(isPresented: $isEditorPresented) {
+                RecipeEditorView(recipe: nil)
             }
-            // TODO: take this out when we're done debugging
-            // Or leave it in with a warning
-            ToolbarItem(placement: .destructiveAction) {
-                Button {
-                    do {
-                        try modelContext.delete(model: Recipe.self)
-                    } catch {
-                        print("Failed to delete all the data")
+            // TODO: try to refactor to another struct view like AddXButton(...)
+            // For some reason, the model context could not be found as a
+            // binding
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        isEditorPresented = true
+                    } label: {
+                        Label("Add a recipe", systemImage: "plus")
+                            .help("Add a recipe")
                     }
-                } label: {
-                    Label("Clear all recipes", systemImage: "minus")
-                        .help("Clear all recipes (DEBUG)")
+                    // TODO: make this in the App itself so that we can put the hint
+                    // in the menu bar
+                    // cmd+n to create an entry
+                    .keyboardShortcut("n")
                 }
-                // TODO: remove this in practice
-                // cmd+d to delete all the entries
-                .keyboardShortcut("d")
+                // TODO: take this out when we're done debugging
+                // Or leave it in with a warning
+                ToolbarItem(placement: .destructiveAction) {
+                    Button {
+                        do {
+                            try modelContext.delete(model: Recipe.self)
+                        } catch {
+                            print("Failed to delete all the data")
+                        }
+                    } label: {
+                        Label("Clear all recipes", systemImage: "minus")
+                            .help("Clear all recipes")
+                    }
+                    // TODO: remove this in practice
+                    // cmd+d to delete all the entries
+                    .keyboardShortcut("d")
+                }
             }
-        }
-        .padding()
+            .padding()
     }
 }

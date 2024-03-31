@@ -30,15 +30,23 @@ struct RecipeView: View {
     var body: some View {
         HSplitView {
             VStack {
-                if let image = recipe.image, let image = NSImage(data: image) {
+                if let imageData = recipe.image,
+                   let image = NSImage(data: imageData)
+                {
                     Image(nsImage: image)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 300, height: 300)
                 }
-                Text("Preparation Time: \(recipe.prepTime)")
-                Text("Cook Time: \(recipe.cookTime)")
-                Text("Comments: \(recipe.comments)")
+                LabeledContent("Preparation Time") {
+                    Text("\(recipe.prepTime)")
+                }.frame(alignment: .leading)
+                LabeledContent("Cooking Time") {
+                    Text("\(recipe.cookTime)")
+                }.frame(alignment: .leading)
+                LabeledContent("Comments") {
+                    Text("\(recipe.comments)")
+                }.frame(alignment: .leading)
             }
             .fontWeight(.semibold)
             .font(.system(size: 16.0))
