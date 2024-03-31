@@ -41,7 +41,9 @@ struct LetUsCookApp: App {
             ContentView()
         }
         .environment(navigationContext)
-        .modelContainer(sharedModelContainer)
+        // TODO: uncomment when we want to start with a fresh set
+        // .modelContainer(sharedModelContainer)
+        .modelContainer(previewContainer)
         .commands {
             SidebarCommands()
         }

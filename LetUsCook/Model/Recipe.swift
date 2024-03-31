@@ -14,7 +14,7 @@ final class Recipe {
     // This name could be unique (well this may be a design decision because you
     // can have multiple ways to cook the same dish according to different
     // people)
-//    @Attribute(.unique)
+    @Attribute(.unique)
     var name: String
 
     // TODO: store the photo not as a string
@@ -22,7 +22,7 @@ final class Recipe {
 
     // TODO: should we be tracking the dates for the recipes?
     var creationDate: Date = Date()
-    var updatedDate: Date?
+    var updatedDate: Date? = nil
 
     // TODO: find a way to make categories unique as well
     var categories: [String] = []
@@ -37,8 +37,8 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipes)
-    var ingredients: [Ingredient] = []
+    @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipe)
+    var ingredients: [Ingredient]
 
     /// The list of the instructions on how to make the recipe
     /// instructions one by one instead of adding all the instructions at once
@@ -46,7 +46,7 @@ final class Recipe {
     // instructions line by line
     // TODO: maybe make a convenience init
     @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
-    var instructions: [Instruction] = []
+    var instructions: [Instruction]
 
     init(
         name: String,
@@ -54,7 +54,9 @@ final class Recipe {
         categories: [String],
         prepTime: String,
         cookTime: String,
-        comments: String
+        comments: String,
+        ingredients: [Ingredient] = [],
+        instructions: [Instruction] = []
     ) {
         self.name = name
         self.photo = photo
@@ -62,6 +64,8 @@ final class Recipe {
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
+        self.ingredients = ingredients
+        self.instructions = instructions
     }
 }
 

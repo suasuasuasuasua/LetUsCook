@@ -27,7 +27,7 @@ struct ContentView: View {
         // For some reason, the model context could not be found as a binding
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
+                        Button {
                     isEditorPresented = true
                 } label: {
                     Label("Add a recipe", systemImage: "plus")

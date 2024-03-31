@@ -16,7 +16,7 @@ final class Ingredient {
 
     // TODO: I think an ingredient should point to many recipes, but I'm not 
     // sure about how to annotate that
-    var recipes: [Recipe]?
+    var recipe: Recipe?
 
     init(name: String) {
         self.name = name

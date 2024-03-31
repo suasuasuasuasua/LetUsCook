@@ -20,12 +20,24 @@ struct RecipeGalleryView: View {
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
 
     var body: some View {
-        NavigationStack {
-            RecipeGallery(recipes: recipes)
+        Text("Recipe Gallery")
+
+        // TODO: remove the table after implementing the navigation stack
+        Table(recipes) {
+            TableColumn("Name", value: \.name)
+            TableColumn("Prep Time", value: \.prepTime)
+            TableColumn("Cook Time", value: \.cookTime)
+            TableColumn("Comments", value: \.comments)
         }
+
+//        NavigationStack {
+//            RecipeGallery(recipes: recipes)
+//        }
+        
     }
 }
 
 #Preview {
     RecipeGalleryView()
+        .modelContainer(previewContainer)
 }
