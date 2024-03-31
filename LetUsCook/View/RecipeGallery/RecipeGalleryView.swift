@@ -22,23 +22,22 @@ struct RecipeGalleryView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20, content: {
+            ScrollView(.vertical) {
+                // TODO: refactor to make this less hardcoded in the future
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 200, maximum: 400))],
+                    spacing: 10
+                ) {
                     ForEach(recipes) { recipe in
-                        NavigationLink(destination: {
-                            RecipeView(recipe: recipe)
-                        }, label: {
-                            Text("\(recipe.name)")
-                        })
+                        NavigationLink(
+                            destination: { RecipeView(recipe: recipe) },
+                            // TODO: i want to be able to preview images here
+                            label: { Text("\(recipe.name)") }
+                        )
                     }
-                })
+                }
             }
             .navigationTitle("Recipe Gallery")
         }
     }
-}
-
-#Preview {
-    RecipeGalleryView()
-        .modelContainer(previewContainer)
 }

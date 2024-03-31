@@ -145,7 +145,7 @@ struct RecipeEditorView: View {
             return
         }
 
-    print(ingredientsArray)
+        print(ingredientsArray)
         print(instructionsArray)
 
         if let recipe {
