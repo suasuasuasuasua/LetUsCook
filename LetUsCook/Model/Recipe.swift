@@ -7,25 +7,26 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 final class Recipe {
     /// The name of the recipe
-    // This name could be unique (well this may be a design decision because you
-    // can have multiple ways to cook the same dish according to different
-    // people)
+    /// This name could be unique (well this may be a design decision because
+    /// you can have multiple ways to cook the same dish according to different
+    /// people)
     @Attribute(.unique)
     var name: String
 
-    // TODO: store the photo not as a string
-    var photo: String
+    /// Store the image as a string of bytes or just `Data`
+    var image: Data? = nil
 
 //    // TODO: should we be tracking the dates for the recipes?
 //    var creationDate: Date
 //    var updatedDate: Date?
 
     // TODO: find a way to make categories unique as well
-    var categories: [String] = []
+    var categories: [String]
 
     // TODO: add validation for the the times -- also don't make these strings
     /// The amount of time that it takes for you to prepare the dish
@@ -47,8 +48,8 @@ final class Recipe {
 
     init(
         name: String,
-        photo: String,
-        categories: [String],
+        image: Data?,
+        categories: [String] = [],
         prepTime: String,
         cookTime: String,
         comments: String,
@@ -56,7 +57,7 @@ final class Recipe {
         instructions: [Instruction] = []
     ) {
         self.name = name
-        self.photo = photo
+        self.image = image
         self.categories = categories
         self.prepTime = prepTime
         self.cookTime = cookTime
@@ -70,8 +71,6 @@ final class Recipe {
     /// The reason why we need to update the `Instrucion`s separately is because
     /// we want the `Instruction` to reference the `Recipe`, but technically the
     /// `Recipe` doesn't exist yet in the `modelContext`.
-    ///
-    /// In the recipe
     func updateInstructions(withInstructions instructions: [Instruction]) {
         for (i, instruction) in instructions.enumerated() {
             // Start indexing from 1

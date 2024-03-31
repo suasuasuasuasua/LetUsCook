@@ -30,9 +30,9 @@ class SampleRecipes {
             Ingredient(name: "Milk"),
         ]
 
-        var Toast = Recipe(
+        let Toast = Recipe(
             name: "Toast",
-            photo: "",
+            image: nil,
             categories: [],
             prepTime: "1 minute",
             cookTime: "5 minutes",
@@ -41,9 +41,9 @@ class SampleRecipes {
             instructions: ToastInstructions
         )
 
-        var Cereal = Recipe(
+        let Cereal = Recipe(
             name: "Cereal",
-            photo: "",
+            image: nil,
             categories: [],
             prepTime: "1 minutes",
             cookTime: "0 minutes",

@@ -28,37 +28,54 @@ struct RecipeView: View {
     var recipe: Recipe
 
     var body: some View {
-        Grid {
-            GridRow {
+        HSplitView {
+            VStack {
+                if let image = recipe.image, let image = NSImage(data: image) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300, height: 300)
+                }
                 Text("Preparation Time: \(recipe.prepTime)")
                 Text("Cook Time: \(recipe.cookTime)")
                 Text("Comments: \(recipe.comments)")
             }
-            GridRow {
-                // TODO: these need to be sorted by index
-                VStack {
-                    if let instructions = recipe.instructions {
-                        ForEach(instructions.sorted(by: { i1, i2 in
-                            i1.index < i2.index
-                        })) { instruction in
-                            let text = "\(instruction.index). \(instruction.text)"
-                            Text("\(text)")
+            .fontWeight(.semibold)
+            .font(.system(size: 16.0))
+            .frame(minWidth: 200, maxHeight: .infinity)
+            Grid {
+                GridRow {
+                    Text("Instructions")
+                    Text("Ingredients")
+                }
+                .fontWeight(.heavy)
+                .font(.system(size: 30.0))
+                GridRow {
+                    List {
+                        if let instructions = recipe.instructions {
+                            ForEach(instructions.sorted(by: { i1, i2 in
+                                i1.index < i2.index
+                            })) { instruction in
+                                let text =
+                                    "\(instruction.index). \(instruction.text)"
+                                Text("\(text)")
+                            }
                         }
                     }
-                }
-                // TODO: these need to be sorted by alphabetically
-                VStack {
-                    if let ingredients = recipe.ingredients {
-                        ForEach(ingredients.sorted(by: { i1, i2 in
-                            i1.name < i2.name
-                        })) { ingredient in
-                            let text = "\(ingredient.name)"
-                            Text("\(text)")
+                    List {
+                        if let ingredients = recipe.ingredients {
+                            ForEach(ingredients.sorted(by: { i1, i2 in
+                                i1.name < i2.name
+                            })) { ingredient in
+                                let text = "\(ingredient.name)"
+                                Text("\(text)")
+                            }
                         }
                     }
                 }
             }
         }
         .navigationTitle("\(recipe.name)")
+        .padding()
     }
 }

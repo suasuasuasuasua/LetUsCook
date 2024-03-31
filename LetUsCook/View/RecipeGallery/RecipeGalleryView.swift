@@ -18,7 +18,7 @@ struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationContext.self) private var navigationContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-    var delim: String = ","
+    var iconSize = 50.0
 
     var body: some View {
         NavigationStack {
@@ -32,7 +32,14 @@ struct RecipeGalleryView: View {
                         NavigationLink(
                             destination: { RecipeView(recipe: recipe) },
                             // TODO: i want to be able to preview images here
-                            label: { Text("\(recipe.name)") }
+                            label: {
+                                VStack {
+                                    Text("\(recipe.name)")
+                                    Image(systemName: "arrow.right.circle.fill")
+                                }
+                                .frame(width: iconSize, height: iconSize)
+                                .padding()
+                            }
                         )
                         .padding()
                     }
