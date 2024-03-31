@@ -20,16 +20,36 @@ struct RecipeGalleryView: View {
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
 
     var body: some View {
-        @Bindable var navigationContext = navigationContext
-//        List(selection: $navigationContext.sidebarTitle) {
-//            
-//        }
+        NavigationStack {
+            RecipeGallery(recipes: recipes)
+        }
+    }
+}
+
+struct RecipeGallery: View {
+    var recipes: [Recipe]
+//    @Binding var editing: Bool
+//    let selectRecipe: (Recipe) -> Void
+//    let addRecipe: () -> Void
+
+    var body: some View {
         Text("Recipe Gallery")
+        
         Table(recipes) {
             TableColumn("Name", value: \.name)
-            TableColumn("Preparation Time", value: \.prepTime)
-            TableColumn("Cooking Time", value: \.cookTime)
+            TableColumn("Prep Time", value: \.prepTime)
+            TableColumn("Cook Time", value: \.cookTime)
+            TableColumn("Comments", value: \.comments)
         }
+        
+        
+//        ScrollView {
+//            LazyVGrid(
+//                columns: RecipeGallery([GridItem(200)]),
+//                spacing: 20
+//            ) {
+//                }
+//            }
     }
 }
 

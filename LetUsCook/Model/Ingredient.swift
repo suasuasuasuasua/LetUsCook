@@ -11,11 +11,12 @@ import SwiftData
 @Model
 final class Ingredient {
     /// The name of the ingredient
-    /// `@Attribute(.unique)` could be useful for this
-    // TODO: should I figure out a way to single-ton'ify this? I imagine that
-    // we will have tons of repeat ingredients like sugar, salt, water, etc.
-    // I could track a global counter of all the ingredients in the app.
+    @Attribute(.unique)
     var name: String
+
+    // TODO: I think an ingredient should point to many recipes, but I'm not 
+    // sure about how to annotate that
+    var recipes: [Recipe]?
 
     init(name: String) {
         self.name = name

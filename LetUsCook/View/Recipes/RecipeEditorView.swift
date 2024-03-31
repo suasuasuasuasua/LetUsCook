@@ -92,6 +92,11 @@ struct RecipeEditorView: View {
                 /// up-to-date properties for the recipe when editing it
                 if let recipe {
                     name = recipe.name
+                    photo = recipe.photo
+                    categories = recipe.categories
+                    prepTime = recipe.prepTime
+                    cookTime = recipe.cookTime
+                    comments = recipe.comments
                 }
             }
         }
@@ -101,6 +106,10 @@ struct RecipeEditorView: View {
     /// Save the recipe in the model context
     /// If we are editing a recipe, then update the recipe's properties
     private func save() {
+        // TODO: do input validation here...
+        // - Can't enter an empty name for sure
+        //   - The other fields can probably be empty
+        
         if let recipe {
             // Edit the recipe
             recipe.name = name
@@ -117,11 +126,9 @@ struct RecipeEditorView: View {
                 categories: categories,
                 prepTime: prepTime,
                 cookTime: cookTime,
-                comments: comments,
+                comments: comments
                 // TODO: figure out how to add a list of instructions and
                 // ingredients
-                ingredients: [],
-                instructions: []
             )
 
             // Remember to insert the recipe into the model context after

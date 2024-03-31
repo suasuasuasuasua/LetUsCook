@@ -11,7 +11,7 @@ import SwiftData
 @Model
 final class Instruction {
     /// The recipe that this instruction belongs to
-    var recipe: Recipe
+    var recipe: Recipe?
     
     init(recipe: Recipe) {
         self.recipe = recipe

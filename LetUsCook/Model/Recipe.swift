@@ -11,13 +11,18 @@ import SwiftData
 @Model
 final class Recipe {
     /// The name of the recipe
-    // TODO: this name should be unique (well this may be a design decision 
-    // because you can have multiple ways to cook the same dish according to
-    // different people)
+    // This name could be unique (well this may be a design decision because you
+    // can have multiple ways to cook the same dish according to different
+    // people)
+//    @Attribute(.unique)
     var name: String
 
-    // TODO: store the photo not as a string..
+    // TODO: store the photo not as a string
     var photo: String
+
+    // TODO: should we be tracking the dates for the recipes?
+    var creationDate: Date = Date()
+    var updatedDate: Date?
 
     // TODO: find a way to make categories unique as well
     var categories: [String] = []
@@ -32,9 +37,7 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    /// Use this `@Relationship(deleteRule: .cascade, inverse: \...)`
-    // TODO: should this be assigned at the end of the recipe?
-    // TODO: maybe make a convenience init
+    @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipes)
     var ingredients: [Ingredient] = []
 
     /// The list of the instructions on how to make the recipe
@@ -42,6 +45,7 @@ final class Recipe {
     // TODO: Probably need a helper function for this because we'll add the
     // instructions line by line
     // TODO: maybe make a convenience init
+    @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
     var instructions: [Instruction] = []
 
     init(
@@ -50,9 +54,7 @@ final class Recipe {
         categories: [String],
         prepTime: String,
         cookTime: String,
-        comments: String,
-        ingredients: [Ingredient],
-        instructions: [Instruction]
+        comments: String
     ) {
         self.name = name
         self.photo = photo
@@ -60,8 +62,6 @@ final class Recipe {
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
-        self.ingredients = ingredients
-        self.instructions = instructions
     }
 }
 
