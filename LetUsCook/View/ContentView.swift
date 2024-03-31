@@ -59,7 +59,3 @@ struct ContentView: View {
         .padding()
     }
 }
-
-#Preview {
-    ContentView()
-}

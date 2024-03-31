@@ -25,11 +25,20 @@ import SwiftUI
 ///     - JSON (I like this idea)
 ///     - Some weird proprietary format that I choose
 struct RecipeView: View {
-    var body: some View {
-        Text("Recipe View")
-    }
-}
+    var recipe: Recipe
 
-#Preview {
-    RecipeView()
+    var body: some View {
+        Grid {
+            GridRow {
+                Text("Preparation Time: \(recipe.prepTime)")
+                Text("Cook Time: \(recipe.cookTime)")
+                Text("Comments: \(recipe.comments)")
+            }
+            GridRow {
+                Text("\(recipe.instructions)")
+                Text("\(recipe.ingredients)")
+            }
+        }
+        .navigationTitle("\(recipe.name)")
+    }
 }

@@ -54,19 +54,38 @@ struct RecipeEditorView: View {
             : "Edit Recipe"
     }
 
+    /// Attempt to parse the string into an array of instructions
+    var instructionsArray: [Instruction] {
+        instructions.components(separatedBy: .newlines)
+            .map { instruction in
+                Instruction(text: instruction
+                    .trimmingCharacters(in: .whitespaces))
+            }
+    }
+
+    /// Attempt to parse the string into an array of ingredients
+    var ingredientsArray: [Ingredient] {
+        ingredients.components(separatedBy: .newlines)
+            .map { ingredient in
+                Ingredient(name: ingredient
+                    .trimmingCharacters(in: .whitespaces))
+            }
+    }
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationStack {
             Form {
-                TextField("Name", text: $name)
-                TextField("TODO: Photo", text: $photo)
+                TextField("Name:", text: $name)
+                // TODO: don't make the photo picker a textfield
+                TextField("Photo:", text: $photo)
                 // TextField("TODO: Categories", text: $categories)
-                TextField("Preparation Time", text: $prepTime)
-                TextField("Cooking Time", text: $cookTime)
-                TextField("Comments", text: $comments, axis: .vertical)
-                    .lineLimit(1...3)
+                TextField("Preparation Time:", text: $prepTime)
+                TextField("Cooking Time:", text: $cookTime)
+                TextField("Comments:", text: $comments, axis: .vertical)
+                    .lineLimit(1 ... 3)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -103,6 +122,16 @@ struct RecipeEditorView: View {
                     comments = recipe.comments
                 }
             }
+            .navigationTitle("Recipe Editor")
+            // TODO: don't make it on another page like this...lol
+            NavigationLink(
+                "Instructions",
+                destination: InstructionEditor(instructions: $instructions)
+            )
+            NavigationLink(
+                "Ingredients",
+                destination: IngredientEditor(ingredients: $ingredients)
+            )
         }
         .frame(minWidth: 600)
         .padding()
@@ -116,6 +145,9 @@ struct RecipeEditorView: View {
             return
         }
 
+    print(ingredientsArray)
+        print(instructionsArray)
+
         if let recipe {
             // Edit the recipe
             recipe.name = name
@@ -125,9 +157,8 @@ struct RecipeEditorView: View {
             recipe.cookTime = cookTime
             recipe.comments = comments
 
-            // TODO: cannot cast the string to list of instructions/ingredients
-//            recipe.instructions = instructions
-//            recipe.ingredients = ingredients
+            recipe.instructions = instructionsArray
+            recipe.ingredients = ingredientsArray
         } else {
             // Add a new recipe.
             let newRecipe = Recipe(
@@ -136,14 +167,36 @@ struct RecipeEditorView: View {
                 categories: categories,
                 prepTime: prepTime,
                 cookTime: cookTime,
-                comments: comments
-                // TODO: figure out how to add a list of instructions and
-                // ingredients
+                comments: comments,
+                ingredients: ingredientsArray,
+                instructions: instructionsArray
             )
 
             // Remember to insert the recipe into the model context after
             modelContext.insert(newRecipe)
         }
+    }
+}
+
+struct InstructionEditor: View {
+    @Binding var instructions: String
+
+    var body: some View {
+        TextEditor(text: $instructions)
+            .foregroundStyle(.secondary)
+            .navigationTitle("Instructions")
+            .padding()
+    }
+}
+
+struct IngredientEditor: View {
+    @Binding var ingredients: String
+
+    var body: some View {
+        TextEditor(text: $ingredients)
+            .foregroundStyle(.secondary)
+            .navigationTitle("Ingredients")
+            .padding()
     }
 }
 

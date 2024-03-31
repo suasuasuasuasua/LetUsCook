@@ -27,8 +27,7 @@ final class Instruction {
 extension Instruction: CustomStringConvertible {
     var description: String {
         """
-        Recipe: \(String(describing: recipe?.name)), Index: \(index),
-            \(text)
+        Recipe: \(String(describing: recipe?.name)), Index: \(index), \(text)
         """
     }
 }
@@ -36,6 +35,6 @@ extension Instruction: CustomStringConvertible {
 extension Array where Element == Instruction {
     var description: String {
         return map(String.init)
-            .joined(separator: ",")
+            .joined(separator: "\n")
     }
 }

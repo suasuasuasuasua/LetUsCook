@@ -21,22 +21,20 @@ struct RecipeGalleryView: View {
     var delim: String = ","
 
     var body: some View {
-        Text("Recipe Gallery")
-
-        // TODO: remove the table after implementing the navigation stack
-        Table(recipes) {
-            TableColumn("Name", value: \.name)
-            TableColumn("Prep Time", value: \.prepTime)
-            TableColumn("Cook Time", value: \.cookTime)
-            TableColumn("Instructions") {
-                Text("\($0.instructions.description)")
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 20, content: {
+                    ForEach(recipes) { recipe in
+                        NavigationLink(destination: {
+                            RecipeView(recipe: recipe)
+                        }, label: {
+                            Text("\(recipe.name)")
+                        })
+                    }
+                })
             }
-            TableColumn("Comments", value: \.comments)
+            .navigationTitle("Recipe Gallery")
         }
-        
-//        NavigationStack {
-//            RecipeGallery(recipes: recipes)
-//        }
     }
 }
 
