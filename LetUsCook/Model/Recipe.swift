@@ -52,8 +52,8 @@ final class Recipe {
         prepTime: String,
         cookTime: String,
         comments: String,
-        ingredients: [Ingredient],
-        instructions: [Instruction]
+        ingredients: [Ingredient] = [],
+        instructions: [Instruction] = []
     ) {
         self.name = name
         self.photo = photo
@@ -62,14 +62,22 @@ final class Recipe {
         self.cookTime = cookTime
         self.comments = comments
         self.ingredients = ingredients
+        self.instructions = instructions
+    }
 
-        // TODO: cannot do it this way because of mutability rules
-        // Point the ingredients and instructions back to the recipe
+    /// Update the instructions for a recipe
+    ///
+    /// The reason why we need to update the `Instrucion`s separately is because
+    /// we want the `Instruction` to reference the `Recipe`, but technically the
+    /// `Recipe` doesn't exist yet in the `modelContext`.
+    ///
+    /// In the recipe
+    func updateInstructions(withInstructions instructions: [Instruction]) {
         for (i, instruction) in instructions.enumerated() {
             // Start indexing from 1
             let i = i + 1
             instruction.index = i
-//            instruction.recipe = self
+            instruction.recipe = self
         }
 
         self.instructions = instructions
@@ -78,10 +86,19 @@ final class Recipe {
 
 extension Recipe: CustomStringConvertible {
     var description: String {
-        """
-        Recipe Name: \(name)
-        Ingredients: \(ingredients)
-        Instructions: \(instructions)
-        """
+        return if let ingredients = ingredients,
+                  let instructions = instructions
+        {
+            """
+            Recipe Name: \(name)
+            Ingredients: \(ingredients)
+            Instructions: \(instructions)
+            """
+        } else {
+            """
+            Recipe Name: \(name)
+            Ingredients or instructions is nil..
+            """
+        }
     }
 }

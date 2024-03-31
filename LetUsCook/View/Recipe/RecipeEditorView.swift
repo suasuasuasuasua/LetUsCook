@@ -141,7 +141,7 @@ struct RecipeEditorView: View {
     /// If we are editing a recipe, then update the recipe's properties
     private func save() {
         name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         // TODO: do more input validation here...
         if name.isEmpty {
             return
@@ -176,12 +176,14 @@ struct RecipeEditorView: View {
                 prepTime: prepTime,
                 cookTime: cookTime,
                 comments: comments,
-                ingredients: ingredientsArray,
-                instructions: instructionsArray
+                ingredients: ingredientsArray
             )
 
             // Remember to insert the recipe into the model context after
             modelContext.insert(newRecipe)
+
+            // Update the instructions
+            newRecipe.updateInstructions(withInstructions: instructionsArray)
         }
     }
 }
