@@ -37,6 +37,8 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
+    // TODO: Probably need a helper function for this because we'll add the
+    // ingredients line by line
     @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipe)
     var ingredients: [Ingredient]
 
@@ -44,8 +46,7 @@ final class Recipe {
     /// instructions one by one instead of adding all the instructions at once
     // TODO: Probably need a helper function for this because we'll add the
     // instructions line by line
-    // TODO: maybe make a convenience init
-    @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
+//    @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
     var instructions: [Instruction]
 
     init(
@@ -66,6 +67,17 @@ final class Recipe {
         self.comments = comments
         self.ingredients = ingredients
         self.instructions = instructions
+
+        // TODO: cannot change mutable thing i guess
+        // Point the ingredients and instructions back to the recipe
+        for ingredient in ingredients {
+            ingredient.recipe = self
+        }
+        
+        for (i, instruction) in instructions.enumerated() {
+            instruction.index = i
+            instruction.recipe = self
+        }
     }
 }
 

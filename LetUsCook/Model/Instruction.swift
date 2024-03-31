@@ -10,17 +10,32 @@ import SwiftData
 
 @Model
 final class Instruction {
-    /// The instruction counter
+    /// The instruction counter of the instruction
     var index: Int
     /// The recipe that this instruction belongs to
     var recipe: Recipe?
-    
-    /// The instruction
+    /// The instruction as a description
     var text: String
-    
-    init(index: Int, recipe: Recipe, text: String) {
+
+    init(index: Int = 0, recipe: Recipe? = nil, text: String) {
         self.index = index
         self.recipe = recipe
         self.text = text
+    }
+}
+
+extension Instruction: CustomStringConvertible {
+    var description: String {
+        """
+        Recipe: \(String(describing: recipe?.name)), Index: \(index),
+            \(text)
+        """
+    }
+}
+
+extension Array where Element == Instruction {
+    var description: String {
+        return map(String.init)
+            .joined(separator: ",")
     }
 }

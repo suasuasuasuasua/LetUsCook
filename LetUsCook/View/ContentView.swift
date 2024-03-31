@@ -27,12 +27,16 @@ struct ContentView: View {
         // For some reason, the model context could not be found as a binding
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                        Button {
+                Button {
                     isEditorPresented = true
                 } label: {
                     Label("Add a recipe", systemImage: "plus")
                         .help("Add a recipe")
                 }
+                // TODO: make this in the App itself so that we can put the hint
+                // in the menu bar
+                // cmd+n to create an entry
+                .keyboardShortcut("n")
             }
             // TODO: take this out when we're done debugging
             // Or leave it in with a warning
@@ -47,6 +51,9 @@ struct ContentView: View {
                     Label("Clear all recipes", systemImage: "minus")
                         .help("Clear all recipes (DEBUG)")
                 }
+                // TODO: remove this in practice
+                // cmd+d to delete all the entries
+                .keyboardShortcut("d")
             }
         }
         .padding()

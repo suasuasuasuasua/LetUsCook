@@ -18,6 +18,7 @@ struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(NavigationContext.self) private var navigationContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
+    var delim: String = ","
 
     var body: some View {
         Text("Recipe Gallery")
@@ -27,13 +28,15 @@ struct RecipeGalleryView: View {
             TableColumn("Name", value: \.name)
             TableColumn("Prep Time", value: \.prepTime)
             TableColumn("Cook Time", value: \.cookTime)
+            TableColumn("Instructions") {
+                Text("\($0.instructions.description)")
+            }
             TableColumn("Comments", value: \.comments)
         }
-
+        
 //        NavigationStack {
 //            RecipeGallery(recipes: recipes)
 //        }
-        
     }
 }
 

@@ -41,6 +41,9 @@ struct RecipeEditorView: View {
     @State private var cookTime = ""
     @State private var comments = ""
 
+    @State private var instructions = ""
+    @State private var ingredients = ""
+
     /// We can share the editor view for creating and editing recipes in.
     /// The title will just depend on whether there is a recipe yet or not
     ///
@@ -62,7 +65,8 @@ struct RecipeEditorView: View {
                 // TextField("TODO: Categories", text: $categories)
                 TextField("Preparation Time", text: $prepTime)
                 TextField("Cooking Time", text: $cookTime)
-                TextField("Comments", text: $comments)
+                TextField("Comments", text: $comments, axis: .vertical)
+                    .lineLimit(1...3)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -100,16 +104,18 @@ struct RecipeEditorView: View {
                 }
             }
         }
+        .frame(minWidth: 600)
         .padding()
     }
 
     /// Save the recipe in the model context
     /// If we are editing a recipe, then update the recipe's properties
     private func save() {
-        // TODO: do input validation here...
-        // - Can't enter an empty name for sure
-        //   - The other fields can probably be empty
-        
+        // TODO: do more input validation here...
+        if name.isEmpty {
+            return
+        }
+
         if let recipe {
             // Edit the recipe
             recipe.name = name
@@ -118,6 +124,10 @@ struct RecipeEditorView: View {
             recipe.prepTime = prepTime
             recipe.cookTime = cookTime
             recipe.comments = comments
+
+            // TODO: cannot cast the string to list of instructions/ingredients
+//            recipe.instructions = instructions
+//            recipe.ingredients = ingredients
         } else {
             // Add a new recipe.
             let newRecipe = Recipe(
