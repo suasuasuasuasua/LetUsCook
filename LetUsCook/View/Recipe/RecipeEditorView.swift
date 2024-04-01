@@ -32,7 +32,7 @@ struct RecipeEditorView: View {
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
     /// Otherwise, we are editing a recipe.
     /// Regardless, the data entered by the user create or edit the recipe.
-    let recipe: Recipe?
+    let recipe: Recipe
 
     /// Define all the variables that the user might be able to change as state
     /// variables.
@@ -50,9 +50,7 @@ struct RecipeEditorView: View {
     /// Or maybe they can add a picture of their own dish after they've cooked
     /// it once
     @State private var selectedPhoto: PhotosPickerItem? = nil
-    // TODO: I have a feeling that the reason for the lag is because the image
-    // is a state variable
-    @State private var selectedPhotoData: Data? = nil
+    @State private var photoSelected: Bool = false
 
     /// The categories that the recipe falls under
     ///
@@ -85,40 +83,6 @@ struct RecipeEditorView: View {
     /// text field
     @State private var ingredients = ""
 
-    /// The `instruction` string from the textfield as an array of `Instruction`
-    ///
-    /// Currently, we are separating by newlines but Mela does a cool thing
-    /// where it seems a new textfield is created each time we press 'Enter'.
-    /// The textfields are also automatically labelled with 1, 2, 3, etc.
-    var instructionsArray: [Instruction] {
-        instructions.components(separatedBy: .newlines)
-            .map { instruction in
-                Instruction(text: instruction.trimmingCharacters(
-                    in: .whitespaces
-                ))
-            }
-    }
-
-    /// The `ingredient` string from the textfield as an array of `Ingredient`
-    var ingredientsArray: [Ingredient] {
-        ingredients.components(separatedBy: .newlines)
-            .map { ingredient in
-                Ingredient(name: ingredient.trimmingCharacters(
-                    in: .whitespaces
-                ))
-            }
-    }
-
-    /// We can share the editor view for creating and editing recipes in.
-    /// The title will just depend on whether there is a recipe yet or not
-    ///
-    /// https://developer.apple.com/documentation/swiftdata/adding-and-editing-persistent-data-in-your-app
-    private var editorTitle: String {
-        recipe == nil
-            ? "Add Recipe"
-            : "Edit Recipe"
-    }
-
     /// Dismiss pushes away the current context
     @Environment(\.dismiss) private var dismiss
 
@@ -140,33 +104,41 @@ struct RecipeEditorView: View {
 
                 // Image Picker
                 Section {
-                    // Preview the photo if one has been selected
-                    if let selectedPhotoData,
-                       let image = NSImage(data: selectedPhotoData)
-                    {
-                        Image(nsImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: imageSize, height: imageSize)
-                    }
-                    // Photo selector option
+//                    // TODO: if i display the image, it becomes hella laggy
+//                    // At least for "larger images" like 2mb+
+//                    if let imageData = recipe.imageData,
+//                       let image = NSImage(data: imageData)
+//                    {
+//                        Text("Image size \(imageData.count)")
+//                        Image(nsImage: image)
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 100, height: 100)
+//                    }
+
                     PhotosPicker(selection: $selectedPhoto,
                                  matching: .images,
                                  photoLibrary: .shared())
                     {
-                        Label("Add Image", systemImage: "photo")
+                        Image(systemName: "pencil.circle.fill")
+                            .symbolRenderingMode(.multicolor)
+                            .font(.system(size: 30))
+                            .foregroundStyle(.blue)
                     }
+                    .buttonStyle(.borderless)
+                    //                    EditableRectangularRecipeImage(
+                    //                        selectedPhoto: $selectedPhoto,
+                    //                        photoSelected: $photoSelected
+                    //                    )
                 } header: {
                     HeaderSectionText(text: "Add an image!")
-                        .italic()
-                        .foregroundStyle(.secondary)
                 } footer: {
                     // Delete button
-                    if selectedPhotoData != nil {
+                    if recipe.imageData != nil {
                         Button(role: .destructive) {
                             withAnimation {
                                 self.selectedPhoto = nil
-                                self.selectedPhotoData = nil
+                                recipe.updateImageData(withData: nil)
                             }
                         } label: {
                             Label("Remove Image", systemImage: "xmark")
@@ -218,14 +190,7 @@ struct RecipeEditorView: View {
                 /// If we are editing a recipe, then we don't want to use
                 /// default values in the editor. This ensures that we use
                 /// up-to-date properties for the recipe when editing it
-                if let recipe {
-                    name = recipe.name
-                    selectedPhotoData = recipe.image
-                    categories = recipe.categories
-                    prepTime = recipe.prepTime
-                    cookTime = recipe.cookTime
-                    comments = recipe.comments
-                }
+                name = recipe.name
             }
             /// Perform an async function whenever the photo value changes
             .task(id: selectedPhoto) {
@@ -233,7 +198,7 @@ struct RecipeEditorView: View {
                 if let data = try? await selectedPhoto?
                     .loadTransferable(type: Data.self)
                 {
-                    selectedPhotoData = data
+                    recipe.updateImageData(withData: data)
                 } else {
                     print("Could not turn the photo into data!")
                 }
@@ -260,42 +225,52 @@ struct RecipeEditorView: View {
     private func save() {
         name = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
+        /// The `instruction` string from the textfield as an array of
+        /// `Instruction`
+        ///
+        /// Currently, we are separating by newlines but Mela does a cool thing
+        /// where it seems a new textfield is created each time we press
+        /// 'Enter'.
+        /// The textfields are also automatically labelled with 1, 2, 3, etc.
+        var instructionsArray: [Instruction] {
+            instructions.components(separatedBy: .newlines)
+                .map { instruction in
+                    Instruction(text: instruction.trimmingCharacters(
+                        in: .whitespaces
+                    ))
+                }
+        }
+
+        /// The `ingredient` string from the textfield as an array of
+        /// `Ingredient`
+        var ingredientsArray: [Ingredient] {
+            ingredients.components(separatedBy: .newlines)
+                .map { ingredient in
+                    Ingredient(name: ingredient.trimmingCharacters(
+                        in: .whitespaces
+                    ))
+                }
+        }
         // TODO: do more input validation here...
         if name.isEmpty {
             return
         }
+        // Add a new recipe.
+        let newRecipe = Recipe(
+            name: name,
+            categories: categories,
+            prepTime: prepTime,
+            cookTime: cookTime,
+            comments: comments,
+            ingredients: ingredientsArray
+        )
 
-        if let recipe {
-            // Edit the recipe
-            recipe.name = name
-            recipe.image = selectedPhotoData
-            recipe.categories = categories
-            recipe.prepTime = prepTime
-            recipe.cookTime = cookTime
-            recipe.comments = comments
+        // Remember to insert the recipe into the model context after
+        modelContext.insert(newRecipe)
 
-            recipe.instructions = instructionsArray
-            recipe.ingredients = ingredientsArray
-        } else {
-            // Add a new recipe.
-            let newRecipe = Recipe(
-                name: name,
-                image: selectedPhotoData,
-                categories: categories,
-                prepTime: prepTime,
-                cookTime: cookTime,
-                comments: comments,
-                ingredients: ingredientsArray
-            )
-
-            print(newRecipe.image == nil)
-
-            // Remember to insert the recipe into the model context after
-            modelContext.insert(newRecipe)
-
-            // Update the instructions
-            newRecipe.updateInstructions(withInstructions: instructionsArray)
-        }
+        // Update the instructions
+        newRecipe.updateInstructions(withInstructions: instructionsArray)
+        newRecipe.updateImageData(withData: recipe.imageData)
     }
 }
 
@@ -329,4 +304,54 @@ struct HeaderSectionText: View {
             .italic()
             .foregroundStyle(.secondary)
     }
+}
+
+struct RectangularRecipeImage: View {
+    var body: some View {
+        Image(systemName: "takeoutbag.and.cup.and.straw.fill")
+            .font(.system(size: 40))
+            .foregroundStyle(.white)
+            .scaledToFit()
+            .clipShape(RoundedRectangle(cornerRadius: 10.0))
+            .frame(width: 100, height: 100)
+            .background {
+                RoundedRectangle(cornerRadius: 10.0).fill(
+                    LinearGradient(
+                        colors: [.yellow, .orange],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
+    }
+}
+
+struct EditableRectangularRecipeImage: View {
+    @Binding var selectedPhoto: PhotosPickerItem?
+    @Binding var photoSelected: Bool
+
+    var body: some View {
+        // TODO: do we really need a viewmodel for this?
+        RectangularRecipeImage()
+            .overlay(alignment: .bottomTrailing) {
+                // Photo selector option
+                PhotosPicker(selection: $selectedPhoto,
+                             matching: .images,
+                             photoLibrary: .shared())
+                {
+                    Image(systemName: "pencil.circle.fill")
+                        .symbolRenderingMode(.multicolor)
+                        .font(.system(size: 30))
+                        .foregroundStyle(.blue)
+                }
+                .buttonStyle(.borderless)
+            }
+    }
+}
+
+enum ImageState {
+    case empty
+    case loading(Progress)
+    case success(Image)
+    case failure(Error)
 }

@@ -32,7 +32,6 @@ class SampleRecipes {
 
         let Toast = Recipe(
             name: "Toast",
-            image: nil,
             categories: [],
             prepTime: "1 minute",
             cookTime: "5 minutes",
@@ -43,7 +42,6 @@ class SampleRecipes {
 
         let Cereal = Recipe(
             name: "Cereal",
-            image: nil,
             categories: [],
             prepTime: "1 minutes",
             cookTime: "0 minutes",

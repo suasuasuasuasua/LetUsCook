@@ -19,7 +19,7 @@ struct ContentView: View {
         // TODO: put this in a NavigationSplitView
         RecipeGalleryView()
             .sheet(isPresented: $isEditorPresented) {
-                RecipeEditorView(recipe: nil)
+                RecipeEditorView(recipe: Recipe(name: "New Recipe.."))
             }
             // TODO: try to refactor to another struct view like AddXButton(...)
             // For some reason, the model context could not be found as a
@@ -48,7 +48,7 @@ struct ContentView: View {
                         }
                     } label: {
                         Label("Clear all recipes", systemImage: "minus")
-                            .help("Clear all recipes")
+                            .help("Clear all recipes (DEBUG)")
                     }
                     // TODO: remove this in practice
                     // cmd+d to delete all the entries

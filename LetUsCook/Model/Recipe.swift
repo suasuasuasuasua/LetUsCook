@@ -20,7 +20,7 @@ final class Recipe {
 
     /// Store the image as a string of bytes or just `Data`
     @Attribute(.externalStorage)
-    var image: Data? = nil
+    var imageData: Data? = nil
 
 //    // TODO: should we be tracking the dates for the recipes?
 //    var creationDate: Date
@@ -49,37 +49,19 @@ final class Recipe {
 
     init(
         name: String,
-        image: Data?,
         categories: [String] = [],
-        prepTime: String,
-        cookTime: String,
-        comments: String,
-        ingredients: [Ingredient] = [],
-        instructions: [Instruction] = []
+        prepTime: String = "",
+        cookTime: String = "",
+        comments: String = "",
+        ingredients: [Ingredient]? = [],
+        instructions: [Instruction]? = []
     ) {
         self.name = name
-        self.image = image
         self.categories = categories
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
         self.ingredients = ingredients
-        self.instructions = instructions
-    }
-
-    /// Update the instructions for a recipe
-    ///
-    /// The reason why we need to update the `Instrucion`s separately is because
-    /// we want the `Instruction` to reference the `Recipe`, but technically the
-    /// `Recipe` doesn't exist yet in the `modelContext`.
-    func updateInstructions(withInstructions instructions: [Instruction]) {
-        for (i, instruction) in instructions.enumerated() {
-            // Start indexing from 1
-            let i = i + 1
-            instruction.index = i
-            instruction.recipe = self
-        }
-
         self.instructions = instructions
     }
 }
@@ -100,5 +82,28 @@ extension Recipe: CustomStringConvertible {
             Ingredients or instructions is nil..
             """
         }
+    }
+}
+
+/// Helper functions for the Recipe
+extension Recipe {
+    /// Update the instructions for a recipe
+    ///
+    /// The reason why we need to update the `Instrucion`s separately is because
+    /// we want the `Instruction` to reference the `Recipe`, but technically the
+    /// `Recipe` doesn't exist yet in the `modelContext`.
+    func updateInstructions(withInstructions instructions: [Instruction]) {
+        for (i, instruction) in instructions.enumerated() {
+            // Start indexing from 1
+            let i = i + 1
+            instruction.index = i
+            instruction.recipe = self
+        }
+
+        self.instructions = instructions
+    }
+
+    func updateImageData(withData data: Data?) {
+        imageData = data
     }
 }

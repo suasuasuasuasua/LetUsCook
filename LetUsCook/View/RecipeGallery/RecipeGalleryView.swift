@@ -33,7 +33,7 @@ struct RecipeGalleryView: View {
                             destination: { RecipeView(recipe: recipe) },
                             label: {
                                 VStack(alignment: .center) {
-                                    if let imageData = recipe.image,
+                                    if let imageData = recipe.imageData,
                                        let image = NSImage(data: imageData)
                                     {
                                         Image(nsImage: image)
