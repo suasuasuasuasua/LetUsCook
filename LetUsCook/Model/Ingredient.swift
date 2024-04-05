@@ -27,6 +27,19 @@ extension Ingredient: CustomStringConvertible {
     }
 }
 
+extension Ingredient {
+    /// The `ingredient` string from the textfield as an array of
+    /// `Ingredient`
+    static func parseIngredients(_ ingredients: String) -> [Ingredient] {
+        return ingredients.components(separatedBy: .newlines)
+            .map { ingredient in
+                Ingredient(name: ingredient.trimmingCharacters(
+                    in: .whitespaces
+                ))
+            }
+    }
+}
+
 extension Array where Element == Ingredient {
     var description: String {
         return map(String.init)

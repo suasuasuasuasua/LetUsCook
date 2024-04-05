@@ -18,16 +18,16 @@ final class Recipe {
     @Attribute(.unique)
     var name: String
 
-    /// Store the image as a string of bytes or just `Data`
+    // - cache the photos and ask the user where to store the images
+    // - look into ApplicationSupport
+    // - look into urlcache
+    /// Store a reference URL to the image on the users' system
+    // TODO: we should ask the user where they want to store the data
     @Attribute(.externalStorage)
-    var imageData: Data? = nil
+    var imageData: Data?
 
-//    // TODO: should we be tracking the dates for the recipes?
-//    var creationDate: Date
-//    var updatedDate: Date?
-
-    // TODO: find a way to make categories unique as well
-    var categories: [String]
+    /// The categories or tags that the recipe has
+    var categories: [Category]
 
     // TODO: add validation for the the times -- also don't make these strings
     /// The amount of time that it takes for you to prepare the dish
@@ -35,7 +35,7 @@ final class Recipe {
     /// The amount of time that the dish takes to cook
     var cookTime: String
 
-    /// Any remarks about the dish
+    /// Any final remarks about the dish
     var comments: String
 
     /// The list of ingredients for the recipe
@@ -49,7 +49,8 @@ final class Recipe {
 
     init(
         name: String,
-        categories: [String] = [],
+        imageData: Data? = nil,
+        categories: [Category] = [],
         prepTime: String = "",
         cookTime: String = "",
         comments: String = "",
@@ -57,6 +58,7 @@ final class Recipe {
         instructions: [Instruction]? = []
     ) {
         self.name = name
+        self.imageData = imageData
         self.categories = categories
         self.prepTime = prepTime
         self.cookTime = cookTime
@@ -68,8 +70,8 @@ final class Recipe {
 
 extension Recipe: CustomStringConvertible {
     var description: String {
-        return if let ingredients = ingredients,
-                  let instructions = instructions
+        return if let ingredients,
+                  let instructions
         {
             """
             Recipe Name: \(name)
@@ -85,7 +87,6 @@ extension Recipe: CustomStringConvertible {
     }
 }
 
-/// Helper functions for the Recipe
 extension Recipe {
     /// Update the instructions for a recipe
     ///
@@ -101,9 +102,5 @@ extension Recipe {
         }
 
         self.instructions = instructions
-    }
-
-    func updateImageData(withData data: Data?) {
-        imageData = data
     }
 }

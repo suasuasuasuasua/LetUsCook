@@ -19,7 +19,7 @@ struct ContentView: View {
         // TODO: put this in a NavigationSplitView
         RecipeGalleryView()
             .sheet(isPresented: $isEditorPresented) {
-                RecipeEditorView(recipe: Recipe(name: "New Recipe.."))
+                RecipeEditorView()
             }
             // TODO: try to refactor to another struct view like AddXButton(...)
             // For some reason, the model context could not be found as a

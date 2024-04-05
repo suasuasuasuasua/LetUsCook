@@ -15,8 +15,6 @@ final class Category {
     @Attribute(.unique)
     var name: String
     
-    // TODO: finish all the other fields if there are any..
-    
     init(name: String) {
         self.name = name
     }

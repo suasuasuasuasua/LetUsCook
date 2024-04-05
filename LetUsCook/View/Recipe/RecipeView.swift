@@ -30,6 +30,7 @@ struct RecipeView: View {
     var body: some View {
         HSplitView {
             VStack {
+                // TODO: display the image here
                 if let imageData = recipe.imageData,
                    let image = NSImage(data: imageData)
                 {
