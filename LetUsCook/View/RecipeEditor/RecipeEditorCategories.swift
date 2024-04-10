@@ -9,8 +9,22 @@ import SwiftUI
 
 struct RecipeEditorCategoriesView: View {
     @Binding var categories: [Category]
-    
+
     var body: some View {
-        Text("TODO: Finish adding categories")
+        List {
+            ForEach(categories) { category in
+                Text("\(category.name)")
+            }
+        }
     }
+}
+
+#Preview {
+    let categories = [
+        Category(name: "Breakfast"),
+        Category(name: "Lunch"),
+        Category(name: "Dinner"),
+    ]
+
+    return RecipeEditorCategoriesView(categories: .constant(categories))
 }

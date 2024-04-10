@@ -15,3 +15,7 @@ struct RecipeEditorNameView: View {
         TextField("Name:", text: $name)
     }
 }
+
+#Preview {
+    RecipeEditorNameView(name: .constant("Recipe Name"))
+}

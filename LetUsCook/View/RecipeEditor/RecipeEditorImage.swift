@@ -64,7 +64,16 @@ struct RecipeEditorImageView: View {
                 // TODO: save the image in a cache and point the recipe's
                 // imageURL to it
                 recipe.imageData = loadedData
-            } 
+            }
         }
     }
+}
+
+#Preview {
+    let recipe = Recipe(name: "Toast")
+    
+    return RecipeEditorImageView(
+        recipe: .constant(recipe),
+        selectedPhotoItem: .constant(nil)
+    )
 }

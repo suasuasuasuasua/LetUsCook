@@ -87,5 +87,6 @@ struct RecipeGalleryView: View {
 }
 
 #Preview {
-    Text("bruh")
+    RecipeGalleryView()
+        .modelContainer(previewContainer)
 }

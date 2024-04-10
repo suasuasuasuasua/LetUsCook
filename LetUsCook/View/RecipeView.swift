@@ -55,18 +55,14 @@ struct RecipeView: View {
                 GridRow {
                     List {
                         // TODO: probably don't sort it here. Do it somewhere else..
-                        ForEach(recipe.instructions.sorted(by: { i1, i2 in
-                            i1.index < i2.index
-                        })) { instruction in
+                        ForEach(recipe.instructions) { instruction in
                             let text =
                                 "\(instruction.index). \(instruction.text)"
                             Text("\(text)")
                         }
                     }
                     List {
-                        ForEach(recipe.ingredients.sorted(by: { i1, i2 in
-                            i1.name < i2.name
-                        })) { ingredient in
+                        ForEach(recipe.ingredients) { ingredient in
                             let text = "\(ingredient.name)"
                             Text("\(text)")
                         }
@@ -83,15 +79,12 @@ struct RecipeView: View {
 }
 
 #Preview {
-    // Add a new recipe.
-    let newRecipe = Recipe(
+    let recipe = Recipe(
         name: "Toast",
         prepTime: "5 minutes",
         cookTime: "5 minutes",
-        comments: "Some toast!",
-        instructions: Instruction.parseInstructions("Put the toast in the toaster\nEnjoy!"),
-        ingredients: Ingredient.parseIngredients("A slice of bread")
+        comments: "Some toast!"
     )
 
-    return RecipeView(recipe: newRecipe)
+    return RecipeView(recipe: recipe)
 }

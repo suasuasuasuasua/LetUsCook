@@ -61,8 +61,12 @@ final class Recipe {
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
-        self.instructions = instructions
-        self.ingredients = ingredients
+        self.instructions = instructions.sorted {
+            $0.index < $1.index
+        }
+        self.ingredients = ingredients.sorted {
+            $0.name < $1.name
+        }
     }
 }
 

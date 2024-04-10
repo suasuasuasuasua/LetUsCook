@@ -89,11 +89,11 @@ struct RecipeEditorView: View {
 
             // TODO: I think it's better to use a different textfield because
             // we can't tab into it
-            RecipeTextEditorView(
+            RecipeEditorText(
                 title: "Instruction",
                 input: $instructions
             )
-            RecipeTextEditorView(
+            RecipeEditorText(
                 title: "Ingredients",
                 input: $ingredients
             )
@@ -153,24 +153,6 @@ struct RecipeEditorView: View {
     }
 }
 
-struct RecipeTextEditorView: View {
-    var title: String
-    @Binding var input: String
-
-    var body: some View {
-        HeaderSectionText(text: title)
-        TextEditor(text: $input)
-            .foregroundStyle(.secondary)
-            .navigationTitle(title)
-    }
-}
-
-struct HeaderSectionText: View {
-    var text: String
-
-    var body: some View {
-        Text("\(text)")
-            .italic()
-            .foregroundStyle(.secondary)
-    }
+#Preview {
+    RecipeEditorView()
 }

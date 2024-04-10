@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecipeEditorCommentsView: View {
     @Binding var comments: String
-    
+
     var body: some View {
         HeaderSectionText(
             text: "Any final comments about the recipe?"
@@ -17,4 +17,10 @@ struct RecipeEditorCommentsView: View {
         TextField("Comments:", text: $comments, axis: .vertical)
             .lineLimit(1 ... 3)
     }
+}
+
+#Preview {
+    let comments = "Blah blah blah\nThis is a comment!"
+
+    return RecipeEditorCommentsView(comments: .constant(comments))
 }
