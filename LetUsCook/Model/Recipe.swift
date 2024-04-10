@@ -29,7 +29,6 @@ final class Recipe {
     /// The categories or tags that the recipe has
     var categories: [Category]
 
-    // TODO: add validation for the the times -- also don't make these strings
     /// The amount of time that it takes for you to prepare the dish
     var prepTime: String
     /// The amount of time that the dish takes to cook
@@ -53,8 +52,8 @@ final class Recipe {
         prepTime: String = "",
         cookTime: String = "",
         comments: String = "",
-        ingredients: [Ingredient] = [],
-        instructions: [Instruction] = []
+        instructions: [Instruction] = [],
+        ingredients: [Ingredient] = []
     ) {
         self.name = name
         self.imageData = imageData
@@ -62,8 +61,8 @@ final class Recipe {
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
-        self.ingredients = ingredients
         self.instructions = instructions
+        self.ingredients = ingredients
     }
 }
 

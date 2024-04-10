@@ -6,14 +6,15 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum SidebarItem: String, Identifiable, CaseIterable {
     var id: String { rawValue }
-    
+
     case Gallery
     case Calendar
     case Groceries
-    
+
     var iconName: String {
         switch self {
         case .Gallery:
@@ -23,5 +24,9 @@ enum SidebarItem: String, Identifiable, CaseIterable {
         case .Groceries:
             "list.bullet.clipboard"
         }
+    }
+    
+    var label: Label<Text, Image> {
+        Label(rawValue, systemImage: iconName)
     }
 }

@@ -35,7 +35,7 @@ struct LetUsCookApp: App {
         // Change `WindowGroup` to `Window` so that we can't have multiple
         // windows of the same app open.
         Window("Let Us Cook", id: "main") {
-            ContentView()
+            MainView()
         }
         .modelContainer(sharedModelContainer)
         .commands {
@@ -44,10 +44,10 @@ struct LetUsCookApp: App {
         }
 
         Settings {
-            // TODO: add the settings menu
-            Text("Settings Menu")
+            SettingsView()
                 .padding()
                 .frame(minWidth: 400, minHeight: 300)
+                .navigationTitle("Settings")
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 /// Focus on a single recipe in the app
 ///
@@ -73,7 +74,24 @@ struct RecipeView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .principal) {}
+        }
         .navigationTitle("\(recipe.name)")
         .padding()
     }
+}
+
+#Preview {
+    // Add a new recipe.
+    let newRecipe = Recipe(
+        name: "Toast",
+        prepTime: "5 minutes",
+        cookTime: "5 minutes",
+        comments: "Some toast!",
+        instructions: Instruction.parseInstructions("Put the toast in the toaster\nEnjoy!"),
+        ingredients: Ingredient.parseIngredients("A slice of bread")
+    )
+
+    return RecipeView(recipe: newRecipe)
 }

@@ -7,40 +7,21 @@
 
 import SwiftUI
 
-// Navigation Basics (SUPER HELPFUL!! :))
+// Navigation Basics - SUPER HELPFUL!! :)
 // https://www.youtube.com/watch?v=uE8RCE45Yxc
 struct SidebarView: View {
-    @Binding var selection: SidebarItem
+    @Binding var sidebarSelection: SidebarItem
 
     var body: some View {
-        // TODO: I like the idea of the sections, but hardcoding it like this
-        // feels ICKY
-        List(selection: $selection) {
-            Section("Create") {
-                let item = SidebarItem.Gallery
-                NavigationLink {
-                    // TODO: finish implementing the search filter
-                    RecipeGalleryView()
-                } label: {
-                    Label("\(item.rawValue)", systemImage: item.iconName)
-                        .tag(item)
-                }
-            }
-            Section("Plan") {
-                ForEach([SidebarItem.Calendar,
-                         SidebarItem.Groceries])
-                { item in
-                    NavigationLink {
-                        switch item {
-                        case .Calendar:
-                            CalendarView()
-                        case .Groceries:
-                            GroceriesView()
-                        default:
-                            EmptyView()
-                        }
-                    } label: {
-                        Label("\(item.rawValue)", systemImage: item.iconName)
+        // Create a list of all the sidebar items, but group them by section
+        List(selection: $sidebarSelection) {
+            // Loop over all the groups
+            ForEach(SidebarGroup.allCases) { group in
+                // Create the section for the group
+                Section(group.rawValue) {
+                    // Loop over all the sidebar items in the group
+                    ForEach(group.items) { item in
+                        Label(item.rawValue, systemImage: item.iconName)
                             .tag(item)
                     }
                 }
@@ -48,4 +29,8 @@ struct SidebarView: View {
         }
         .listStyle(.sidebar)
     }
+}
+
+#Preview {
+    SidebarView(sidebarSelection: .constant(.Gallery))
 }

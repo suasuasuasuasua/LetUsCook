@@ -2,21 +2,26 @@
 //  ContentView.swift
 //  LetUsCook
 //
-//  Created by Justin Hoang on 3/30/24.
+//  Created by Justin Hoang on 4/10/24.
 //
 
-import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var selection: SidebarItem = .Gallery
+    @Binding var selection: SidebarItem
 
     var body: some View {
-        NavigationSplitView {
-            SidebarView(selection: $selection)
+        switch selection {
+        case .Gallery:
+            RecipeGalleryView()
+        case .Calendar:
+            CalendarView()
+        case .Groceries:
+            GroceriesView()
         }
-        content: {}
-        detail: {}
     }
+}
+
+#Preview {
+    ContentView(selection: .constant(.Gallery))
 }

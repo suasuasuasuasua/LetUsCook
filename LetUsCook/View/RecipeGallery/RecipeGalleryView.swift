@@ -18,8 +18,13 @@ struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
 
-    @State private var selectedItem: Recipe? = nil
-    @State private var searchItem: String = ""
+    @State private var searchTerm: String = ""
+
+    private var filteredRecipes: [Recipe] {
+        recipes.filter {
+            $0.name.contains(searchTerm)
+        }
+    }
 
     private let iconSize = 75.0
 
@@ -32,27 +37,24 @@ struct RecipeGalleryView: View {
                 ))],
                 spacing: 10
             ) {
+                // Filter the recipes if there is a search term (i.e. the search term is not empty
+                let recipes = (searchTerm.isEmpty)
+                    ? recipes
+                    : filteredRecipes
+
+                // Display each recipe as a navigation link
                 ForEach(recipes) { recipe in
                     NavigationLink {
                         RecipeView(recipe: recipe)
                     }
                     label: {
-                        VStack(alignment: .center) {
-                            Text("Image Here.")
-                            Text("\(recipe.name)")
-                                .bold()
-                        }
-                        .frame(width: iconSize, height: iconSize)
-                    }
-                    // TODO: Save which item is selected so we can edit it
-                    .onTapGesture {
-                        selectedItem = recipe
+                        RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
                     }
                 }
             }
             .navigationTitle("Recipe Gallery")
         }
-        .searchable(text: $searchItem, placement: .toolbar)
+        .searchable(text: $searchTerm, placement: .toolbar)
 
         // TODO: we should have this option in the menubar so that it's
         // obvious that these are commands we can use
@@ -65,16 +67,6 @@ struct RecipeGalleryView: View {
                 }
 
                 .keyboardShortcut("n")
-            }
-            if selectedItem != nil {
-                ToolbarItem(placement: .automatic) {
-                    NavigationLink {
-                        Text("Edit!")
-                    } label: {
-                        Label("Edit the recipe", systemImage: "pencil")
-                    }
-                    .keyboardShortcut("e")
-                }
             }
             ToolbarItem(placement: .destructiveAction) {
                 Button {
@@ -92,4 +84,8 @@ struct RecipeGalleryView: View {
         }
         .padding()
     }
+}
+
+#Preview {
+    Text("bruh")
 }
