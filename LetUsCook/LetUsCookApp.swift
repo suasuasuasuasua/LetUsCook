@@ -31,21 +31,17 @@ struct LetUsCookApp: App {
         }
     }()
 
-    /// Define the navigation context for the whole application
-    /// This keeps track of which menus and tabs are open and have been clicked
-    /// on
-    @State var navigationContext = NavigationContext()
-
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "Recipes") {
             ContentView()
         }
-        .environment(navigationContext)
-//         TODO: uncomment when we want to start with a fresh set
-         .modelContainer(sharedModelContainer)
-//        .modelContainer(previewContainer)
+        .modelContainer(sharedModelContainer)
         .commands {
             SidebarCommands()
+        }
+        
+        Settings {
+            Text("Bruh")
         }
     }
 }

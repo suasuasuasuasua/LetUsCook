@@ -22,7 +22,14 @@ struct RecipeEditorView: View {
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
     /// Otherwise, we are editing a recipe.
     /// Regardless, the data entered by the user create or edit the recipe.
-    @State var recipe: Recipe = .init(name: "New Recipe")
+    let recipe: Recipe = Recipe(name: "New Recipe")
+
+    /// Define all the variables that the user might be able to change as state
+    /// variables.
+    ///
+    /// This ensure that SwiftData does not save changes until the
+    /// user is ready to submit and save those changes. Moreover, the user can
+    /// discard changes if they don't like what they have entered.
 
     /// The name of the recipe
     @State private var name = ""
@@ -73,14 +80,63 @@ struct RecipeEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                RecipeEditorNameView(name: $name)
-                RecipeEditorImageView(
-                    recipe: $recipe,
-                    selectedPhotoItem: $selectedPhoto
-                )
-                RecipeEditorCategoriesView(categories: $categories)
-                RecipeEditorTimeView(prepTime: $prepTime, cookTime: $cookTime)
-                RecipeEditorCommentsView(comments: $comments)
+                Section {
+                    TextField("Name:", text: $name)
+                } header: {
+                    HeaderSectionText(text: "What is this recipe called?")
+                }
+
+                // Image Picker
+                Section {
+                    PhotosPicker(selection: $selectedPhoto,
+                                 matching: .images,
+                                 photoLibrary: .shared())
+                    {
+                        Image(systemName: "pencil.circle.fill")
+                            .symbolRenderingMode(.multicolor)
+                            .font(.system(size: 30))
+                            .foregroundStyle(.blue)
+                    }
+                    .buttonStyle(.borderless)
+                } header: {
+                    HeaderSectionText(text: "Add an image!")
+                } footer: {
+                    // Delete button
+                    if recipe.imageData != nil {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                self.selectedPhoto = nil
+                                recipe.updateImageData(withData: nil)
+                            }
+                        } label: {
+                            Label("Remove Image", systemImage: "xmark")
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+
+//                 TextField("TODO: Categories", text: $categories)
+
+                // Time Related Attributes
+                Section {
+                    TextField("Preparation Time", text: $prepTime)
+                    TextField("Cooking Time", text: $cookTime)
+                } header: {
+                    HeaderSectionText(
+                        text: "How long does this recipe take to cook?"
+                    )
+                    .italic()
+                    .foregroundStyle(.secondary)
+                }.frame(alignment: .leading)
+
+                Section {
+                    TextField("Comments:", text: $comments, axis: .vertical)
+                        .lineLimit(1 ... 3)
+                } header: {
+                    HeaderSectionText(
+                        text: "Any final comments about the recipe?"
+                    )
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

@@ -20,10 +20,10 @@
 		D8675D3F2BB8B84E002D0844 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D3E2BB8B84E002D0844 /* Recipe.swift */; };
 		D8675D412BB8B8A3002D0844 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D402BB8B8A3002D0844 /* Instruction.swift */; };
 		D8675D452BB8BD50002D0844 /* RecipeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D442BB8BD50002D0844 /* RecipeEditorView.swift */; };
-		D8675D472BB8C9C9002D0844 /* NavigationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D462BB8C9C9002D0844 /* NavigationContext.swift */; };
 		D8675D492BB8D79A002D0844 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D482BB8D79A002D0844 /* ContentView.swift */; };
+		D8A7E9EF2BC4A96C00B895C2 /* NavigationItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A7E9EE2BC4A96C00B895C2 /* NavigationItems.swift */; };
 		D8AD17BD2BBAEC5B00F97C48 /* RecipeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AD17BC2BBAEC5B00F97C48 /* RecipeModel.swift */; };
-		D8CFBDF72BB9A738002D982C /* RecipeGalleryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CFBDF62BB9A738002D982C /* RecipeGalleryItem.swift */; };
+		D8C9910B2BC6FCF2003B77DA /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9910A2BC6FCF2003B77DA /* SidebarView.swift */; };
 		D8CFBDFD2BB9BB04002D982C /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CFBDFC2BB9BB04002D982C /* PreviewSampleData.swift */; };
 		D8CFBDFF2BB9BCB3002D982C /* SampleRecipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CFBDFE2BB9BCB3002D982C /* SampleRecipes.swift */; };
 		D8F466452BBDF3160081220D /* RecipeEditorTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F466442BBDF3160081220D /* RecipeEditorTimeView.swift */; };
@@ -49,10 +49,10 @@
 		D8675D3E2BB8B84E002D0844 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		D8675D402BB8B8A3002D0844 /* Instruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
 		D8675D442BB8BD50002D0844 /* RecipeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorView.swift; sourceTree = "<group>"; };
-		D8675D462BB8C9C9002D0844 /* NavigationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationContext.swift; sourceTree = "<group>"; };
 		D8675D482BB8D79A002D0844 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D8A7E9EE2BC4A96C00B895C2 /* NavigationItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationItems.swift; sourceTree = "<group>"; };
 		D8AD17BC2BBAEC5B00F97C48 /* RecipeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeModel.swift; sourceTree = "<group>"; };
-		D8CFBDF62BB9A738002D982C /* RecipeGalleryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGalleryItem.swift; sourceTree = "<group>"; };
+		D8C9910A2BC6FCF2003B77DA /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		D8CFBDFC2BB9BB04002D982C /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		D8CFBDFE2BB9BCB3002D982C /* SampleRecipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRecipes.swift; sourceTree = "<group>"; };
 		D8F466442BBDF3160081220D /* RecipeEditorTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditorTimeView.swift; sourceTree = "<group>"; };
@@ -115,7 +115,9 @@
 			isa = PBXGroup;
 			children = (
 				D8675D482BB8D79A002D0844 /* ContentView.swift */,
-				D8675D422BB8BD33002D0844 /* Recipe */,
+				D8C9910A2BC6FCF2003B77DA /* SidebarView.swift */,
+				D8675D152BB8B325002D0844 /* RecipeView.swift */,
+				D8A7E9F02BC4A9F500B895C2 /* RecipeEditor */,
 				D8CFBDF82BB9A98F002D982C /* RecipeGallery */,
 				D8AD17BB2BBAEC4800F97C48 /* ViewModel */,
 				D8675D382BB8B4DE002D0844 /* RecipeFeedView.swift */,
@@ -132,19 +134,18 @@
 				D83610152BB9A01A00DA47B3 /* Category.swift */,
 				D8675D402BB8B8A3002D0844 /* Instruction.swift */,
 				D806B7532BB6039F0043400B /* Ingredient.swift */,
-				D8675D462BB8C9C9002D0844 /* NavigationContext.swift */,
+				D8A7E9EE2BC4A96C00B895C2 /* NavigationItems.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		D8675D422BB8BD33002D0844 /* Recipe */ = {
+		D8A7E9F02BC4A9F500B895C2 /* RecipeEditor */ = {
 			isa = PBXGroup;
 			children = (
 				D8675D152BB8B325002D0844 /* RecipeView.swift */,
 				D8675D442BB8BD50002D0844 /* RecipeEditorView.swift */,
-				D8F466462BBDF36B0081220D /* RecipeEditorModules */,
 			);
-			path = Recipe;
+			path = RecipeEditor;
 			sourceTree = "<group>";
 		};
 		D8AD17BB2BBAEC4800F97C48 /* ViewModel */ = {
@@ -159,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */,
-				D8CFBDF62BB9A738002D982C /* RecipeGalleryItem.swift */,
 			);
 			path = RecipeGallery;
 			sourceTree = "<group>";
@@ -257,11 +257,12 @@
 			files = (
 				D8675D412BB8B8A3002D0844 /* Instruction.swift in Sources */,
 				D8AD17BD2BBAEC5B00F97C48 /* RecipeModel.swift in Sources */,
-				D8675D472BB8C9C9002D0844 /* NavigationContext.swift in Sources */,
 				D8675D492BB8D79A002D0844 /* ContentView.swift in Sources */,
 				D8675D182BB8B342002D0844 /* CalendarView.swift in Sources */,
+				D8C9910B2BC6FCF2003B77DA /* SidebarView.swift in Sources */,
 				D806B7542BB6039F0043400B /* Ingredient.swift in Sources */,
 				D8675D452BB8BD50002D0844 /* RecipeEditorView.swift in Sources */,
+				D8A7E9EF2BC4A96C00B895C2 /* NavigationItems.swift in Sources */,
 				D8675D3B2BB8B6CF002D0844 /* GroceriesView.swift in Sources */,
 				D8F4664E2BBDF5740081220D /* RecipeEditorCategoriesView.swift in Sources */,
 				D8675D142BB8B312002D0844 /* RecipeGalleryView.swift in Sources */,
@@ -276,7 +277,6 @@
 				D8F4664C2BBDF54C0081220D /* RecipeEditorNameView.swift in Sources */,
 				D806B7502BB6039F0043400B /* LetUsCookApp.swift in Sources */,
 				D8675D3F2BB8B84E002D0844 /* Recipe.swift in Sources */,
-				D8CFBDF72BB9A738002D982C /* RecipeGalleryItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +436,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LetUsCook/LetUsCook.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;

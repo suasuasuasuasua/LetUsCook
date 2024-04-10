@@ -28,17 +28,17 @@ struct RecipeView: View {
     var recipe: Recipe
 
     var body: some View {
-        HSplitView {
+        VStack {
             VStack {
-                // TODO: display the image here
-                if let imageData = recipe.imageData,
-                   let image = NSImage(data: imageData)
-                {
-                    Image(nsImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300, height: 300)
-                }
+//                if let imageData = recipe.imageData,
+//                   let image = NSImage(data: imageData)
+//                {
+//                    Image(nsImage: image)
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 300, height: 300)
+//                }
+                Text("Image here.")
                 LabeledContent("Preparation Time") {
                     Text("\(recipe.prepTime)")
                 }.frame(alignment: .leading)
