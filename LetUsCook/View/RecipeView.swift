@@ -30,14 +30,6 @@ struct RecipeView: View {
     var body: some View {
         VStack {
             VStack {
-//                if let imageData = recipe.imageData,
-//                   let image = NSImage(data: imageData)
-//                {
-//                    Image(nsImage: image)
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 300, height: 300)
-//                }
                 Text("Image here.")
                 LabeledContent("Preparation Time") {
                     Text("\(recipe.prepTime)")
@@ -61,24 +53,21 @@ struct RecipeView: View {
                 .font(.system(size: 30.0))
                 GridRow {
                     List {
-                        if let instructions = recipe.instructions {
-                            ForEach(instructions.sorted(by: { i1, i2 in
-                                i1.index < i2.index
-                            })) { instruction in
-                                let text =
-                                    "\(instruction.index). \(instruction.text)"
-                                Text("\(text)")
-                            }
+                        // TODO: probably don't sort it here. Do it somewhere else..
+                        ForEach(recipe.instructions.sorted(by: { i1, i2 in
+                            i1.index < i2.index
+                        })) { instruction in
+                            let text =
+                                "\(instruction.index). \(instruction.text)"
+                            Text("\(text)")
                         }
                     }
                     List {
-                        if let ingredients = recipe.ingredients {
-                            ForEach(ingredients.sorted(by: { i1, i2 in
-                                i1.name < i2.name
-                            })) { ingredient in
-                                let text = "\(ingredient.name)"
-                                Text("\(text)")
-                            }
+                        ForEach(recipe.ingredients.sorted(by: { i1, i2 in
+                            i1.name < i2.name
+                        })) { ingredient in
+                            let text = "\(ingredient.name)"
+                            Text("\(text)")
                         }
                     }
                 }

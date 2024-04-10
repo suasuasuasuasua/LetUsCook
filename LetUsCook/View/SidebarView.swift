@@ -7,31 +7,23 @@
 
 import SwiftUI
 
+// Navigation Basics (SUPER HELPFUL!! :))
+// https://www.youtube.com/watch?v=uE8RCE45Yxc
 struct SidebarView: View {
     @Binding var selection: SidebarItem
 
     var body: some View {
-        // Navigation Basics (SUPER HELPFUL!! :))
-        // https://www.youtube.com/watch?v=uE8RCE45Yxc
+        // TODO: I like the idea of the sections, but hardcoding it like this
+        // feels ICKY
         List(selection: $selection) {
-            // TODO: I like the sections, but hardcoding it like this feels ICKY
-            Section("View") {
-                ForEach([SidebarItem.Editor,
-                         SidebarItem.Gallery])
-                { item in
-                    NavigationLink {
-                        switch item {
-                        case .Editor:
-                            RecipeEditorView()
-                        case .Gallery:
-                            RecipeGalleryView()
-                        default:
-                            EmptyView()
-                        }
-                    } label: {
-                        Label("\(item.rawValue)", systemImage: item.iconName)
-                            .tag(item)
-                    }
+            Section("Create") {
+                let item = SidebarItem.Gallery
+                NavigationLink {
+                    // TODO: finish implementing the search filter
+                    RecipeGalleryView()
+                } label: {
+                    Label("\(item.rawValue)", systemImage: item.iconName)
+                        .tag(item)
                 }
             }
             Section("Plan") {
@@ -40,10 +32,10 @@ struct SidebarView: View {
                 { item in
                     NavigationLink {
                         switch item {
-                        case .Editor:
-                            RecipeEditorView()
-                        case .Gallery:
-                            RecipeGalleryView()
+                        case .Calendar:
+                            CalendarView()
+                        case .Groceries:
+                            GroceriesView()
                         default:
                             EmptyView()
                         }

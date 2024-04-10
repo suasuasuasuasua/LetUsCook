@@ -32,16 +32,22 @@ struct LetUsCookApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup(id: "Recipes") {
+        // Change `WindowGroup` to `Window` so that we can't have multiple
+        // windows of the same app open.
+        Window("Let Us Cook", id: "main") {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
         .commands {
             SidebarCommands()
+            // TODO: also do CMD-1,2,3,etc. to go through the sidebar items
         }
-        
+
         Settings {
-            Text("Bruh")
+            // TODO: add the settings menu
+            Text("Settings Menu")
+                .padding()
+                .frame(minWidth: 400, minHeight: 300)
         }
     }
 }

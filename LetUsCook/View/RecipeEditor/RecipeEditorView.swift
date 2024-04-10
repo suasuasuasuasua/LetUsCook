@@ -22,7 +22,7 @@ struct RecipeEditorView: View {
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
     /// Otherwise, we are editing a recipe.
     /// Regardless, the data entered by the user create or edit the recipe.
-    let recipe: Recipe = Recipe(name: "New Recipe")
+    @State var recipe: Recipe = .init(name: "New Recipe")
 
     /// Define all the variables that the user might be able to change as state
     /// variables.
@@ -78,100 +78,43 @@ struct RecipeEditorView: View {
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("Name:", text: $name)
-                } header: {
-                    HeaderSectionText(text: "What is this recipe called?")
-                }
+        Form {
+            RecipeEditorNameView(name: $name)
+            RecipeEditorImageView(
+                recipe: $recipe,
+                selectedPhotoItem: $selectedPhoto
+            )
+            RecipeEditorTimeView(prepTime: $prepTime, cookTime: $cookTime)
+            RecipeEditorCommentsView(comments: $comments)
 
-                // Image Picker
-                Section {
-                    PhotosPicker(selection: $selectedPhoto,
-                                 matching: .images,
-                                 photoLibrary: .shared())
-                    {
-                        Image(systemName: "pencil.circle.fill")
-                            .symbolRenderingMode(.multicolor)
-                            .font(.system(size: 30))
-                            .foregroundStyle(.blue)
-                    }
-                    .buttonStyle(.borderless)
-                } header: {
-                    HeaderSectionText(text: "Add an image!")
-                } footer: {
-                    // Delete button
-                    if recipe.imageData != nil {
-                        Button(role: .destructive) {
-                            withAnimation {
-                                self.selectedPhoto = nil
-                                recipe.updateImageData(withData: nil)
-                            }
-                        } label: {
-                            Label("Remove Image", systemImage: "xmark")
-                                .foregroundStyle(.red)
-                        }
-                    }
-                }
-
-//                 TextField("TODO: Categories", text: $categories)
-
-                // Time Related Attributes
-                Section {
-                    TextField("Preparation Time", text: $prepTime)
-                    TextField("Cooking Time", text: $cookTime)
-                } header: {
-                    HeaderSectionText(
-                        text: "How long does this recipe take to cook?"
-                    )
-                    .italic()
-                    .foregroundStyle(.secondary)
-                }.frame(alignment: .leading)
-
-                Section {
-                    TextField("Comments:", text: $comments, axis: .vertical)
-                        .lineLimit(1 ... 3)
-                } header: {
-                    HeaderSectionText(
-                        text: "Any final comments about the recipe?"
-                    )
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        withAnimation {
-                            save()
-                            dismiss()
-                        }
-                    }
-                }
-
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) {
+            // TODO: I think it's better to use a different textfield because
+            // we can't tab into it
+            RecipeTextEditorView(
+                title: "Instruction",
+                input: $instructions
+            )
+            RecipeTextEditorView(
+                title: "Ingredients",
+                input: $ingredients
+            )
+        }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
+                    withAnimation {
+                        save()
                         dismiss()
                     }
                 }
             }
-            .navigationTitle("Recipe Editor")
 
-            // TODO: don't make it on another page like this
-            NavigationLink(
-                "Instructions",
-                destination: RecipeTextEditorView(
-                    title: "Instruction",
-                    input: $instructions
-                )
-            )
-            NavigationLink(
-                "Ingredients",
-                destination: RecipeTextEditorView(
-                    title: "Ingredients",
-                    input: $ingredients
-                )
-            )
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel", role: .cancel) {
+                    dismiss()
+                }
+            }
         }
+        .navigationTitle("Recipe Editor")
         .frame(minWidth: 600)
         .padding()
     }
@@ -204,7 +147,8 @@ struct RecipeEditorView: View {
         // Remember to insert the recipe into the model context after
         modelContext.insert(newRecipe)
 
-        // Update the instructions
+        // The item has to first exist in the model context before we can create
+        // any links to other existing items!!
         newRecipe.updateInstructions(withInstructions: instructions)
     }
 }
@@ -214,10 +158,10 @@ struct RecipeTextEditorView: View {
     @Binding var input: String
 
     var body: some View {
+        HeaderSectionText(text: title)
         TextEditor(text: $input)
             .foregroundStyle(.secondary)
             .navigationTitle(title)
-            .padding()
     }
 }
 

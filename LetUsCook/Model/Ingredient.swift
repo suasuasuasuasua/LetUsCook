@@ -39,10 +39,3 @@ extension Ingredient {
             }
     }
 }
-
-extension Array where Element == Ingredient {
-    var description: String {
-        return map(String.init)
-            .joined(separator: ",")
-    }
-}

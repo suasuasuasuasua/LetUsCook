@@ -39,13 +39,12 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    @Relationship(deleteRule: .cascade)
-    var ingredients: [Ingredient]?
+    var ingredients: [Ingredient]
 
     /// The list of the instructions on how to make the recipe
     /// instructions one by one instead of adding all the instructions at once
     @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
-    var instructions: [Instruction]?
+    var instructions: [Instruction]
 
     init(
         name: String,
@@ -54,8 +53,8 @@ final class Recipe {
         prepTime: String = "",
         cookTime: String = "",
         comments: String = "",
-        ingredients: [Ingredient]? = [],
-        instructions: [Instruction]? = []
+        ingredients: [Ingredient] = [],
+        instructions: [Instruction] = []
     ) {
         self.name = name
         self.imageData = imageData
@@ -70,27 +69,18 @@ final class Recipe {
 
 extension Recipe: CustomStringConvertible {
     var description: String {
-        return if let ingredients,
-                  let instructions
-        {
-            """
-            Recipe Name: \(name)
-            Ingredients: \(ingredients)
-            Instructions: \(instructions)
-            """
-        } else {
-            """
-            Recipe Name: \(name)
-            Ingredients or instructions is nil..
-            """
-        }
+        return """
+               Recipe Name: \(name)
+               Ingredients: \(ingredients)
+               Instructions: \(instructions)
+               """
     }
 }
 
 extension Recipe {
     /// Update the instructions for a recipe
     ///
-    /// The reason why we need to update the `Instrucion`s separately is because
+    /// The reason why we need to update the `Instruction`s separately is because
     /// we want the `Instruction` to reference the `Recipe`, but technically the
     /// `Recipe` doesn't exist yet in the `modelContext`.
     func updateInstructions(withInstructions instructions: [Instruction]) {

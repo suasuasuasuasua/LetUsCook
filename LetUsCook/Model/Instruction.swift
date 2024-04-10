@@ -49,10 +49,3 @@ extension Instruction {
             }
     }
 }
-
-extension Array where Element == Instruction {
-    var description: String {
-        return map(String.init)
-            .joined(separator: "\n")
-    }
-}

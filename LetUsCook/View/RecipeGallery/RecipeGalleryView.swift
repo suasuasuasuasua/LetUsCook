@@ -16,47 +16,79 @@ import SwiftUI
 /// - Quick edit or delete from the gallery using a right-click
 struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
-
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-    var iconSize = 150.0
+
+    @State private var selectedItem: Recipe? = nil
+    @State private var searchItem: String = ""
+
+    private let iconSize = 75.0
 
     var body: some View {
         ScrollView(.vertical) {
-            // TODO: refactor to make this less hardcoded in the future
             LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 200, maximum: 400))],
+                columns: [GridItem(.adaptive(
+                    minimum: iconSize * 1.5,
+                    maximum: iconSize * 2
+                ))],
                 spacing: 10
             ) {
                 ForEach(recipes) { recipe in
-                    NavigationLink(
-                        destination: { RecipeView(recipe: recipe) },
-                        label: {
-                            VStack(alignment: .center) {
-                                //                                    if let
-                                //                                    imageData
-                                //                                    = recipe.imageData,
-                                //                                       let
-                                //                                       image = NSImage(data:
-                                //                                       imageData)
-                                //                                    {
-                                //                                        Image(nsImage: image)
-                                //                                            .resizable()
-                                //                                            .scaledToFit()
-                                //                                            .clipShape(RoundedRectangle(
-                                //                                                cornerRadius: 10,
-                                //                                                style: .continuous
-                                //                                            ))
-                                //                                    }
-                                Text("Image Here.")
-                                Text("\(recipe.name)")
-                                    .bold()
-                            }
-                            .frame(width: iconSize, height: iconSize)
+                    NavigationLink {
+                        RecipeView(recipe: recipe)
+                    }
+                    label: {
+                        VStack(alignment: .center) {
+                            Text("Image Here.")
+                            Text("\(recipe.name)")
+                                .bold()
                         }
-                    )
+                        .frame(width: iconSize, height: iconSize)
+                    }
+                    // TODO: Save which item is selected so we can edit it
+                    .onTapGesture {
+                        selectedItem = recipe
+                    }
                 }
             }
             .navigationTitle("Recipe Gallery")
+        }
+        .searchable(text: $searchItem, placement: .toolbar)
+
+        // TODO: we should have this option in the menubar so that it's
+        // obvious that these are commands we can use
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink {
+                    RecipeEditorView()
+                } label: {
+                    Label("Create new recipe", systemImage: "plus")
+                }
+
+                .keyboardShortcut("n")
+            }
+            if selectedItem != nil {
+                ToolbarItem(placement: .automatic) {
+                    NavigationLink {
+                        Text("Edit!")
+                    } label: {
+                        Label("Edit the recipe", systemImage: "pencil")
+                    }
+                    .keyboardShortcut("e")
+                }
+            }
+            ToolbarItem(placement: .destructiveAction) {
+                Button {
+                    do {
+                        try modelContext.delete(model: Recipe.self)
+                    } catch {
+                        print("Failed to delete all the data")
+                    }
+                } label: {
+                    Label("Clear all recipes", systemImage: "minus")
+                        .help("Clear all recipes (DEBUG)")
+                }
+                .keyboardShortcut("d")
+            }
         }
         .padding()
     }

@@ -17,15 +17,16 @@ struct RecipeEditorImageView: View {
     private let imageSize = 50.0
 
     var body: some View {
-        VStack {
-            HeaderSectionText(text: "Add an image!")
+        HeaderSectionText(text: "Add an image!")
 
-            // Load the image when the photo has been selected
-            selectedPhotoImage?
-                .resizable()
-                .scaledToFit()
-                .frame(width: 300, height: 300)
+        // TODO: WHY IS IT ROTATING IMAGES RANDOMLY?!!?
+        // Load the image when the photo has been selected
+        selectedPhotoImage?
+            .resizable()
+            .scaledToFit()
+            .frame(height: imageSize)
 
+        HStack {
             // Add an option to pull images from the user's photos album
             PhotosPicker(selection: $selectedPhotoItem,
                          matching: .images,
@@ -50,11 +51,12 @@ struct RecipeEditorImageView: View {
                 }
             }
         }
+        // TODO: i don't really like how this is done here..
         /// Perform an async function whenever the photo value changes
         .task(id: selectedPhotoItem) {
             if let loadedImage = try? await selectedPhotoItem?
                 .loadTransferable(type: Image.self),
-               let loadedData = try? await selectedPhotoItem?
+                let loadedData = try? await selectedPhotoItem?
                 .loadTransferable(type: Data.self)
             {
                 selectedPhotoImage = loadedImage
@@ -62,9 +64,7 @@ struct RecipeEditorImageView: View {
                 // TODO: save the image in a cache and point the recipe's
                 // imageURL to it
                 recipe.imageData = loadedData
-            } else {
-                print("Failed to load the image..")
-            }
+            } 
         }
     }
 }

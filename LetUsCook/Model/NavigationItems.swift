@@ -10,15 +10,12 @@ import Foundation
 enum SidebarItem: String, Identifiable, CaseIterable {
     var id: String { rawValue }
     
-    case Editor
     case Gallery
     case Calendar
     case Groceries
     
     var iconName: String {
         switch self {
-        case .Editor:
-            "pencil.circle"
         case .Gallery:
             "book"
         case .Calendar:
