@@ -12,11 +12,18 @@ struct RecipeEditorTimeView: View {
     @Binding var cookTime: String
 
     var body: some View {
-        HeaderSectionText(
-            text: "How long does this recipe take to cook?"
-        )
-        TextField("Preparation Time", text: $prepTime)
-        TextField("Cooking Time", text: $cookTime)
+        Section("Time") {
+            TextField(
+                "Preparation Time",
+                text: $prepTime,
+                prompt: Text("How long does this recipe take to prepare?")
+            )
+            TextField(
+                "Cooking Time",
+                text: $cookTime,
+                prompt: Text("How long does this recipe take to cook?")
+            )
+        }
     }
 }
 

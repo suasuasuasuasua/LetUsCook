@@ -9,13 +9,18 @@ import SwiftUI
 
 struct RecipeEditorNameView: View {
     @Binding var name: String
-    
+
     var body: some View {
-        HeaderSectionText(text: "What is this recipe called?")
-        TextField("Name:", text: $name)
+        Section("Name") {
+            TextField(
+                "",
+                text: $name,
+                prompt: Text("What is this recipe called?")
+            )
+        }
     }
 }
 
 #Preview {
-    RecipeEditorNameView(name: .constant("Recipe Name"))
+    RecipeEditorNameView(name: .constant(""))
 }

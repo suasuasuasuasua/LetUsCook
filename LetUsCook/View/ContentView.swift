@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var selection: SidebarItem
+    @Binding var sidebarSelection: SidebarItem
 
     var body: some View {
-        switch selection {
+        switch sidebarSelection {
         case .Gallery:
             RecipeGalleryView()
+                .navigationTitle(sidebarSelection.rawValue)
         case .Calendar:
             CalendarView()
+                .navigationTitle(sidebarSelection.rawValue)
         case .Groceries:
             GroceriesView()
+                .navigationTitle(sidebarSelection.rawValue)
         }
     }
 }
 
 #Preview {
-    ContentView(selection: .constant(.Gallery))
+    ContentView(sidebarSelection: .constant(.Gallery))
 }

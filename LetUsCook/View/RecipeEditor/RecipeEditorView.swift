@@ -98,6 +98,9 @@ struct RecipeEditorView: View {
                 input: $ingredients
             )
         }
+        .textFieldStyle(.roundedBorder)
+        
+        // Add buttons to the toolbar
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {

@@ -11,11 +11,15 @@ struct RecipeEditorCommentsView: View {
     @Binding var comments: String
 
     var body: some View {
-        HeaderSectionText(
-            text: "Any final comments about the recipe?"
-        )
-        TextField("Comments:", text: $comments, axis: .vertical)
+        Section("Comments") {
+            TextField(
+                "",
+                text: $comments,
+                prompt: Text("Any final comments?"),
+                axis: .vertical
+            )
             .lineLimit(1 ... 3)
+        }
     }
 }
 

@@ -12,18 +12,19 @@ struct RecipeGalleryIcon: View {
     let iconSize: CGFloat
 
     var body: some View {
-        VStack(alignment: .center) {
+        HStack{
             Text("Image Here.")
+                .frame(width: iconSize, height: iconSize)
+                .border(.black)
             Text("\(recipe.name)")
                 .bold()
         }
-        .frame(width: iconSize, height: iconSize)
     }
 }
 
 #Preview {
     let recipe = Recipe(name: "Toast")
-    let iconSize: CGFloat = 50
+    let iconSize: CGFloat = 75
 
     return RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
 }

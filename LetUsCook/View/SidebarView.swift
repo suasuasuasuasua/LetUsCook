@@ -14,16 +14,13 @@ struct SidebarView: View {
 
     var body: some View {
         // Create a list of all the sidebar items, but group them by section
-        List(selection: $sidebarSelection) {
-            // Loop over all the groups
-            ForEach(SidebarGroup.allCases) { group in
-                // Create the section for the group
-                Section(group.rawValue) {
-                    // Loop over all the sidebar items in the group
-                    ForEach(group.items) { item in
-                        Label(item.rawValue, systemImage: item.iconName)
-                            .tag(item)
-                    }
+        List(SidebarGroup.allCases, selection: $sidebarSelection) { group in
+            // Create the section for the group
+            Section(group.rawValue) {
+                // Loop over all the sidebar items in the group
+                ForEach(group.items) { item in
+                    Label(item.rawValue, systemImage: item.iconName)
+                        .tag(item)
                 }
             }
         }

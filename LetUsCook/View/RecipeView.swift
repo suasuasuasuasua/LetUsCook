@@ -5,8 +5,8 @@
 //  Created by Justin Hoang on 3/30/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// Focus on a single recipe in the app
 ///
@@ -29,9 +29,11 @@ struct RecipeView: View {
     var recipe: Recipe
 
     var body: some View {
-        VStack {
-            VStack {
+        HSplitView {
+            VStack(alignment: .leading) {
                 Text("Image here.")
+                    .padding()
+                    .border(.black)
                 LabeledContent("Preparation Time") {
                     Text("\(recipe.prepTime)")
                 }.frame(alignment: .leading)
@@ -44,37 +46,52 @@ struct RecipeView: View {
             }
             .fontWeight(.semibold)
             .font(.system(size: 16.0))
-            .frame(minWidth: 200, maxHeight: .infinity)
-            Grid {
-                GridRow {
-                    Text("Instructions")
-                    Text("Ingredients")
+
+            VStack {
+                Text("Instructions")
+                    .fontWeight(.heavy)
+                    .font(.system(size: 30.0))
+                List(recipe.instructions) { instruction in
+                    Text("\(instruction.index). \(instruction.text)")
                 }
-                .fontWeight(.heavy)
-                .font(.system(size: 30.0))
-                GridRow {
-                    List {
-                        // TODO: probably don't sort it here. Do it somewhere else..
-                        ForEach(recipe.instructions) { instruction in
-                            let text =
-                                "\(instruction.index). \(instruction.text)"
-                            Text("\(text)")
-                        }
-                    }
-                    List {
-                        ForEach(recipe.ingredients) { ingredient in
-                            let text = "\(ingredient.name)"
-                            Text("\(text)")
-                        }
-                    }
+                Text("Ingredients")
+                    .fontWeight(.heavy)
+                    .font(.system(size: 30.0))
+                List(recipe.ingredients) { ingredient in
+                    Text("\(ingredient.name)")
+                }
+            }
+            .frame(idealHeight: .infinity)
+        }
+        .padding()
+        .frame(
+            minWidth: 600,
+            maxWidth: .infinity,
+            minHeight: 600,
+            maxHeight: .infinity
+        )
+
+        // Define the toolbar when selecting a recipe
+        // We want to be able to edit the current recipe or delete it
+        .toolbarRole(.editor)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Button {
+                    // TODO: add a way to edit the recipe
+                    print("Edit!")
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                }
+            }
+            ToolbarItem(placement: .destructiveAction) {
+                Button {
+                    // TODO: add a way to delete the recipe
+                    print("Delete the selected recipe")
+                } label: {
+                    Label("Edit", systemImage: "minus")
                 }
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {}
-        }
-        .navigationTitle("\(recipe.name)")
-        .padding()
     }
 }
 

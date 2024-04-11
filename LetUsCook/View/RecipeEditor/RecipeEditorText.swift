@@ -12,20 +12,10 @@ struct RecipeEditorText: View {
     @Binding var input: String
 
     var body: some View {
-        HeaderSectionText(text: title)
-        TextEditor(text: $input)
-            .foregroundStyle(.secondary)
-            .navigationTitle(title)
-    }
-}
-
-struct HeaderSectionText: View {
-    var text: String
-
-    var body: some View {
-        Text("\(text)")
-            .italic()
-            .foregroundStyle(.secondary)
+        Section(title) {
+            TextEditor(text: $input)
+                .foregroundStyle(.secondary)
+        }
     }
 }
 
