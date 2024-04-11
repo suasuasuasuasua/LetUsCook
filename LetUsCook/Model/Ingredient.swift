@@ -31,7 +31,13 @@ extension Ingredient {
     /// The `ingredient` string from the textfield as an array of
     /// `Ingredient`
     static func parseIngredients(_ ingredients: String) -> [Ingredient] {
-        return ingredients.components(separatedBy: .newlines)
+        if ingredients.isEmpty {
+            return []
+        }
+
+        return ingredients.isEmpty
+            ? []
+            : ingredients.components(separatedBy: .newlines)
             .map { ingredient in
                 Ingredient(name: ingredient.trimmingCharacters(
                     in: .whitespaces

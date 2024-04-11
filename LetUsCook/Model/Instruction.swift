@@ -41,7 +41,9 @@ extension Instruction {
     /// 'Enter'.
     /// The textfields are also automatically labelled with 1, 2, 3, etc.
     static func parseInstructions(_ instructions: String) -> [Instruction] {
-        return instructions.components(separatedBy: .newlines)
+        return instructions.isEmpty
+            ? []
+            : instructions.components(separatedBy: .newlines)
             .map { instruction in
                 Instruction(text: instruction.trimmingCharacters(
                     in: .whitespaces

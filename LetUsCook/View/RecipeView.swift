@@ -26,10 +26,14 @@ import SwiftUI
 ///     - JSON (I like this idea)
 ///     - Some weird proprietary format that I choose
 struct RecipeView: View {
+    @Environment(\.modelContext) private var modelContext
+    @State private var deleteRecipe = false
+
     var recipe: Recipe
 
     var body: some View {
-        HSplitView {
+        // TODO: use a HSplitView
+        HStack {
             VStack(alignment: .leading) {
                 Text("Image here.")
                     .padding()
@@ -84,14 +88,25 @@ struct RecipeView: View {
                 }
             }
             ToolbarItem(placement: .destructiveAction) {
+                // If the user presses the delete button, set an alert boolean
                 Button {
-                    // TODO: add a way to delete the recipe
-                    print("Delete the selected recipe")
+                    deleteRecipe = true
                 } label: {
-                    Label("Edit", systemImage: "minus")
+                    Label("Delete", systemImage: "minus")
                 }
             }
         }
+        // When the alert boolean is set, show the delete context
+        .alert(
+            "Are you sure you want to delete \(recipe.name)?",
+            isPresented: $deleteRecipe,
+            actions: {
+                Button("Yes") {
+                    modelContext.delete(recipe)
+                }
+                Button("No") {}
+            }
+        )
     }
 }
 
