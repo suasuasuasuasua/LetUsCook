@@ -98,15 +98,21 @@ struct RecipeView: View {
         }
         // When the alert boolean is set, show the delete context
         .alert(
-            "Are you sure you want to delete \(recipe.name)?",
+            "Are you sure you want to delete the recipe permanently?",
             isPresented: $deleteRecipe,
-            actions: {
-                Button("Yes") {
-                    modelContext.delete(recipe)
-                }
-                Button("No") {}
+            presenting: recipe
+        ) { recipe in
+            Button(role: .destructive) {
+                modelContext.delete(recipe)
+            } label: {
+                Text("Delete")
             }
-        )
+            Button("Cancel", role: .cancel) {}
+        } message: { _ in
+            // TODO: but what if it could be undone?
+            // Maybe send to the trash instead
+            Text("You cannot undo this action.")
+        }
     }
 }
 
