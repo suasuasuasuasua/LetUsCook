@@ -84,11 +84,15 @@ extension Recipe {
             instruction.index = i + 1
             instruction.recipe = self
         }
-        
-        self.instructions = instructions
+
+        self.instructions = instructions.sorted {
+            $0.index < $1.index
+        }
     }
 
     func updateIngredients(withIngredients ingredients: [Ingredient]) {
-        self.ingredients = ingredients
+        self.ingredients = ingredients.sorted {
+            $0.name < $1.name
+        }
     }
 }

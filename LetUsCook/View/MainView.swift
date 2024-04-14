@@ -15,18 +15,13 @@ struct MainView: View {
 
     var body: some View {
         NavigationSplitView {
-            // Make a selection from the sidebar
             SidebarView(sidebarSelection: $sidebarSelection)
         }
         content: {
-            if let sidebarSelection {
-                ContentView(
-                    sidebarSelection: sidebarSelection,
-                    recipeSelection: $recipeSelection
-                )
-            } else {
-                Text("Select a sidebar item!")
-            }
+            ContentView(
+                sidebarSelection: sidebarSelection,
+                recipeSelection: $recipeSelection
+            )
         }
         detail: {
             RecipeView(recipe: recipeSelection)

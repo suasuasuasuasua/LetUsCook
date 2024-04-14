@@ -12,19 +12,21 @@ struct ContentView: View {
     @Binding var recipeSelection: Recipe?
 
     var body: some View {
-        // TODO: this does feel kind of icky but not sure of a better way to
-        // manage switching the views
-        switch sidebarSelection {
-        case .Gallery:
-            RecipeGalleryView(recipeSelection: $recipeSelection)
-        case .Feed:
-            RecipeFeedView()
-        case .Calendar:
-            CalendarView()
-        case .Groceries:
-            GroceriesView()
-        case nil:
-            Text("Choose a category!")
+        if let sidebarSelection {
+            // TODO: this does feel kind of icky but not sure of a better way to
+            // manage switching the views
+            switch sidebarSelection {
+            case .Gallery:
+                RecipeGalleryView(recipeSelection: $recipeSelection)
+            case .Feed:
+                RecipeFeedView()
+            case .Calendar:
+                CalendarView()
+            case .Groceries:
+                GroceriesView()
+            }
+        } else {
+            Text("Select a sidebar item!")
         }
     }
 }

@@ -20,56 +20,56 @@ struct RecipeGalleryView: View {
 
     @Binding var recipeSelection: Recipe?
 
-    var body: some View {
-        // Filter the recipes if there is a search term (i.e. the search
-        // term is not empty
-        // TODO: use data model instead of this
-        let recipes = searchTerm.isEmpty
+    @State private var searchTerm: String = ""
+    private let iconSize = 50.0
+    
+    // Filter the recipes if there is a search term (i.e. the search
+    // term is not empty
+    // TODO: use data model instead of this
+    private var filteredRecipes: [Recipe] {
+        searchTerm.isEmpty
             ? recipes
-            : filteredRecipes
+            : recipes.filter { recipe in
+                recipe.name.contains(searchTerm)
+            }
+    }
 
-        List(recipes, selection: $recipeSelection) { recipe in
+    var body: some View {
+        List(filteredRecipes, selection: $recipeSelection) { recipe in
             // Display each recipe as a navigation link
             RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
                 .tag(recipe)
         }
-        .searchable(text: $searchTerm, placement: .toolbar)
+        .searchable(text: $searchTerm, placement: .automatic)
 
         // TODO: we should have this option in the menubar so that it's
         // obvious that these are commands we can use
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 NavigationLink {
-                    RecipeEditorView()
+                    RecipeEditorView(recipe: nil)
                 } label: {
                     Label("Create new recipe", systemImage: "plus")
                 }
                 .keyboardShortcut("n")
-                Button {
-                    do {
-                        try modelContext.delete(model: Recipe.self)
-                    } catch {
-                        print("Failed to delete all the data")
-                    }
-                } label: {
-                    Label("Clear all recipes", systemImage: "trash")
-                        .help("Clear all recipes (DEBUG)")
-                }
-                .keyboardShortcut("d")
+                // TODO: debug deleting
+//                Button {
+//                    do {
+//                        try modelContext.delete(model: Recipe.self)
+//                    } catch {
+//                        print("Failed to delete all the data")
+//                    }
+//                } label: {
+//                    Label("Clear all recipes", systemImage: "trash")
+//                        .help("Clear all recipes (DEBUG)")
+//                }
+//                .keyboardShortcut("d")
             }
         }
         .listStyle(.automatic)
         .padding()
         // TODO: i want this frame size to be global
-        .frame(minWidth: iconSize * 4)
-    }
-
-    @State private var searchTerm: String = ""
-    private let iconSize = 50.0
-    private var filteredRecipes: [Recipe] {
-        recipes.filter { recipe in
-            recipe.name.contains(searchTerm)
-        }
+        .frame(minWidth: iconSize * 6)
     }
 }
 

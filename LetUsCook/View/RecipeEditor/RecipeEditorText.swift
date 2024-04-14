@@ -14,6 +14,7 @@ struct RecipeEditorText: View {
     var body: some View {
         Section(title) {
             TextEditor(text: $input)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
     }

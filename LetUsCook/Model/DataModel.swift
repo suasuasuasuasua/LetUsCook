@@ -8,5 +8,5 @@
 import Foundation
 
 class DataModel: ObservableObject {
-    
+    var modelContext: ModelContext?
 }

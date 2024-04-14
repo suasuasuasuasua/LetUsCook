@@ -22,7 +22,7 @@ struct RecipeEditorView: View {
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
     /// Otherwise, we are editing a recipe.
     /// Regardless, the data entered by the user create or edit the recipe.
-    @State var recipe: Recipe = .init(name: "New Recipe")
+    var recipe: Recipe?
 
     /// Define all the variables that the user might be able to change as state
     /// variables.
@@ -40,6 +40,7 @@ struct RecipeEditorView: View {
     /// Or maybe they can add a picture of their own dish after they've cooked
     /// it once
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var selectedPhotoImage: Image? = nil
 
     /// The categories that the recipe falls under
     ///
@@ -71,24 +72,22 @@ struct RecipeEditorView: View {
     /// text field
     @State private var ingredients = ""
 
-    /// Dismiss pushes away the current context
-    @Environment(\.dismiss) private var dismiss
-
     /// The model context contains the data for the application
     @Environment(\.modelContext) private var modelContext
+
+    /// Dismiss pushes away the current context
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Form {
             RecipeEditorNameView(name: $name)
             RecipeEditorImageView(
-                recipe: $recipe,
-                selectedPhotoItem: $selectedPhoto
+                selectedPhotoItem: $selectedPhoto,
+                selectedPhotoImage: $selectedPhotoImage
             )
             RecipeEditorTimeView(prepTime: $prepTime, cookTime: $cookTime)
             RecipeEditorCommentsView(comments: $comments)
 
-            // TODO: I think it's better to use a different textfield because
-            // we can't tab into it
             RecipeEditorText(
                 title: "Instruction",
                 input: $instructions
@@ -99,7 +98,7 @@ struct RecipeEditorView: View {
             )
         }
         .textFieldStyle(.roundedBorder)
-        
+
         // Add buttons to the toolbar
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -116,6 +115,37 @@ struct RecipeEditorView: View {
                 }
             }
         }
+        // TODO: i don't really like how this is done here..
+        /// Perform an async function whenever the photo value changes
+        .task(id: selectedPhoto) {
+            if let loadedImage = try? await selectedPhoto?
+                .loadTransferable(type: Image.self),
+                let loadedData = try? await selectedPhoto?
+                .loadTransferable(type: Data.self)
+            {
+                selectedPhotoImage = loadedImage
+
+                // TODO: save the image in a cache and point the recipe's
+                // imageURL to it
+                recipe?.imageData = loadedData
+            }
+        }
+
+        .onAppear {
+            if let recipe {
+                name = recipe.name
+
+                // TODO: how to save photo?
+
+                categories = recipe.categories
+                prepTime = recipe.prepTime
+                cookTime = recipe.cookTime
+                comments = recipe.comments
+                instructions = Instruction.asString(recipe.instructions)
+                ingredients = Ingredient.asString(recipe.ingredients)
+            }
+        }
+
         .navigationTitle("Recipe Editor")
         .frame(minWidth: 600)
         .padding()
@@ -129,32 +159,44 @@ struct RecipeEditorView: View {
         // Get the instructinos and ingredients as arrays
         let instructions = Instruction.parseInstructions(instructions)
         let ingredients = Ingredient.parseIngredients(ingredients)
-        
+
         // TODO: do more input validation here...
         if name.isEmpty {
             return
         }
 
-        // Add a new recipe.
-        let newRecipe = Recipe(
-            name: name,
-            imageData: recipe.imageData,
-            categories: categories,
-            prepTime: prepTime,
-            cookTime: cookTime,
-            comments: comments
-        )
+        if let recipe {
+            recipe.name = name
+            // TODO: save the image data
+            recipe.categories = categories
+            recipe.prepTime = prepTime
+            recipe.cookTime = cookTime
+            recipe.comments = comments
+            
+            recipe.updateInstructions(withInstructions: instructions)
+            recipe.updateIngredients(withIngredients: ingredients)
+        } else { // Add a new recipe.
+            let newRecipe = Recipe(
+                name: name,
+                // TODO: save the image data
+                // imageData: recipe.imageData,
+                categories: categories,
+                prepTime: prepTime,
+                cookTime: cookTime,
+                comments: comments
+            )
 
-        // Remember to insert the recipe into the model context after
-        modelContext.insert(newRecipe)
+            // Remember to insert the recipe into the model context after
+            modelContext.insert(newRecipe)
 
-        // The item has to first exist in the model context before we can create
-        // any links to other existing items!!
-        newRecipe.updateInstructions(withInstructions: instructions)
-        newRecipe.updateIngredients(withIngredients: ingredients)
+            // The item has to first exist in the model context before we can
+            // create any links to other existing items!!
+            newRecipe.updateInstructions(withInstructions: instructions)
+            newRecipe.updateIngredients(withIngredients: ingredients)
+        }
     }
 }
 
 #Preview {
-    RecipeEditorView()
+    RecipeEditorView(recipe: Recipe(name: "Test123"))
 }

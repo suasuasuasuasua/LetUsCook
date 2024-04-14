@@ -9,9 +9,8 @@ import PhotosUI
 import SwiftUI
 
 struct RecipeEditorImageView: View {
-    @Binding var recipe: Recipe
     @Binding var selectedPhotoItem: PhotosPickerItem?
-    @State var selectedPhotoImage: Image?
+    @Binding var selectedPhotoImage: Image?
 
     /// The size of the preview image
     private let imageSize = 50.0
@@ -54,21 +53,7 @@ struct RecipeEditorImageView: View {
                 }
             }
         }
-        // TODO: i don't really like how this is done here..
-        /// Perform an async function whenever the photo value changes
-        .task(id: selectedPhotoItem) {
-            if let loadedImage = try? await selectedPhotoItem?
-                .loadTransferable(type: Image.self),
-                let loadedData = try? await selectedPhotoItem?
-                .loadTransferable(type: Data.self)
-            {
-                selectedPhotoImage = loadedImage
-
-                // TODO: save the image in a cache and point the recipe's
-                // imageURL to it
-                recipe.imageData = loadedData
-            }
-        }
+        
     }
 }
 
@@ -76,7 +61,7 @@ struct RecipeEditorImageView: View {
     let recipe = Recipe(name: "Toast")
 
     return RecipeEditorImageView(
-        recipe: .constant(recipe),
-        selectedPhotoItem: .constant(nil)
+        selectedPhotoItem: .constant(nil),
+        selectedPhotoImage: .constant(nil)
     )
 }

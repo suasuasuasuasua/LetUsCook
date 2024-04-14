@@ -41,4 +41,10 @@ extension Ingredient {
                 ))
             }
     }
+    
+    static func asString(_ ingredients: [Ingredient]) -> String {
+        return ingredients.reduce("") { acc, cur in
+            acc + cur.name + "\n"
+        }
+    }
 }
