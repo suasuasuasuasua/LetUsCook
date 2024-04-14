@@ -8,23 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var sidebarSelection: SidebarItem
+    var sidebarSelection: SidebarItem?
+    @Binding var recipeSelection: Recipe?
 
     var body: some View {
+        // TODO: this does feel kind of icky but not sure of a better way to
+        // manage switching the views
         switch sidebarSelection {
         case .Gallery:
-            RecipeGalleryView()
-                .navigationTitle(sidebarSelection.rawValue)
+            RecipeGalleryView(recipeSelection: $recipeSelection)
+        case .Feed:
+            RecipeFeedView()
         case .Calendar:
             CalendarView()
-                .navigationTitle(sidebarSelection.rawValue)
         case .Groceries:
             GroceriesView()
-                .navigationTitle(sidebarSelection.rawValue)
+        case nil:
+            Text("Choose a category!")
         }
     }
 }
 
 #Preview {
-    ContentView(sidebarSelection: .constant(.Gallery))
+    ContentView(sidebarSelection: .Gallery, recipeSelection: .constant(nil))
 }

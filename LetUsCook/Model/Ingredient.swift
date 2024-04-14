@@ -11,7 +11,8 @@ import SwiftData
 @Model
 final class Ingredient {
     /// The name of the ingredient
-    @Attribute(.unique)
+    // TODO: i want the ingredients to be unique
+    //    @Attribute(.unique)
     var name: String
 
     init(name: String) {
@@ -31,10 +32,6 @@ extension Ingredient {
     /// The `ingredient` string from the textfield as an array of
     /// `Ingredient`
     static func parseIngredients(_ ingredients: String) -> [Ingredient] {
-        if ingredients.isEmpty {
-            return []
-        }
-
         return ingredients.isEmpty
             ? []
             : ingredients.components(separatedBy: .newlines)

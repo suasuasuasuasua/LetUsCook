@@ -12,13 +12,23 @@ struct RecipeGalleryIcon: View {
     let iconSize: CGFloat
 
     var body: some View {
-        HStack{
-            Text("Image Here.")
+        HStack {
+            // TODO add the image
+            Image(systemName: "photo")
+                .resizable()
                 .frame(width: iconSize, height: iconSize)
-                .border(.black)
-            Text("\(recipe.name)")
-                .bold()
+                .cornerRadius(5)
+            VStack(alignment: .leading) {
+                Text("\(recipe.name)")
+                    .bold()
+                Group {
+                    Text("Preparation Time: \(recipe.prepTime)")
+                    Text("Cook: \(recipe.cookTime)")
+                }
+                .font(.caption)
+            }
         }
+        .padding(.vertical, 10)
     }
 }
 

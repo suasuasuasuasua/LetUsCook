@@ -38,12 +38,12 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    var ingredients: [Ingredient]
+    var ingredients: [Ingredient] = []
 
     /// The list of the instructions on how to make the recipe
     /// instructions one by one instead of adding all the instructions at once
     @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
-    var instructions: [Instruction]
+    var instructions: [Instruction] = []
 
     init(
         name: String,
@@ -51,9 +51,7 @@ final class Recipe {
         categories: [Category] = [],
         prepTime: String = "",
         cookTime: String = "",
-        comments: String = "",
-        instructions: [Instruction] = [],
-        ingredients: [Ingredient] = []
+        comments: String = ""
     ) {
         self.name = name
         self.imageData = imageData
@@ -61,39 +59,36 @@ final class Recipe {
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
-        self.instructions = instructions.sorted {
-            $0.index < $1.index
-        }
-        self.ingredients = ingredients.sorted {
-            $0.name < $1.name
-        }
     }
 }
 
 extension Recipe: CustomStringConvertible {
     var description: String {
         return """
-               Recipe Name: \(name)
-               Ingredients: \(ingredients)
-               Instructions: \(instructions)
-               """
+        Recipe Name: \(name)
+        Ingredients: \(ingredients)
+        Instructions: \(instructions)
+        """
     }
 }
 
 extension Recipe {
     /// Update the instructions for a recipe
     ///
-    /// The reason why we need to update the `Instruction`s separately is because
+    /// The reason why we need to update the `Instruction`s separately is
+    /// because
     /// we want the `Instruction` to reference the `Recipe`, but technically the
     /// `Recipe` doesn't exist yet in the `modelContext`.
     func updateInstructions(withInstructions instructions: [Instruction]) {
         for (i, instruction) in instructions.enumerated() {
-            // Start indexing from 1
-            let i = i + 1
-            instruction.index = i
+            instruction.index = i + 1
             instruction.recipe = self
         }
-
+        
         self.instructions = instructions
+    }
+
+    func updateIngredients(withIngredients ingredients: [Ingredient]) {
+        self.ingredients = ingredients
     }
 }

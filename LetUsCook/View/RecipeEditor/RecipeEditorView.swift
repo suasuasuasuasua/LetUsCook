@@ -110,7 +110,6 @@ struct RecipeEditorView: View {
                     }
                 }
             }
-
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel", role: .cancel) {
                     dismiss()
@@ -130,7 +129,7 @@ struct RecipeEditorView: View {
         // Get the instructinos and ingredients as arrays
         let instructions = Instruction.parseInstructions(instructions)
         let ingredients = Ingredient.parseIngredients(ingredients)
-
+        
         // TODO: do more input validation here...
         if name.isEmpty {
             return
@@ -143,8 +142,7 @@ struct RecipeEditorView: View {
             categories: categories,
             prepTime: prepTime,
             cookTime: cookTime,
-            comments: comments,
-            ingredients: ingredients
+            comments: comments
         )
 
         // Remember to insert the recipe into the model context after
@@ -153,6 +151,7 @@ struct RecipeEditorView: View {
         // The item has to first exist in the model context before we can create
         // any links to other existing items!!
         newRecipe.updateInstructions(withInstructions: instructions)
+        newRecipe.updateIngredients(withIngredients: ingredients)
     }
 }
 

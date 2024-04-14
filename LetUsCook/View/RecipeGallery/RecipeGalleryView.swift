@@ -18,47 +18,33 @@ struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
 
-    @State private var searchTerm: String = ""
-    @State private var selectedRecipe: Recipe? = nil
-
-    private var filteredRecipes: [Recipe] {
-        recipes.filter {
-            $0.name.contains(searchTerm)
-        }
-    }
-
-    private let iconSize = 75.0
+    @Binding var recipeSelection: Recipe?
 
     var body: some View {
         // Filter the recipes if there is a search term (i.e. the search
         // term is not empty
+        // TODO: use data model instead of this
         let recipes = searchTerm.isEmpty
             ? recipes
             : filteredRecipes
 
-        List(recipes, selection: $selectedRecipe) { recipe in
+        List(recipes, selection: $recipeSelection) { recipe in
             // Display each recipe as a navigation link
-            NavigationLink {
-                RecipeView(recipe: recipe)
-            }
-            label: {
-                RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
-            }
+            RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
+                .tag(recipe)
         }
         .searchable(text: $searchTerm, placement: .toolbar)
 
         // TODO: we should have this option in the menubar so that it's
         // obvious that these are commands we can use
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItemGroup(placement: .primaryAction) {
                 NavigationLink {
                     RecipeEditorView()
                 } label: {
                     Label("Create new recipe", systemImage: "plus")
                 }
                 .keyboardShortcut("n")
-            }
-            ToolbarItem(placement: .destructiveAction) {
                 Button {
                     do {
                         try modelContext.delete(model: Recipe.self)
@@ -72,12 +58,22 @@ struct RecipeGalleryView: View {
                 .keyboardShortcut("d")
             }
         }
+        .listStyle(.automatic)
         .padding()
-        .frame(minWidth: iconSize * 2)
+        // TODO: i want this frame size to be global
+        .frame(minWidth: iconSize * 4)
+    }
+
+    @State private var searchTerm: String = ""
+    private let iconSize = 50.0
+    private var filteredRecipes: [Recipe] {
+        recipes.filter { recipe in
+            recipe.name.contains(searchTerm)
+        }
     }
 }
 
 #Preview {
-    RecipeGalleryView()
+    RecipeGalleryView(recipeSelection: .constant(nil))
         .modelContainer(previewContainer)
 }
