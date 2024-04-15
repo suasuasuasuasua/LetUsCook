@@ -16,45 +16,60 @@ import SwiftUI
 /// - Quick edit or delete from the gallery using a right-click
 struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(NavigationContext.self) private var navigationContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-    var iconSize = 150.0
+    
+    @Binding var recipeSelection: Recipe?
+    
+    @State private var searchTerm: String = ""
+    private let iconSize = 50.0
+    
+    
+    // Filter the recipes if there is a search term (i.e. the search
+    // term is not empty
+    // TODO: use data model instead of this
+    private var filteredRecipes: [Recipe] {
+        searchTerm.isEmpty
+            ? recipes
+            : recipes.filter { recipe in
+                recipe.name.contains(searchTerm)
+            }
+    }
 
     var body: some View {
-        NavigationStack {
-            ScrollView(.vertical) {
-                // TODO: refactor to make this less hardcoded in the future
-                LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: 200, maximum: 400))],
-                    spacing: 10
-                ) {
-                    ForEach(recipes) { recipe in
-                        NavigationLink(
-                            destination: { RecipeView(recipe: recipe) },
-                            label: {
-                                VStack(alignment: .center) {
-                                    if let imageData = recipe.imageData,
-                                       let image = NSImage(data: imageData)
-                                    {
-                                        Image(nsImage: image)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .clipShape(RoundedRectangle(
-                                                cornerRadius: 10,
-                                                style: .continuous
-                                            ))
-                                    }
-                                    Text("\(recipe.name)")
-                                }
-                                .frame(width: iconSize, height: iconSize)
-                                .padding()
-                            }
-                        )
-                        .padding()
-                    }
-                }
-            }
-            .navigationTitle("Recipe Gallery")
+        List(filteredRecipes, selection: $recipeSelection) { recipe in
+            // Display each recipe as a navigation link
+            GalleryRow(recipe: recipe, iconSize: iconSize)
+                .tag(recipe)
         }
+        .searchable(text: $searchTerm, placement: .automatic)
+
+        // TODO: we should have this option in the menubar so that it's
+        // obvious that these are commands we can use
+        .toolbar {
+            ToolbarItemGroup(placement: .primaryAction) {
+                NavigationLink {
+                    RecipeEditorView(recipe: .constant(nil))
+                } label: {
+                    Label("Create new recipe", systemImage: "plus")
+                }
+                .keyboardShortcut("n")
+                // TODO: debug deleting
+//                Button {
+//                    do {
+//                        try modelContext.delete(model: Recipe.self)
+//                    } catch {
+//                        print("Failed to delete all the data")
+//                    }
+//                } label: {
+//                    Label("Clear all recipes", systemImage: "trash")
+//                        .help("Clear all recipes (DEBUG)")
+//                }
+//                .keyboardShortcut("d")
+            }
+        }
+        .listStyle(.automatic)
+        .padding()
+        // TODO: i want this frame size to be global
+        .frame(minWidth: iconSize * 6)
     }
 }

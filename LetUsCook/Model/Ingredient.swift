@@ -11,7 +11,8 @@ import SwiftData
 @Model
 final class Ingredient {
     /// The name of the ingredient
-    @Attribute(.unique)
+    // TODO: i want the ingredients to be unique
+    //    @Attribute(.unique)
     var name: String
 
     init(name: String) {
@@ -27,9 +28,21 @@ extension Ingredient: CustomStringConvertible {
     }
 }
 
-extension Array where Element == Ingredient {
-    var description: String {
-        return map(String.init)
-            .joined(separator: ",")
+extension Ingredient {
+    /// The `ingredient` string from the textfield as an array of
+    /// `Ingredient`
+    static func parseIngredients(_ ingredients: String) -> [Ingredient] {
+        return ingredients.split(whereSeparator: \.isNewline)
+            .map { ingredient in
+                Ingredient(name: ingredient.trimmingCharacters(
+                    in: .whitespaces
+                ))
+            }
+    }
+
+    static func asString(_ ingredients: [Ingredient]) -> String {
+        return ingredients.map { ingredient in
+            ingredient.name
+        }.joined(separator: "\n")
     }
 }

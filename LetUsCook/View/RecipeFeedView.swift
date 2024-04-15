@@ -20,8 +20,10 @@ import SwiftUI
 ///       indeed a cooking blog
 /// - Favorite recipes and add it to the user's gallery
 struct RecipeFeedView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
-        Text("Recipe Feed View")
+        Text("Feed view")
     }
 }
 
