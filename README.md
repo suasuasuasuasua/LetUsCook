@@ -1,7 +1,7 @@
 # Let Us Cook
 
-![Let Him Cook Photo](./Doc/let_him_cook.jpg)
-
+| ![512-mac](https://github.com/suasuasuasuasua/LetUsCook/assets/72476123/d38d40e1-e4b7-4fa0-9482-72ed008ef2d5) | ![Let Him Cook Photo](./Doc/let_him_cook.jpg) |
+|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
 ## Overview
 
 Let Us Cook is an app written for macOS that allows user to plan and budget
@@ -25,10 +25,10 @@ easy-to-use. You can just fill in what you did eat for that day and move on.
 
 These features define the core of the app.
 
-- [ ] The user will also be able to add, edit, and delete recipes.
-  - [ ] The user will be able to search for recipes by name.
+- [x] The user will also be able to add, edit, and delete recipes.
+  - [x] The user will be able to search for recipes by name.
   - [ ] Add a drag-and-drop feature to add recipes to the calendar.
-  - [ ] The user will be able to visualize the recipes as templates.
+  - [x] The user will be able to visualize the recipes as templates.
 - [ ] The user can preview all the meals in a calendar view with the ability to
       fine-tune to the current day, week, and month.
 - [ ] The user's calendar app will also be able to sync with the app to give you
