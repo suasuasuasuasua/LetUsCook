@@ -10,34 +10,15 @@ import SwiftUI
 
 @main
 struct LetUsCookApp: App {
-    /// Define a model container to store the context for the data in the
-    /// application
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Recipe.self,
-        ])
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
-
-        do {
-            return try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
-            )
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    let dataModel: DataModel = DataModel()
+    
     var body: some Scene {
         // Change `WindowGroup` to `Window` so that we can't have multiple
         // windows of the same app open.
-        Window("Let Us Cook", id: "main") {
+        WindowGroup {
             MainView()
+                .modelContext(dataModel.modelContext)
         }
-        .modelContainer(sharedModelContainer)
         .commands {
             SidebarCommands()
             // TODO: also do CMD-1,2,3,etc. to go through the sidebar items

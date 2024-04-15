@@ -15,13 +15,13 @@ import SwiftUI
 /// - Show preview picture and estimated cooking time of the meal
 /// - Quick edit or delete from the gallery using a right-click
 struct RecipeGalleryView: View {
-    @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-
+    
     @Binding var recipeSelection: Recipe?
-
+    
     @State private var searchTerm: String = ""
     private let iconSize = 50.0
+    
     
     // Filter the recipes if there is a search term (i.e. the search
     // term is not empty
@@ -37,7 +37,7 @@ struct RecipeGalleryView: View {
     var body: some View {
         List(filteredRecipes, selection: $recipeSelection) { recipe in
             // Display each recipe as a navigation link
-            RecipeGalleryIcon(recipe: recipe, iconSize: iconSize)
+            GalleryRow(recipe: recipe, iconSize: iconSize)
                 .tag(recipe)
         }
         .searchable(text: $searchTerm, placement: .automatic)

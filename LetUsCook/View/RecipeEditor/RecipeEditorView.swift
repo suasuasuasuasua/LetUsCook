@@ -17,6 +17,12 @@ import SwiftUI
 /// discard changes if they don't like what they have entered.
 
 struct RecipeEditorView: View {
+    /// The model context contains the data for the application
+    @Environment(\.modelContext) private var modelContext
+
+    /// Dismiss pushes away the current context
+    @Environment(\.dismiss) private var dismiss
+
     /// The recipe that we are currently viewing
     ///
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
@@ -72,27 +78,21 @@ struct RecipeEditorView: View {
     /// text field
     @State private var ingredients = ""
 
-    /// The model context contains the data for the application
-    @Environment(\.modelContext) private var modelContext
-
-    /// Dismiss pushes away the current context
-    @Environment(\.dismiss) private var dismiss
-
     var body: some View {
         Form {
-            RecipeEditorNameView(name: $name)
-            RecipeEditorImageView(
+            NameView(name: $name)
+            ImageView(
                 selectedPhotoItem: $selectedPhoto,
                 selectedPhotoImage: $selectedPhotoImage
             )
-            RecipeEditorTimeView(prepTime: $prepTime, cookTime: $cookTime)
-            RecipeEditorCommentsView(comments: $comments)
+            TimeView(prepTime: $prepTime, cookTime: $cookTime)
+            CommentsView(comments: $comments)
 
-            RecipeEditorText(
+            EditorView(
                 title: "Instruction",
                 input: $instructions
             )
-            RecipeEditorText(
+            EditorView(
                 title: "Ingredients",
                 input: $ingredients
             )
@@ -172,7 +172,7 @@ struct RecipeEditorView: View {
             recipe.prepTime = prepTime
             recipe.cookTime = cookTime
             recipe.comments = comments
-            
+
             recipe.updateInstructions(withInstructions: instructions)
             recipe.updateIngredients(withIngredients: ingredients)
         } else { // Add a new recipe.
