@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
@@ -24,7 +25,7 @@ struct MainView: View {
             )
         }
         detail: {
-            RecipeView(recipe: recipeSelection)
+            RecipeView(recipe: $recipeSelection)
         }
     }
 }

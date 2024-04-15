@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     var sidebarSelection: SidebarItem?
     @Binding var recipeSelection: Recipe?
 
@@ -29,8 +31,4 @@ struct ContentView: View {
             Text("Select a sidebar item!")
         }
     }
-}
-
-#Preview {
-    ContentView(sidebarSelection: .Gallery, recipeSelection: .constant(nil))
 }

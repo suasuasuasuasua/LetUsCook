@@ -15,6 +15,7 @@ import SwiftUI
 /// - Show preview picture and estimated cooking time of the meal
 /// - Quick edit or delete from the gallery using a right-click
 struct RecipeGalleryView: View {
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
     
     @Binding var recipeSelection: Recipe?
@@ -47,7 +48,7 @@ struct RecipeGalleryView: View {
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 NavigationLink {
-                    RecipeEditorView(recipe: nil)
+                    RecipeEditorView(recipe: .constant(nil))
                 } label: {
                     Label("Create new recipe", systemImage: "plus")
                 }
@@ -71,9 +72,4 @@ struct RecipeGalleryView: View {
         // TODO: i want this frame size to be global
         .frame(minWidth: iconSize * 6)
     }
-}
-
-#Preview {
-    RecipeGalleryView(recipeSelection: .constant(nil))
-        .modelContainer(previewContainer)
 }

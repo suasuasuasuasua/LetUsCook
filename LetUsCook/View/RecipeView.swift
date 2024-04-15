@@ -30,8 +30,7 @@ struct RecipeView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var deleteRecipe = false
-
-    var recipe: Recipe?
+    @Binding var recipe: Recipe?
 
     var body: some View {
         if let recipe {
@@ -41,7 +40,7 @@ struct RecipeView: View {
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         NavigationLink {
-                            RecipeEditorView(recipe: recipe)
+                            RecipeEditorView(recipe: $recipe)
                         } label: {
                             Label("Edit", systemImage: "pencil")
                         }
@@ -91,102 +90,93 @@ struct RecipeView: View {
     }
 }
 
-private struct RecipeContent: View {
-    // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
-    @Environment(\.defaultMinListRowHeight) var minRowHeight
-    var recipe: Recipe
+extension RecipeView {
+    private struct RecipeContent: View {
+        // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
+        @Environment(\.defaultMinListRowHeight) var minRowHeight
+        var recipe: Recipe
 
-    // TODO: should use a viewmodel instead
-    var instructions: [Instruction] {
-        recipe.instructions.sorted {
-            $0.index < $1.index
+        // TODO: should use a viewmodel instead
+        var instructions: [Instruction] {
+            recipe.instructions.sorted {
+                $0.index < $1.index
+            }
         }
-    }
 
-    var ingredients: [Ingredient] {
-        recipe.ingredients.sorted {
-            $0.name < $1.name
+        var ingredients: [Ingredient] {
+            recipe.ingredients.sorted {
+                $0.name < $1.name
+            }
         }
-    }
 
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20.0) {
-                Text("\(recipe.name)")
-                    .font(.title)
-                HStack(alignment: .top, spacing: 24.0) {
-                    Image(systemName: "photo")
-                        .resizable()
-                        .clipShape(Circle())
-                        .overlay {
-                            Circle().stroke(.white, lineWidth: 4)
+        var body: some View {
+            ScrollView {
+                VStack(spacing: 20.0) {
+                    Text("\(recipe.name)")
+                        .font(.title)
+                    HStack(alignment: .top, spacing: 24.0) {
+                        Image(systemName: "photo")
+                            .resizable()
+                            .clipShape(Circle())
+                            .overlay {
+                                Circle().stroke(.white, lineWidth: 4)
+                            }
+                            .shadow(radius: 7)
+                            .frame(width: 160, height: 160)
+
+                        Divider()
+
+                        VStack(alignment: .leading) {
+                            Text("Preparation Time")
+                                .font(.headline)
+                            Text("\(recipe.prepTime)")
+                                .font(.subheadline)
+                            Text("Cooking Time")
+                                .font(.headline)
+                            Text("\(recipe.cookTime)")
+                                .font(.subheadline)
                         }
-                        .shadow(radius: 7)
-                        .frame(width: 160, height: 160)
 
-                    Divider()
+                        Divider()
 
-                    VStack(alignment: .leading) {
-                        Text("Preparation Time")
-                            .font(.headline)
-                        Text("\(recipe.prepTime)")
-                            .font(.subheadline)
-                        Text("Cooking Time")
-                            .font(.headline)
-                        Text("\(recipe.cookTime)")
-                            .font(.subheadline)
-                    }
-
-                    Divider()
-
-                    VStack(alignment: .leading) {
-                        Text("Comments")
-                            .font(.headline)
-                        Text("\(recipe.comments)")
-                            .font(.subheadline)
+                        VStack(alignment: .leading) {
+                            Text("Comments")
+                                .font(.headline)
+                            Text("\(recipe.comments)")
+                                .font(.subheadline)
+                        }
                     }
                 }
-            }
 
-            Divider()
+                Divider()
 
-            VStack {
-                Text("Instructions")
-                    .font(.title)
-                List(instructions) { instruction in
-                    Text("\(instruction.index). \(instruction.text)")
+                VStack {
+                    Text("Instructions")
+                        .font(.title)
+                    List(instructions) { instruction in
+                        Text("\(instruction.index). \(instruction.text)")
+                    }
+                    .frame(minHeight: minRowHeight * 10)
+                    Text("Ingredients")
+                        .font(.title)
+                    List(ingredients) { ingredient in
+                        Text("\(ingredient.name)")
+                    }
+                    .frame(minHeight: minRowHeight * 10)
                 }
-                .frame(minHeight: minRowHeight * 10)
-                Text("Ingredients")
-                    .font(.title)
-                List(ingredients) { ingredient in
-                    Text("\(ingredient.name)")
-                }
-                .frame(minHeight: minRowHeight * 10)
             }
         }
     }
-}
 
-private struct RecipeNonContent: View {
-    var body: some View {
-        Text("Select a recipe!")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    // TODO: this seems like weird way to hide the toolbar
-                    Text("")
+    private struct RecipeNonContent: View {
+        var body: some View {
+            Text("Select a recipe!")
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        // TODO: this seems like weird way to hide the toolbar
+                        Text("")
+                    }
                 }
-            }
+        }
     }
-}
-
-#Preview {
-    let recipe = Recipe(
-        name: "Toast",
-        prepTime: "5 minutes",
-        cookTime: "5 minutes",
-        comments: "Some toast!"
-    )
-
-    return RecipeView(recipe: recipe)
 }

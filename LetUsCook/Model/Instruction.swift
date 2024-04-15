@@ -52,11 +52,8 @@ extension Instruction {
     }
     
     static func asString(_ instructions: [Instruction]) -> String {
-        var s = instructions.reduce("") { acc, cur in
-            acc + cur.text + "\n"
-        }
-        
-        print("asstring: ", s)
-        return s
+        return instructions.map { ingredient in
+            ingredient.text
+        }.joined(separator: "\n")
     }
 }

@@ -17,7 +17,6 @@ import SwiftUI
 /// discard changes if they don't like what they have entered.
 
 struct RecipeEditorView: View {
-    /// The model context contains the data for the application
     @Environment(\.modelContext) private var modelContext
 
     /// Dismiss pushes away the current context
@@ -28,7 +27,7 @@ struct RecipeEditorView: View {
     /// If the recipe is `nil`, that means we are creating a recipe in the view.
     /// Otherwise, we are editing a recipe.
     /// Regardless, the data entered by the user create or edit the recipe.
-    var recipe: Recipe?
+    @Binding var recipe: Recipe?
 
     /// Define all the variables that the user might be able to change as state
     /// variables.
@@ -69,14 +68,16 @@ struct RecipeEditorView: View {
     /// The instructions are parsed into an array of `Instruction` in
     /// `instructionArray`. It just needs to be a string so that we can use a
     /// text field
-    @State private var instructions = ""
+    @State private var instructions: [String] = []
+    @State private var instructionText: String = ""
 
     /// Describes which ingredients are needed for the recipe
     ///
     /// The ingredients are parsed into an array of `Ingredient` in
     /// `ingredientArray`. It just needs to be a string so that we can use a
     /// text field
-    @State private var ingredients = ""
+    @State private var ingredients: [String] = []
+    @State private var ingredientText: String = ""
 
     var body: some View {
         Form {
@@ -90,14 +91,36 @@ struct RecipeEditorView: View {
 
             EditorView(
                 title: "Instruction",
-                input: $instructions
+                input: $instructionText
             )
             EditorView(
                 title: "Ingredients",
-                input: $ingredients
+                input: $ingredientText
             )
         }
         .textFieldStyle(.roundedBorder)
+        .onAppear {
+            if let recipe {
+                name = recipe.name
+
+                // TODO: how to save photo?
+
+                categories = recipe.categories
+                prepTime = recipe.prepTime
+                cookTime = recipe.cookTime
+                comments = recipe.comments
+
+                // TODO: let's not use a string??
+                // TODO: WHY DO WE HAVE TO SORT EVERY TIME
+                instructionText = Instruction
+                    .asString(recipe.instructions.sorted {
+                        $0.index < $1.index
+                    })
+                ingredientText = Ingredient.asString(recipe.ingredients.sorted {
+                    $0.name < $1.name
+                })
+            }
+        }
 
         // Add buttons to the toolbar
         .toolbar {
@@ -115,37 +138,22 @@ struct RecipeEditorView: View {
                 }
             }
         }
-        // TODO: i don't really like how this is done here..
-        /// Perform an async function whenever the photo value changes
-        .task(id: selectedPhoto) {
-            if let loadedImage = try? await selectedPhoto?
-                .loadTransferable(type: Image.self),
-                let loadedData = try? await selectedPhoto?
-                .loadTransferable(type: Data.self)
-            {
-                selectedPhotoImage = loadedImage
-
-                // TODO: save the image in a cache and point the recipe's
-                // imageURL to it
-                recipe?.imageData = loadedData
-            }
-        }
-
-        .onAppear {
-            if let recipe {
-                name = recipe.name
-
-                // TODO: how to save photo?
-
-                categories = recipe.categories
-                prepTime = recipe.prepTime
-                cookTime = recipe.cookTime
-                comments = recipe.comments
-                instructions = Instruction.asString(recipe.instructions)
-                ingredients = Ingredient.asString(recipe.ingredients)
-            }
-        }
-
+//        // TODO: i don't really like how this is done here..
+//        /// Perform an async function whenever the photo value changes
+//        .task(id: selectedPhoto) {
+//            if let loadedImage = try? await selectedPhoto?
+//                .loadTransferable(type: Image.self),
+//                let loadedData = try? await selectedPhoto?
+//                .loadTransferable(type: Data.self)
+//            {
+//                selectedPhotoImage = loadedImage
+//
+//                // TODO: save the image in a cache and point the recipe's
+//                // imageURL to it
+        ////                recipe?.imageData = loadedData
+//            }
+//        }
+//
         .navigationTitle("Recipe Editor")
         .frame(minWidth: 600)
         .padding()
@@ -156,14 +164,14 @@ struct RecipeEditorView: View {
     private func save() {
         name = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // Get the instructinos and ingredients as arrays
-        let instructions = Instruction.parseInstructions(instructions)
-        let ingredients = Ingredient.parseIngredients(ingredients)
-
         // TODO: do more input validation here...
         if name.isEmpty {
             return
         }
+
+        // Get the instructinos and ingredients as arrays
+        let instructions = Instruction.parseInstructions(instructionText)
+        let ingredients = Ingredient.parseIngredients(ingredientText)
 
         if let recipe {
             recipe.name = name
@@ -175,6 +183,7 @@ struct RecipeEditorView: View {
 
             recipe.updateInstructions(withInstructions: instructions)
             recipe.updateIngredients(withIngredients: ingredients)
+
         } else { // Add a new recipe.
             let newRecipe = Recipe(
                 name: name,
@@ -195,8 +204,4 @@ struct RecipeEditorView: View {
             newRecipe.updateIngredients(withIngredients: ingredients)
         }
     }
-}
-
-#Preview {
-    RecipeEditorView(recipe: Recipe(name: "Test123"))
 }

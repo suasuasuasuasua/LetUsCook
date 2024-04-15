@@ -32,19 +32,17 @@ extension Ingredient {
     /// The `ingredient` string from the textfield as an array of
     /// `Ingredient`
     static func parseIngredients(_ ingredients: String) -> [Ingredient] {
-        return ingredients.isEmpty
-            ? []
-            : ingredients.components(separatedBy: .newlines)
+        return ingredients.split(whereSeparator: \.isNewline)
             .map { ingredient in
                 Ingredient(name: ingredient.trimmingCharacters(
                     in: .whitespaces
                 ))
             }
     }
-    
+
     static func asString(_ ingredients: [Ingredient]) -> String {
-        return ingredients.reduce("") { acc, cur in
-            acc + cur.name + "\n"
-        }
+        return ingredients.map { ingredient in
+            ingredient.name
+        }.joined(separator: "\n")
     }
 }

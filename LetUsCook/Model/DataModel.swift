@@ -16,9 +16,6 @@ class DataModel {
     var recipes: [Recipe] = []
     var sortRecipes: [KeyPathComparator<Recipe>] = [.init(\.name)]
 
-    var sortInstructions: [KeyPathComparator<Instruction>] = [.init(\.index)]
-    var sortIngredients: [KeyPathComparator<Ingredient>] = [.init(\.name)]
-
     init() {
         /// Define a model container to store the context for the data in the
         /// application
@@ -43,18 +40,5 @@ class DataModel {
 
         container = sharedModelContainer
         modelContext = ModelContext(sharedModelContainer)
-        
-        fetchData()
-    }
-
-    func fetchData() {
-        do {
-            let sortOrder = [SortDescriptor<Recipe>(\.name)]
-            let descriptor = FetchDescriptor<Recipe>(sortBy: sortOrder)
-            
-            recipes = try modelContext.fetch(descriptor)
-        } catch {
-            print("Fetch failed in Datamodel fetchData()...")
-        }
     }
 }

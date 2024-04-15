@@ -10,6 +10,7 @@ import SwiftUI
 // Navigation Basics - SUPER HELPFUL!! :)
 // https://www.youtube.com/watch?v=uE8RCE45Yxc
 struct SidebarView: View {
+    @Environment(\.modelContext) private var modelContext
     @Binding var sidebarSelection: SidebarItem?
 
     var body: some View {
