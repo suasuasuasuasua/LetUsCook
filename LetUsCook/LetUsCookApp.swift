@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct LetUsCookApp: App {
     let dataModel: DataModel = DataModel()
-    
+
     var body: some Scene {
         // Change `WindowGroup` to `Window` so that we can't have multiple
         // windows of the same app open.
@@ -26,9 +26,6 @@ struct LetUsCookApp: App {
 
         Settings {
             SettingsView()
-                .padding()
-                .frame(minWidth: 400, minHeight: 300)
-                .navigationTitle("Settings")
         }
     }
 }

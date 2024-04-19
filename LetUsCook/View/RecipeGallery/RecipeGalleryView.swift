@@ -15,28 +15,28 @@ import SwiftUI
 /// - Show preview picture and estimated cooking time of the meal
 /// - Quick edit or delete from the gallery using a right-click
 struct RecipeGalleryView: View {
+    @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-    
-    @Binding var recipeSelection: Recipe?
-    
+
     @State private var searchTerm: String = ""
     private let iconSize = 50.0
-    
-    
-    // Filter the recipes if there is a search term (i.e. the search
-    // term is not empty
-    // TODO: use data model instead of this
-    private var filteredRecipes: [Recipe] {
-        searchTerm.isEmpty
-            ? recipes
-            : recipes.filter { recipe in
-                recipe.name.contains(searchTerm)
+
+    // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
+    init(searchTerm: String = "") {
+        _recipes = Query(filter: #Predicate {
+            if searchTerm.isEmpty {
+                return true
+            } else {
+                return $0.name.localizedStandardContains(searchTerm)
             }
+        })
     }
 
     var body: some View {
-        List(filteredRecipes, selection: $recipeSelection) { recipe in
+        @Bindable var navigationContext = navigationContext
+
+        List(recipes, selection: $navigationContext.selectedRecipe) { recipe in
             // Display each recipe as a navigation link
             GalleryRow(recipe: recipe, iconSize: iconSize)
                 .tag(recipe)
@@ -47,27 +47,18 @@ struct RecipeGalleryView: View {
         // obvious that these are commands we can use
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
-                NavigationLink {
-                    RecipeEditorView(recipe: .constant(nil))
-                } label: {
+                Button {
+                    let newRecipe = Recipe(name: "New Recipe \(recipes.count+1)")
+
+                    modelContext.insert(newRecipe)
+                    navigationContext.selectedRecipe = newRecipe
+                }
+                label: {
                     Label("Create new recipe", systemImage: "plus")
                 }
                 .keyboardShortcut("n")
-                // TODO: debug deleting
-//                Button {
-//                    do {
-//                        try modelContext.delete(model: Recipe.self)
-//                    } catch {
-//                        print("Failed to delete all the data")
-//                    }
-//                } label: {
-//                    Label("Clear all recipes", systemImage: "trash")
-//                        .help("Clear all recipes (DEBUG)")
-//                }
-//                .keyboardShortcut("d")
             }
         }
-        .listStyle(.automatic)
         .padding()
         // TODO: i want this frame size to be global
         .frame(minWidth: iconSize * 6)

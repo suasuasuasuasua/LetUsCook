@@ -26,30 +26,23 @@ import SwiftUI
 ///     - JSON (I like this idea)
 ///     - Some weird proprietary format that I choose
 struct RecipeView: View {
+    @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @State private var deleteRecipe = false
-    @Binding var recipe: Recipe?
+    @State private var isDeleting = false
+    var recipe: Recipe?
 
     var body: some View {
         if let recipe {
             RecipeContent(recipe: recipe)
                 // Define the toolbar when selecting a recipe
-                // We want to be able to edit the current recipe or delete it
                 .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        NavigationLink {
-                            RecipeEditorView(recipe: $recipe)
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                    }
                     ToolbarItem(placement: .destructiveAction) {
                         // If the user presses the delete button, set an alert
                         // boolean
                         Button {
-                            deleteRecipe = true
+                            isDeleting = true
                         } label: {
                             Label("Delete", systemImage: "minus")
                         }
@@ -67,13 +60,11 @@ struct RecipeView: View {
                 .confirmationDialog(
                     // TODO: maybe I should move it to the trash instead?
                     "Are you sure you want to delete the recipe permanently?",
-                    isPresented: $deleteRecipe,
+                    isPresented: $isDeleting,
                     presenting: recipe
                 ) { recipe in
                     Button(role: .destructive) {
-                        withAnimation {
-                            modelContext.delete(recipe)
-                        }
+                        delete(recipe)
                     } label: {
                         Text("Delete")
                     }
@@ -85,8 +76,13 @@ struct RecipeView: View {
                 }
                 .padding()
         } else {
-            RecipeNonContent()
+            ContentUnavailableView("Select a recipe!", image: "fork.knife")
         }
+    }
+
+    private func delete(_ recipe: Recipe) {
+        // navigationContext.selectedRecipe = nil
+        modelContext.delete(recipe)
     }
 }
 
@@ -95,6 +91,19 @@ extension RecipeView {
         // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
         @Environment(\.defaultMinListRowHeight) var minRowHeight
         var recipe: Recipe
+
+        @State private var name: String
+        @State private var prepTime: String
+        @State private var cookTime: String
+        @State private var comments: String
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            name = recipe.name
+            prepTime = recipe.prepTime
+            cookTime = recipe.cookTime
+            comments = recipe.comments
+        }
 
         // TODO: should use a viewmodel instead
         var instructions: [Instruction] {
@@ -112,7 +121,12 @@ extension RecipeView {
         var body: some View {
             ScrollView {
                 VStack(spacing: 20.0) {
-                    Text("\(recipe.name)")
+                    TextField("", text: $name)
+                        .onSubmit {
+                            // TODO: we should only be able to save recipes that have
+                            // unique names
+                            recipe.name = name
+                        }
                         .font(.title)
                     HStack(alignment: .top, spacing: 24.0) {
                         Image(systemName: "photo")
@@ -129,11 +143,17 @@ extension RecipeView {
                         VStack(alignment: .leading) {
                             Text("Preparation Time")
                                 .font(.headline)
-                            Text("\(recipe.prepTime)")
+                            TextField("", text: $prepTime)
+                                .onSubmit {
+                                    recipe.prepTime = prepTime
+                                }
                                 .font(.subheadline)
                             Text("Cooking Time")
                                 .font(.headline)
-                            Text("\(recipe.cookTime)")
+                            TextField("", text: $cookTime)
+                                .onSubmit {
+                                    recipe.cookTime = cookTime
+                                }
                                 .font(.subheadline)
                         }
 
@@ -142,7 +162,10 @@ extension RecipeView {
                         VStack(alignment: .leading) {
                             Text("Comments")
                                 .font(.headline)
-                            Text("\(recipe.comments)")
+                            TextField("", text: $comments)
+                                .onSubmit {
+                                    recipe.comments = comments
+                                }
                                 .font(.subheadline)
                         }
                     }
@@ -165,18 +188,6 @@ extension RecipeView {
                     .frame(minHeight: minRowHeight * 10)
                 }
             }
-        }
-    }
-
-    private struct RecipeNonContent: View {
-        var body: some View {
-            Text("Select a recipe!")
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        // TODO: this seems like weird way to hide the toolbar
-                        Text("")
-                    }
-                }
         }
     }
 }
