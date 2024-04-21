@@ -19,15 +19,19 @@ struct RecipeGalleryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
 
-    @State private var searchTerm: String = ""
+    @State private var searchTerm: String
     private let iconSize = 50.0
 
     // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
     init(searchTerm: String = "") {
+        self.searchTerm = searchTerm
+
         _recipes = Query(filter: #Predicate {
             if searchTerm.isEmpty {
+                // Return all the elements if there isn't a search term
                 return true
             } else {
+                // Return elemnts that contain the search term
                 return $0.name.localizedStandardContains(searchTerm)
             }
         })
@@ -36,19 +40,21 @@ struct RecipeGalleryView: View {
     var body: some View {
         @Bindable var navigationContext = navigationContext
 
-        List(recipes, selection: $navigationContext.selectedRecipe) { recipe in
-            // Display each recipe as a navigation link
-            GalleryRow(recipe: recipe, iconSize: iconSize)
-                .tag(recipe)
+        // Display each recipe as a clickable element
+        List(selection: $navigationContext.selectedRecipe) {
+            ForEach(recipes, id: \.self) { recipe in
+                GalleryRow(recipe: recipe, iconSize: iconSize)
+            }
         }
         .searchable(text: $searchTerm, placement: .automatic)
-
         // TODO: we should have this option in the menubar so that it's
         // obvious that these are commands we can use
         .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
+            // Create a new recipe with the plus button
+            ToolbarItem(placement: .primaryAction) {
                 Button {
-                    let newRecipe = Recipe(name: "New Recipe \(recipes.count+1)")
+                    let newRecipe =
+                        Recipe(name: "New Recipe \(recipes.count + 1)")
 
                     modelContext.insert(newRecipe)
                     navigationContext.selectedRecipe = newRecipe

@@ -50,7 +50,6 @@ struct RecipeView: View {
                     ToolbarItem {
                         Button {
                             // TODO: implement the share option
-                            print("Share!")
                         } label: {
                             Label("Share", systemImage: "square.and.arrow.up")
                         }
@@ -76,7 +75,13 @@ struct RecipeView: View {
                 }
                 .padding()
         } else {
-            ContentUnavailableView("Select a recipe!", image: "fork.knife")
+            ContentUnavailableView(
+                "Select a recipe!",
+                systemImage: "fork.knife"
+            )
+            // Make it so that the plus button always sits in the content
+            // section
+            .toolbar { Text("") }
         }
     }
 
@@ -90,103 +95,142 @@ extension RecipeView {
     private struct RecipeContent: View {
         // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
         @Environment(\.defaultMinListRowHeight) var minRowHeight
-        var recipe: Recipe
-
-        @State private var name: String
-        @State private var prepTime: String
-        @State private var cookTime: String
-        @State private var comments: String
-
-        init(recipe: Recipe) {
-            self.recipe = recipe
-            name = recipe.name
-            prepTime = recipe.prepTime
-            cookTime = recipe.cookTime
-            comments = recipe.comments
-        }
-
-        // TODO: should use a viewmodel instead
-        var instructions: [Instruction] {
-            recipe.instructions.sorted {
-                $0.index < $1.index
-            }
-        }
-
-        var ingredients: [Ingredient] {
-            recipe.ingredients.sorted {
-                $0.name < $1.name
-            }
-        }
+        @Bindable var recipe: Recipe
 
         var body: some View {
             ScrollView {
                 VStack(spacing: 20.0) {
-                    TextField("", text: $name)
-                        .onSubmit {
-                            // TODO: we should only be able to save recipes that have
-                            // unique names
-                            recipe.name = name
-                        }
-                        .font(.title)
+                    NameView(recipe: recipe)
                     HStack(alignment: .top, spacing: 24.0) {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .clipShape(Circle())
-                            .overlay {
-                                Circle().stroke(.white, lineWidth: 4)
-                            }
-                            .shadow(radius: 7)
-                            .frame(width: 160, height: 160)
-
+                        ImageView(recipe: recipe)
                         Divider()
-
-                        VStack(alignment: .leading) {
-                            Text("Preparation Time")
-                                .font(.headline)
-                            TextField("", text: $prepTime)
-                                .onSubmit {
-                                    recipe.prepTime = prepTime
-                                }
-                                .font(.subheadline)
-                            Text("Cooking Time")
-                                .font(.headline)
-                            TextField("", text: $cookTime)
-                                .onSubmit {
-                                    recipe.cookTime = cookTime
-                                }
-                                .font(.subheadline)
-                        }
-
+                        TimeView(recipe: recipe)
                         Divider()
-
-                        VStack(alignment: .leading) {
-                            Text("Comments")
-                                .font(.headline)
-                            TextField("", text: $comments)
-                                .onSubmit {
-                                    recipe.comments = comments
-                                }
-                                .font(.subheadline)
-                        }
+                        CommentsView(recipe: recipe)
                     }
                 }
 
                 Divider()
 
                 VStack {
-                    Text("Instructions")
-                        .font(.title)
-                    List(instructions) { instruction in
-                        Text("\(instruction.index). \(instruction.text)")
-                    }
-                    .frame(minHeight: minRowHeight * 10)
-                    Text("Ingredients")
-                        .font(.title)
-                    List(ingredients) { ingredient in
-                        Text("\(ingredient.name)")
-                    }
-                    .frame(minHeight: minRowHeight * 10)
+                    InstructionsView(recipe: recipe)
+                    IngredientsView(recipe: recipe)
                 }
+                .frame(minHeight: minRowHeight * 10)
+            }
+        }
+    }
+
+    private struct NameView: View {
+        @Bindable var recipe: Recipe
+        @State var name: String = ""
+
+        var body: some View {
+            TextField("", text: $name)
+                .font(.title)
+                // Update the text field on the recipe
+                .task(id: recipe) {
+                    name = recipe.name
+                }
+                // Only update the recipe on submit
+                .onSubmit {
+                    // TODO: error check the name so we can't have duplicates
+                    recipe.name = name
+                }
+        }
+    }
+
+    private struct ImageView: View {
+        var recipe: Recipe
+
+        var body: some View {
+            Image(systemName: "photo")
+                .resizable()
+                .clipShape(Circle())
+                .overlay {
+                    Circle().stroke(.white, lineWidth: 4)
+                }
+                .shadow(radius: 7)
+                .frame(width: 160, height: 160)
+        }
+    }
+
+    private struct TimeView: View {
+        var recipe: Recipe
+        @State var prepTime: String = ""
+        @State var cookTime: String = ""
+        var body: some View {
+            VStack(alignment: .leading) {
+                Text("Preparation Time")
+                    .font(.headline)
+                TextField("", text: $prepTime)
+                    .onSubmit {
+                        recipe.prepTime = prepTime
+                    }
+                    .font(.subheadline)
+                Text("Cooking Time")
+                    .font(.headline)
+                TextField("", text: $cookTime)
+                    .onSubmit {
+                        recipe.cookTime = cookTime
+                    }
+                    .font(.subheadline)
+            }
+            .task(id: recipe) {
+                prepTime = recipe.prepTime
+                cookTime = recipe.cookTime
+            }
+        }
+    }
+
+    private struct CommentsView: View {
+        var recipe: Recipe
+        @State var comments: String = ""
+
+        var body: some View {
+            VStack(alignment: .leading) {
+                Text("Comments")
+                    .font(.headline)
+                TextField("", text: $comments)
+                    .onSubmit {
+                        recipe.comments = comments
+                    }
+                    .font(.subheadline)
+            }
+            .task(id: recipe) {
+                comments = recipe.comments
+            }
+        }
+    }
+
+    // TODO: make this an array of textfields?
+    private struct InstructionsView: View {
+        var recipe: Recipe
+
+        var body: some View {
+            Text("Instructions")
+                .font(.title)
+            List(recipe.instructions) { instruction in
+                Text("\(instruction.index). \(instruction.text)")
+            }
+            .task(id: recipe) {
+                // TODO: fill in the task
+            }
+        }
+    }
+
+    // TODO: make this an array of textfields?
+    private struct IngredientsView: View {
+        var recipe: Recipe
+
+        var body: some View {
+            Text("Ingredients")
+                .font(.title)
+            List(recipe.ingredients) { ingredient in
+                Text("\(ingredient.name)")
+            }
+            .task(id: recipe) {
+                // TODO: fill in the task
             }
         }
     }

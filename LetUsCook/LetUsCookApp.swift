@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct LetUsCookApp: App {
     let dataModel: DataModel = DataModel()
+    @State private var navigationContext = NavigationContext()
 
     var body: some Scene {
         // Change `WindowGroup` to `Window` so that we can't have multiple
@@ -18,6 +19,7 @@ struct LetUsCookApp: App {
         WindowGroup {
             MainView()
                 .modelContext(dataModel.modelContext)
+                .environment(navigationContext)
         }
         .commands {
             SidebarCommands()

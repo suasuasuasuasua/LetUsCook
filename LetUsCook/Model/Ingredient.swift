@@ -13,6 +13,7 @@ final class Ingredient {
     /// The name of the ingredient
     // TODO: i want the ingredients to be unique
     //    @Attribute(.unique)
+    // use an ID - UUID
     var name: String
 
     init(name: String) {
