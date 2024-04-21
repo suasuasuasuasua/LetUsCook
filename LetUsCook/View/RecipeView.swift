@@ -5,6 +5,7 @@
 //  Created by Justin Hoang on 3/30/24.
 //
 
+import PhotosUI
 import SwiftData
 import SwiftUI
 
@@ -180,13 +181,16 @@ extension RecipeView {
         @Bindable var recipe: Recipe
         // TODO: implement the image
         @State private var image = Image(systemName: "photo")
+        // https://developer.apple.com/documentation/photokit/bringing_photos_picker_to_your_swiftui_app
+        @State private var photosSelection: PhotosPickerItem?
 
-        private let imageWidth = 300.0, imageHeight = 300.0
+        private let imageWidth = 200.0, imageHeight = 200.0
 
         // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
         var body: some View {
-            VStack {
-                Text("Image for \(recipe.name)")
+            VStack(alignment: .leading) {
+                Text("Photo")
+                    .font(.title)
                 image
                     .resizable()
                     .frame(width: imageWidth, height: imageHeight)
@@ -196,28 +200,42 @@ extension RecipeView {
                         else { return false }
                         image = Image(nsImage: nsImage)
 
-                        print("Setting image data")
+                        // Set the recipe's data on change
                         recipe.imageData = itemData
-                        print("Done Setting image data")
                         return true
                     }
 
                 Text("Choose from files.")
-                Text("Choose from photos library.")
+                PhotosPicker(
+                    selection: $photosSelection,
+                    matching: .images,
+                    preferredItemEncoding: .automatic
+                ) {
+                    Text("Choose from photos library.")
+                }
+                Spacer()
             }
+            // TODO: try on appear?
             .task(id: recipe) {
-                await loadImage()
+                if let imageData = recipe.imageData,
+                   let nsImage = NSImage(data: imageData)
+                {
+                    image = Image(nsImage: nsImage)
+                    print("loaded image for \(recipe.name)!")
+                } else {
+                    image = Image(systemName: "photo")
+                }
             }
-        }
-        
-        private func loadImage() async {
-            if let imageData = recipe.imageData,
-               let nsImage = NSImage(data: imageData)
-            {
-                image = Image(nsImage: nsImage)
-                print("loaded image for \(recipe.name)!")
-            } else {
-                image = Image(systemName: "photo")
+            // https://www.youtube.com/watch?v=y3LofRLPUM8
+            .task(id: photosSelection) {
+                // TODO: Fine for now -- let's do caching later
+                if let imageData = try? await photosSelection?
+                    .loadTransferable(type: Data.self),
+                    let nsImage = NSImage(data: imageData)
+                {
+                    image = Image(nsImage: nsImage)
+                    recipe.imageData = imageData
+                }
             }
         }
     }
