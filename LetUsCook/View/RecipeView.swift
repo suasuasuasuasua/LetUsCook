@@ -31,23 +31,35 @@ struct RecipeView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var isDeleting = false
+    @State private var isShowingImage: Bool = true
     var recipe: Recipe?
 
     var body: some View {
         if let recipe {
             RecipeContent(recipe: recipe)
-                // Define the toolbar when selecting a recipe
+                .inspector(
+                    isPresented: $isShowingImage
+                ) {
+                    // TODO: Maybe also have things like links and date created?
+                    ImageView(recipe: recipe)
+                }
                 .toolbar {
                     ToolbarItem(placement: .destructiveAction) {
-                        // If the user presses the delete button, set an alert
-                        // boolean
+                        // Delete the recipe
                         Button {
                             isDeleting = true
                         } label: {
                             Label("Delete", systemImage: "minus")
                         }
                     }
-                    ToolbarItem {
+                    ToolbarItemGroup {
+                        // Toggle the image inspector on the right
+                        Button {
+                            isShowingImage.toggle()
+                        } label: {
+                            Label("Show Image", systemImage: "photo")
+                        }
+                        // Share the recipe
                         Button {
                             // TODO: implement the share option
                         } label: {
@@ -79,9 +91,6 @@ struct RecipeView: View {
                 "Select a recipe!",
                 systemImage: "fork.knife"
             )
-            // Make it so that the plus button always sits in the content
-            // section
-            .toolbar { Text("") }
         }
     }
 
@@ -102,8 +111,6 @@ extension RecipeView {
                 VStack(spacing: 20.0) {
                     NameView(recipe: recipe)
                     HStack(alignment: .top, spacing: 24.0) {
-                        ImageView(recipe: recipe)
-                        Divider()
                         TimeView(recipe: recipe)
                         Divider()
                         CommentsView(recipe: recipe)
@@ -131,7 +138,6 @@ extension RecipeView {
 
         @State var name: String = ""
         @State private var OGName: String = ""
-
         @State private var error: String = ""
 
         var body: some View {
@@ -144,14 +150,8 @@ extension RecipeView {
                     OGName = recipe.name
                 }
                 .onChange(of: name) {
-                    if let name = recipeNames.firstIndex(of: name) {
-                        print(name)
-                    }
-                }
-                // Only update the recipe on submit
-                .onSubmit {
-                    if recipeNames.contains(where: { $0 == name }) &&
-                        name != OGName
+                    if name != OGName &&
+                        recipeNames.contains(where: { $0 == name })
                     {
                         error = "Duplicate name!"
                     } else if name.isEmpty {
@@ -159,6 +159,7 @@ extension RecipeView {
                     } else {
                         error = ""
                         recipe.name = name
+                            .trimmingCharacters(in: .whitespacesAndNewlines)
                     }
                 }
         }
@@ -168,7 +169,7 @@ extension RecipeView {
             TextField("", text: $name)
                 .font(.title)
             if !error.isEmpty {
-                Text("Warning: \(error)")
+                Text("\(error)")
                     .font(.subheadline)
                     .foregroundStyle(.red)
             }
@@ -176,22 +177,53 @@ extension RecipeView {
     }
 
     private struct ImageView: View {
-        var recipe: Recipe
+        @Bindable var recipe: Recipe
+        // TODO: implement the image
+        @State private var image = Image(systemName: "photo")
 
+        private let imageWidth = 300.0, imageHeight = 300.0
+
+        // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
         var body: some View {
-            Image(systemName: "photo")
-                .resizable()
-                .clipShape(Circle())
-                .overlay {
-                    Circle().stroke(.white, lineWidth: 4)
-                }
-                .shadow(radius: 7)
-                .frame(width: 160, height: 160)
+            VStack {
+                Text("Image for \(recipe.name)")
+                image
+                    .resizable()
+                    .frame(width: imageWidth, height: imageHeight)
+                    .dropDestination(for: Data.self) { items, location in
+                        guard let itemData = items.first else { return false }
+                        guard let nsImage = NSImage(data: itemData)
+                        else { return false }
+                        image = Image(nsImage: nsImage)
+
+                        print("Setting image data")
+                        recipe.imageData = itemData
+                        print("Done Setting image data")
+                        return true
+                    }
+
+                Text("Choose from files.")
+                Text("Choose from photos library.")
+            }
+            .task(id: recipe) {
+                await loadImage()
+            }
+        }
+        
+        private func loadImage() async {
+            if let imageData = recipe.imageData,
+               let nsImage = NSImage(data: imageData)
+            {
+                image = Image(nsImage: nsImage)
+                print("loaded image for \(recipe.name)!")
+            } else {
+                image = Image(systemName: "photo")
+            }
         }
     }
 
     private struct TimeView: View {
-        var recipe: Recipe
+        @Bindable var recipe: Recipe
         @State var prepTime: String = ""
         @State var cookTime: String = ""
         var body: some View {
@@ -199,14 +231,14 @@ extension RecipeView {
                 Text("Preparation Time")
                     .font(.headline)
                 TextField("", text: $prepTime)
-                    .onSubmit {
+                    .onChange(of: prepTime) {
                         recipe.prepTime = prepTime
                     }
                     .font(.subheadline)
                 Text("Cooking Time")
                     .font(.headline)
                 TextField("", text: $cookTime)
-                    .onSubmit {
+                    .onChange(of: cookTime) {
                         recipe.cookTime = cookTime
                     }
                     .font(.subheadline)
@@ -219,7 +251,7 @@ extension RecipeView {
     }
 
     private struct CommentsView: View {
-        var recipe: Recipe
+        @Bindable var recipe: Recipe
         @State var comments: String = ""
 
         var body: some View {
@@ -227,7 +259,7 @@ extension RecipeView {
                 Text("Comments")
                     .font(.headline)
                 TextField("", text: $comments)
-                    .onSubmit {
+                    .onChange(of: comments) {
                         recipe.comments = comments
                     }
                     .font(.subheadline)
@@ -240,7 +272,7 @@ extension RecipeView {
 
     // TODO: make this an array of textfields?
     private struct InstructionsView: View {
-        var recipe: Recipe
+        @Bindable var recipe: Recipe
         @State var instructions: [Instruction] = []
 
         var body: some View {
@@ -278,7 +310,7 @@ extension RecipeView {
 
     // TODO: make this an array of textfields?
     private struct IngredientsView: View {
-        var recipe: Recipe
+        @Bindable var recipe: Recipe
 
         var body: some View {
             Text("Ingredients")
