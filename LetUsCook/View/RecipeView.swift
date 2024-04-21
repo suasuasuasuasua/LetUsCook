@@ -123,20 +123,55 @@ extension RecipeView {
 
     private struct NameView: View {
         @Bindable var recipe: Recipe
+
+        @Query(sort: \Recipe.name) private var recipes: [Recipe]
+        private var recipeNames: [String] {
+            recipes.map { $0.name }
+        }
+
         @State var name: String = ""
+        @State private var OGName: String = ""
+
+        @State private var error: String = ""
 
         var body: some View {
-            TextField("", text: $name)
-                .font(.title)
-                // Update the text field on the recipe
+            NameBody()
+                // Update the text field on the recipe whenever the recipe
+                // changes. We do this instead of .onAppear because that happens
+                // only when the view itself changes
                 .task(id: recipe) {
                     name = recipe.name
+                    OGName = recipe.name
+                }
+                .onChange(of: name) {
+                    if let name = recipeNames.firstIndex(of: name) {
+                        print(name)
+                    }
                 }
                 // Only update the recipe on submit
                 .onSubmit {
-                    // TODO: error check the name so we can't have duplicates
-                    recipe.name = name
+                    if recipeNames.contains(where: { $0 == name }) &&
+                        name != OGName
+                    {
+                        error = "Duplicate name!"
+                    } else if name.isEmpty {
+                        error = "Name cannot be empty!"
+                    } else {
+                        error = ""
+                        recipe.name = name
+                    }
                 }
+        }
+
+        @ViewBuilder
+        private func NameBody() -> some View {
+            TextField("", text: $name)
+                .font(.title)
+            if !error.isEmpty {
+                Text("Warning: \(error)")
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            }
         }
     }
 
@@ -206,15 +241,37 @@ extension RecipeView {
     // TODO: make this an array of textfields?
     private struct InstructionsView: View {
         var recipe: Recipe
+        @State var instructions: [Instruction] = []
 
         var body: some View {
             Text("Instructions")
                 .font(.title)
-            List(recipe.instructions) { instruction in
-                Text("\(instruction.index). \(instruction.text)")
+            Form {
+                ForEach($instructions, id: \.self) { instruction in
+                    TextField(
+                        "",
+                        text: instruction.text
+                    )
+                    .onSubmit {
+                        let instructionTexts = instructions.map { $0.text }
+                        if instructionTexts
+                            .contains(instruction.wrappedValue.text)
+                        {
+                            print("bruh")
+                        }
+
+                        recipe.instructions = instructions
+                    }
+                }
             }
+
             .task(id: recipe) {
                 // TODO: fill in the task
+                instructions = recipe.instructions
+
+                if instructions.isEmpty {
+                    instructions = [Instruction(text: "")]
+                }
             }
         }
     }
