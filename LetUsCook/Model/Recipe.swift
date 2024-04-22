@@ -19,6 +19,8 @@ final class Recipe: Identifiable {
     var id = UUID()
 
     var name: String
+    
+    var dateCreated: Date = Date.now
 
     /// Store a reference URL to the image on the users' system
     var imageURL: URL?

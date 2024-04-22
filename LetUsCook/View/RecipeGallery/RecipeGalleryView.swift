@@ -18,15 +18,8 @@ struct RecipeGalleryView: View {
     @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
-
-    @State private var searchTerm: String
-    private let iconSize = 50.0
-
-    // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
-    init(searchTerm: String = "") {
-        self.searchTerm = searchTerm
-
-        _recipes = Query(filter: #Predicate {
+    private var filteredRecipes: [Recipe] {
+        recipes.filter {
             if searchTerm.isEmpty {
                 // Return all the elements if there isn't a search term
                 return true
@@ -34,14 +27,22 @@ struct RecipeGalleryView: View {
                 // Return elemnts that contain the search term
                 return $0.name.localizedStandardContains(searchTerm)
             }
-        })
+        }
+    }
+
+    @State private var searchTerm: String
+    private let iconSize = 50.0
+
+    // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
+    init(searchTerm: String = "") {
+        self.searchTerm = searchTerm
     }
 
     var body: some View {
         @Bindable var navigationContext = navigationContext
 
         // Display each recipe as a clickable element
-        List(recipes, selection: $navigationContext.selectedRecipe) { recipe in
+        List(filteredRecipes, selection: $navigationContext.selectedRecipe) { recipe in
             GalleryRow(recipe: recipe, iconSize: iconSize)
                 .tag(recipe)
         }
