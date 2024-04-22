@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
-    
-    var sidebarSelection: SidebarItem?
-    @Binding var recipeSelection: Recipe?
+
+    var selectedSidebarItem: SidebarItem?
 
     var body: some View {
-        if let sidebarSelection {
-            // TODO: this does feel kind of icky but not sure of a better way to
-            // manage switching the views
-            switch sidebarSelection {
+        @Bindable var navigationContext = navigationContext
+
+        if let selectedSidebarItem {
+            switch selectedSidebarItem {
             case .Gallery:
-                RecipeGalleryView(recipeSelection: $recipeSelection)
+                RecipeGalleryView()
             case .Feed:
                 RecipeFeedView()
             case .Calendar:
@@ -28,7 +28,9 @@ struct ContentView: View {
                 GroceriesView()
             }
         } else {
-            Text("Select a sidebar item!")
+            ContentUnavailableView {
+                Text("Select a Category")
+            }
         }
     }
 }

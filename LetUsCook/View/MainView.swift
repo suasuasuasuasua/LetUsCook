@@ -5,27 +5,30 @@
 //  Created by Justin Hoang on 3/30/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct MainView: View {
+    @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
-    
-    @State private var sidebarSelection: SidebarItem? = .Gallery
-    @State private var recipeSelection: Recipe?
 
     var body: some View {
-        NavigationSplitView {
-            SidebarView(sidebarSelection: $sidebarSelection)
+        @Bindable var navigationContext = navigationContext
+
+        NavigationSplitView(
+            columnVisibility: $navigationContext.columnVisibility
+        ) {
+            SidebarView()
+                .navigationTitle(navigationContext.sidebarTitle)
         }
         content: {
             ContentView(
-                sidebarSelection: sidebarSelection,
-                recipeSelection: $recipeSelection
+                selectedSidebarItem: navigationContext.selectedSidebarItem
             )
+            .navigationTitle(navigationContext.contentListTitle)
         }
         detail: {
-            RecipeView(recipe: $recipeSelection)
+            RecipeView(recipe: navigationContext.selectedRecipe)
         }
     }
 }

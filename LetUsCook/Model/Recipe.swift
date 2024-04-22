@@ -10,21 +10,18 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class Recipe {
+final class Recipe: Identifiable {
     /// The name of the recipe
     /// This name could be unique (well this may be a design decision because
     /// you can have multiple ways to cook the same dish according to different
     /// people)
     @Attribute(.unique)
+    var id = UUID()
+
     var name: String
 
-    // - cache the photos and ask the user where to store the images
-    // - look into ApplicationSupport
-    // - look into urlcache
     /// Store a reference URL to the image on the users' system
-    // TODO: we should ask the user where they want to store the data
-    @Attribute(.externalStorage)
-    var imageData: Data?
+    var imageURL: URL?
 
     /// The categories or tags that the recipe has
     var categories: [Category]
@@ -38,27 +35,30 @@ final class Recipe {
     var comments: String
 
     /// The list of ingredients for the recipe
-    var ingredients: [Ingredient] = []
+    var ingredients: [Ingredient]
 
     /// The list of the instructions on how to make the recipe
     /// instructions one by one instead of adding all the instructions at once
     @Relationship(deleteRule: .cascade, inverse: \Instruction.recipe)
-    var instructions: [Instruction] = []
+    var instructions: [Instruction]
 
     init(
         name: String,
-        imageData: Data? = nil,
+        imageData: URL? = nil,
         categories: [Category] = [],
         prepTime: String = "",
         cookTime: String = "",
-        comments: String = ""
+        comments: String = "",
+        instructions: [Instruction] = [],
+        ingredients: [Ingredient] = []
     ) {
         self.name = name
-        self.imageData = imageData
         self.categories = categories
         self.prepTime = prepTime
         self.cookTime = cookTime
         self.comments = comments
+        self.ingredients = ingredients
+        self.instructions = instructions
     }
 }
 

@@ -9,12 +9,12 @@ import Foundation
 import SwiftData
 
 @Model
-final class Ingredient {
+final class Ingredient: Identifiable {
     /// The name of the ingredient
-    // TODO: i want the ingredients to be unique
-    //    @Attribute(.unique)
+    @Attribute(.unique)
+    var id = UUID()
     var name: String
-
+    
     init(name: String) {
         self.name = name
     }
