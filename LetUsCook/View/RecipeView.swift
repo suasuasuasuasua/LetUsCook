@@ -264,29 +264,29 @@ extension RecipeView {
                     Image(systemName: "photo")
                 }
             }
+            // TODO: i want to move away from tasks
             // https://www.youtube.com/watch?v=y3LofRLPUM8
             .task(id: photosSelection) {
-//                // TODO: Fine for now -- let's do caching later
-//                image = if let imageData = try? await photosSelection?
-//                    .loadTransferable(type: Data.self),
-//                    let nsImage = NSImage(data: imageData)
-//                {
-//                    // Define the URL to the cached image
-//                    let cachedURL = URL(
-//                        fileURLWithPath: itemURL.lastPathComponent,
-//                        isDirectory: false,
-//                        relativeTo: localCachePath
-//                    )
-//                    do {
-//                        // Attempt to save the image data to this path
-//                        try itemData.write(to: cachedURL)
-//                    } catch {
-//                        print("ERROR", error)
-//                    }
-//
-//                } else {
-//                    Image(systemName: "photo")
-//                }
+                // TODO: Fine for now -- let's do caching later
+                if let imageData = try? await photosSelection?
+                    .loadTransferable(type: Data.self),
+                    let nsImage = NSImage(data: imageData)
+                {
+                    // Set the image
+                    image = Image(nsImage: nsImage)
+
+                    // Define some URL for the image
+                    let imageURL = URL(fileURLWithPath: recipe.name)
+                        .appendingPathExtension(for: .heic)
+
+                    // Cache the image itself
+                    // TODO: it will actually overwrite the last image that
+                    // was named New Recipe 3's image for example.
+                    // Could tag the imageURL with a datetime as well
+                    cachePhoto(imageURL: imageURL, itemData: imageData)
+                } else {
+                    print("Something went horribly wrong")
+                }
             }
             // https://stackoverflow.com/a/60677690
             .task(id: fileURL) {
