@@ -41,10 +41,9 @@ struct RecipeGalleryView: View {
         @Bindable var navigationContext = navigationContext
 
         // Display each recipe as a clickable element
-        List(selection: $navigationContext.selectedRecipe) {
-            ForEach(recipes, id: \.self) { recipe in
-                GalleryRow(recipe: recipe, iconSize: iconSize)
-            }
+        List(recipes, selection: $navigationContext.selectedRecipe) { recipe in
+            GalleryRow(recipe: recipe, iconSize: iconSize)
+                .tag(recipe)
         }
         .searchable(text: $searchTerm, placement: .automatic)
         // TODO: we should have this option in the menubar so that it's
@@ -53,8 +52,9 @@ struct RecipeGalleryView: View {
             // Create a new recipe with the plus button
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    let newRecipe =
-                        Recipe(name: "New Recipe \(recipes.count + 1)")
+                    let newRecipe = Recipe(
+                        name: "New Recipe \(recipes.count + 1)"
+                    )
 
                     modelContext.insert(newRecipe)
                     navigationContext.selectedRecipe = newRecipe

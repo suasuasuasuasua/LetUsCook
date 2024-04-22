@@ -179,14 +179,27 @@ extension RecipeView {
 
     private struct ImageView: View {
         @Bindable var recipe: Recipe
-        // TODO: implement the image
+        // TODO: should i make this an async image?
         @State private var image = Image(systemName: "photo")
+
         // https://developer.apple.com/documentation/photokit/bringing_photos_picker_to_your_swiftui_app
         @State private var photosSelection: PhotosPickerItem?
+        @State private var fileURL: URL?
 
         private let imageWidth = 200.0, imageHeight = 200.0
 
-        // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
+        // https://developer.apple.com/tutorials/app-dev-training/persisting-data
+        private var localCachePath: URL? = nil
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            localCachePath = try? FileManager.default.url(for: .cachesDirectory,
+                                                          in: .userDomainMask,
+                                                          appropriateFor: nil,
+                                                          create: true)
+                .appendingPathComponent("letuscook.data")
+        }
+
         var body: some View {
             VStack(alignment: .leading) {
                 Text("Photo")
@@ -194,18 +207,44 @@ extension RecipeView {
                 image
                     .resizable()
                     .frame(width: imageWidth, height: imageHeight)
-                    .dropDestination(for: Data.self) { items, location in
-                        guard let itemData = items.first else { return false }
-                        guard let nsImage = NSImage(data: itemData)
+                    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
+                    .dropDestination(for: URL.self) { items, location in
+                        // Need to ensure that all of variables are not nil to
+                        // procede
+                        // Get data from URL:
+                        // https://stackoverflow.com/a/44868411
+                        guard let itemURL = items.first,
+                              let itemData = try? Data(contentsOf: itemURL),
+                              let nsImage = NSImage(data: itemData)
                         else { return false }
+
+                        // Set the image on the view
                         image = Image(nsImage: nsImage)
 
-                        // Set the recipe's data on change
-                        recipe.imageData = itemData
+                        // Cache the image's data
+                        cachePhoto(imageURL: itemURL, itemData: itemData)
+
                         return true
                     }
+                // https://stackoverflow.com/a/63764764
+                // TODO: eventually refactor this to the top view so we can
+                // open files that way too
+                Button {
+                    let panel = NSOpenPanel()
+                    panel.allowsMultipleSelection = false
+                    panel.canChooseFiles = true
+                    panel.canChooseDirectories = false
+                    panel.isAccessoryViewDisclosed = true
 
-                Text("Choose from files.")
+                    // I think these are all the relevant file types for images
+                    panel.allowedContentTypes = [.png, .jpeg, .heic, .heif]
+                    if panel.runModal() == .OK {
+                        fileURL = panel.url
+                    }
+
+                } label: {
+                    Text("Choose from files.")
+                }
                 PhotosPicker(
                     selection: $photosSelection,
                     matching: .images,
@@ -215,27 +254,71 @@ extension RecipeView {
                 }
                 Spacer()
             }
-            // TODO: try on appear?
+            // TODO: there's a weird flicker
             .task(id: recipe) {
-                if let imageData = recipe.imageData,
-                   let nsImage = NSImage(data: imageData)
+                image = if let imageURL = recipe.imageURL,
+                           let nsImage = NSImage(contentsOf: imageURL)
                 {
-                    image = Image(nsImage: nsImage)
-                    print("loaded image for \(recipe.name)!")
+                    Image(nsImage: nsImage)
                 } else {
-                    image = Image(systemName: "photo")
+                    Image(systemName: "photo")
                 }
             }
             // https://www.youtube.com/watch?v=y3LofRLPUM8
             .task(id: photosSelection) {
-                // TODO: Fine for now -- let's do caching later
-                if let imageData = try? await photosSelection?
-                    .loadTransferable(type: Data.self),
-                    let nsImage = NSImage(data: imageData)
+//                // TODO: Fine for now -- let's do caching later
+//                image = if let imageData = try? await photosSelection?
+//                    .loadTransferable(type: Data.self),
+//                    let nsImage = NSImage(data: imageData)
+//                {
+//                    // Define the URL to the cached image
+//                    let cachedURL = URL(
+//                        fileURLWithPath: itemURL.lastPathComponent,
+//                        isDirectory: false,
+//                        relativeTo: localCachePath
+//                    )
+//                    do {
+//                        // Attempt to save the image data to this path
+//                        try itemData.write(to: cachedURL)
+//                    } catch {
+//                        print("ERROR", error)
+//                    }
+//
+//                } else {
+//                    Image(systemName: "photo")
+//                }
+            }
+            // https://stackoverflow.com/a/60677690
+            .task(id: fileURL) {
+                // https://developer.apple.com/documentation/foundation/filemanager/1407903-copyitem
+                if let fileURL,
+                   let fileData = try? Data(contentsOf: fileURL),
+                   let nsImage = NSImage(data: fileData)
                 {
+                    // Set the image
                     image = Image(nsImage: nsImage)
-                    recipe.imageData = imageData
+
+                    // Cache the image itself
+                    cachePhoto(imageURL: fileURL, itemData: fileData)
                 }
+            }
+        }
+
+        private func cachePhoto(imageURL: URL, itemData: Data) {
+            // Define the URL to the cached image
+            let cachedURL = URL(
+                fileURLWithPath: imageURL.lastPathComponent,
+                isDirectory: false,
+                relativeTo: localCachePath
+            )
+            do {
+                // Attempt to save the image data to this path
+                try itemData.write(to: cachedURL)
+
+                // Save the image URL finally
+                recipe.imageURL = cachedURL
+            } catch {
+                print("ERROR", error)
             }
         }
     }

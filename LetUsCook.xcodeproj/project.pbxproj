@@ -19,6 +19,7 @@
 		D81EC1302BD2C50100E374C1 /* RSSItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81EC12F2BD2C50100E374C1 /* RSSItem.swift */; };
 		D81EC1322BD2DE1200E374C1 /* NavigationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81EC1312BD2DE1200E374C1 /* NavigationContext.swift */; };
 		D83610162BB9A01A00DA47B3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83610152BB9A01A00DA47B3 /* Category.swift */; };
+		D862F90E2BD6C14000E50819 /* NSBitmapImageRep_FileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D862F90D2BD6C14000E50819 /* NSBitmapImageRep_FileType.swift */; };
 		D8675D142BB8B312002D0844 /* RecipeGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */; };
 		D8675D162BB8B325002D0844 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D152BB8B325002D0844 /* RecipeView.swift */; };
 		D8675D182BB8B342002D0844 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D172BB8B342002D0844 /* CalendarView.swift */; };
@@ -49,6 +50,7 @@
 		D81EC12F2BD2C50100E374C1 /* RSSItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSItem.swift; sourceTree = "<group>"; };
 		D81EC1312BD2DE1200E374C1 /* NavigationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationContext.swift; sourceTree = "<group>"; };
 		D83610152BB9A01A00DA47B3 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		D862F90D2BD6C14000E50819 /* NSBitmapImageRep_FileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBitmapImageRep_FileType.swift; sourceTree = "<group>"; };
 		D8675D132BB8B312002D0844 /* RecipeGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeGalleryView.swift; sourceTree = "<group>"; };
 		D8675D152BB8B325002D0844 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		D8675D172BB8B342002D0844 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				D812EF0B2BD3180F00AE04EB /* AppController.swift */,
 				D8756AC62BCC44AD0070D406 /* DataModel.swift */,
 				D81EC1312BD2DE1200E374C1 /* NavigationContext.swift */,
+				D862F90D2BD6C14000E50819 /* NSBitmapImageRep_FileType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				D812EF0C2BD3180F00AE04EB /* AppController.swift in Sources */,
 				D8675D3B2BB8B6CF002D0844 /* GroceriesView.swift in Sources */,
 				D8675D142BB8B312002D0844 /* RecipeGalleryView.swift in Sources */,
+				D862F90E2BD6C14000E50819 /* NSBitmapImageRep_FileType.swift in Sources */,
 				D81EC1302BD2C50100E374C1 /* RSSItem.swift in Sources */,
 				D81EC1322BD2DE1200E374C1 /* NavigationContext.swift in Sources */,
 				D8675D162BB8B325002D0844 /* RecipeView.swift in Sources */,

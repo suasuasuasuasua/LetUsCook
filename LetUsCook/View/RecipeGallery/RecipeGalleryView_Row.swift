@@ -8,23 +8,25 @@
 import SwiftUI
 
 extension RecipeGalleryView {
-    internal struct GalleryRow: View {
+    struct GalleryRow: View {
         let recipe: Recipe
         let iconSize: CGFloat
 
         var body: some View {
             HStack {
-                // TODO add the image
-                Image(systemName: "photo")
-                    .resizable()
-                    .frame(width: iconSize, height: iconSize)
-                    .cornerRadius(5)
+                AsyncImage(url: recipe.imageURL) { image in
+                    image.resizable()
+                } placeholder: {
+//                    ProgressView()
+                }
+                .frame(width: iconSize, height: iconSize)
                 VStack(alignment: .leading) {
                     Text("\(recipe.name)")
                         .bold()
                     Group {
                         Text("Preparation Time: \(recipe.prepTime)")
                         Text("Cook: \(recipe.cookTime)")
+                        Text("Comments: \(recipe.comments)")
                     }
                     .font(.caption)
                 }
@@ -32,5 +34,4 @@ extension RecipeGalleryView {
             .padding(.vertical, 10)
         }
     }
-
 }
