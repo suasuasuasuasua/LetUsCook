@@ -40,14 +40,8 @@ struct RecipeView: View {
                         Button {
                             isShowingImage.toggle()
                         } label: {
-                            Label("Show Image", systemImage: "info.circle")
+                            Label("Show Image", systemImage: "sidebar.right")
                         }
-//                        // TODO: implement the share option
-//                        // Share the recipe
-//                        Button {
-//                        } label: {
-//                            Label("Share", systemImage: "square.and.arrow.up")
-//                        }
                     }
                 }
                 // When the alert boolean is set, show the delete context
@@ -78,7 +72,7 @@ struct RecipeView: View {
     }
 
     private func delete(_ recipe: Recipe) {
-        // navigationContext.selectedRecipe = nil
+        navigationContext.selectedRecipe = nil
         modelContext.delete(recipe)
     }
 }

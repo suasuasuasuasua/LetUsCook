@@ -2,33 +2,33 @@ import PhotosUI
 import SwiftData
 import SwiftUI
 
-extension RecipeView {
-    struct InspectorView: View {
-        @Bindable var recipe: Recipe
+struct InspectorView: View {
+    @Bindable var recipe: Recipe
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            DateView(recipe: recipe)
+            ImageView(recipe: recipe)
+            CategoriesView(recipe: recipe)
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+extension InspectorView {
+    struct DateView: View {
+        let recipe: Recipe
 
         var body: some View {
             VStack(alignment: .leading) {
-                DateView(recipe: recipe)
-                ImageView(recipe: recipe)
-                CategoriesView(recipe: recipe)
-                Spacer()
-            }
-            .padding()
-        }
-
-        private struct DateView: View {
-            let recipe: Recipe
-
-            var body: some View {
-                VStack(alignment: .leading) {
-                    Text("Date created")
-                        .font(.title)
-                    Text(recipe.dateCreated.formatted(
-                        date: .abbreviated,
-                        time: .standard
-                    ))
-                    .font(.subheadline)
-                }
+                Text("Date created")
+                    .font(.title)
+                Text(recipe.dateCreated.formatted(
+                    date: .abbreviated,
+                    time: .standard
+                ))
+                .font(.subheadline)
             }
         }
     }
@@ -46,28 +46,15 @@ extension RecipeView {
         private let imageWidth = 200.0, imageHeight = 200.0
 
         // https://developer.apple.com/tutorials/app-dev-training/persisting-data
-        private var localCachePath: URL? = nil
+        var localCachePath: URL? = try? FileManager.default.url(
+            for: .cachesDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
+        .appendingPathComponent("letuscook.data")
 
-        init(recipe: Recipe) {
-            self.recipe = recipe
-            localCachePath = try? FileManager.default.url(
-                for: .cachesDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: true
-            )
-            .appendingPathComponent("letuscook.data")
-
-            if let imageURL = recipe.imageURL,
-               let nsImage =
-               NSImage(contentsOf: imageURL)
-            {
-                print("nsimage \(recipe.name)")
-                image = Image(nsImage: nsImage)
-            } else {
-                image = Image(systemName: "photo")
-            }
-        }
+        @State private var photoDetailsExpanded = false
 
         var body: some View {
             VStack(alignment: .leading) {
@@ -76,9 +63,6 @@ extension RecipeView {
                     .frame(width: imageWidth, height: imageHeight)
                     // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
                     .dropDestination(for: URL.self) { items, location in
-                        // Need to ensure that all of variables are not nil
-                        // to
-                        // procede
                         // Get data from URL:
                         // https://stackoverflow.com/a/44868411
                         guard let itemURL = items.first,
@@ -94,6 +78,23 @@ extension RecipeView {
 
                         return true
                     }
+                DisclosureGroup(
+                    isExpanded: $photoDetailsExpanded,
+                    content: {
+                        VStack(alignment: .leading) {
+                            if let url = recipe.imageURL
+                            {
+                                Text("\(url.size.B2KB()) KB")
+                            } else {
+                                Text("No photo selected")
+                            }
+                        }
+                    },
+                    label: {
+                        Text("Details")
+                    }
+                )
+
                 // https://stackoverflow.com/a/63764764
                 // TODO: eventually refactor this to the top view so we can
                 // open files that way too
@@ -114,24 +115,24 @@ extension RecipeView {
 
                     } label: {
                         Label("Files", systemImage: "folder")
+                            .foregroundStyle(.accent)
                     }
                     PhotosPicker(
                         selection: $photosSelection,
                         matching: .images,
                         preferredItemEncoding: .automatic
                     ) {
-                        Label("Photos", systemImage: "camera")
+                        Label("Photos", systemImage: "photo.on.rectangle")
+                            .foregroundStyle(.darkerAccent)
                     }
-                    //                // TODO: implement taking a picture with
-                    //                /your phone
-                    //                Text("Take a picture with your phone")
+                    // // TODO: implement taking a picture with your phone
+                    // Text("Take a picture with your phone")
                 }
             }
             // TODO: there's a weird flicker
             .task(id: recipe) {
                 image = if let imageURL = recipe.imageURL,
-                           let nsImage = NSImage(contentsOf:
-                               imageURL)
+                           let nsImage = NSImage(contentsOf: imageURL)
                 {
                     Image(nsImage: nsImage)
                 } else {
@@ -141,6 +142,7 @@ extension RecipeView {
             // TODO: i want to move away from tasks
             // https://www.youtube.com/watch?v=y3LofRLPUM8
             .task(id: photosSelection) {
+                print("selection changed")
                 if let imageData = try? await photosSelection?
                     .loadTransferable(type: Data.self),
                     let nsImage = NSImage(data: imageData)
@@ -196,7 +198,7 @@ extension RecipeView {
         }
     }
 
-    struct CategoriesView: View {
+    private struct CategoriesView: View {
         @Bindable var recipe: Recipe
         @State var selectedRecipe: Recipe? = nil
 
