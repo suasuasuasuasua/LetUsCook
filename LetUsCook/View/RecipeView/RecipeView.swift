@@ -52,7 +52,9 @@ struct RecipeView: View {
                     presenting: recipe
                 ) { recipe in
                     Button(role: .destructive) {
-                        delete(recipe)
+                        withAnimation {
+                            delete(recipe)
+                        }
                     } label: {
                         Text("Delete")
                     }

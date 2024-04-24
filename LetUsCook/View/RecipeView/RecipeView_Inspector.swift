@@ -34,17 +34,17 @@ extension InspectorView {
     }
 
     struct ImageView: View {
-        // TODO: should i make this an async image?
-        @State private var image = Image(systemName: "photo")
+        @Bindable var recipe: Recipe
 
         // https://developer.apple.com/documentation/photokit/bringing_photos_picker_to_your_swiftui_app
+        @State private var image: Image? = nil
         @State private var photosSelection: PhotosPickerItem?
         @State private var fileURL: URL?
-
-        @Bindable var recipe: Recipe
+        @State private var photoDetailsExpanded = false
 
         private let imageWidth = 200.0, imageHeight = 200.0
 
+        // TODO: refactor to top view so I can put this in the settings menu
         // https://developer.apple.com/tutorials/app-dev-training/persisting-data
         var localCachePath: URL? = try? FileManager.default.url(
             for: .cachesDirectory,
@@ -54,11 +54,9 @@ extension InspectorView {
         )
         .appendingPathComponent("letuscook.data")
 
-        @State private var photoDetailsExpanded = false
-
         var body: some View {
             VStack(alignment: .leading) {
-                image
+                image?
                     .resizable()
                     .frame(width: imageWidth, height: imageHeight)
                     // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
@@ -71,7 +69,9 @@ extension InspectorView {
                         else { return false }
 
                         // Set the image on the view
-                        image = Image(nsImage: nsImage)
+                        withAnimation {
+                            image = Image(nsImage: nsImage)
+                        }
 
                         // Cache the image's data
                         cachePhoto(imageURL: itemURL, itemData: itemData)
@@ -82,8 +82,7 @@ extension InspectorView {
                     isExpanded: $photoDetailsExpanded,
                     content: {
                         VStack(alignment: .leading) {
-                            if let url = recipe.imageURL
-                            {
+                            if let url = recipe.imageURL {
                                 Text("\(url.size.B2KB()) KB")
                             } else {
                                 Text("No photo selected")
@@ -131,24 +130,27 @@ extension InspectorView {
             }
             // TODO: there's a weird flicker
             .task(id: recipe) {
-                image = if let imageURL = recipe.imageURL,
-                           let nsImage = NSImage(contentsOf: imageURL)
-                {
-                    Image(nsImage: nsImage)
-                } else {
-                    Image(systemName: "photo")
+                withAnimation {
+                    image = if let imageURL = recipe.imageURL,
+                               let nsImage = NSImage(contentsOf: imageURL)
+                    {
+                        Image(nsImage: nsImage)
+                    } else {
+                        Image(systemName: "photo")
+                    }
                 }
             }
             // TODO: i want to move away from tasks
             // https://www.youtube.com/watch?v=y3LofRLPUM8
             .task(id: photosSelection) {
-                print("selection changed")
                 if let imageData = try? await photosSelection?
                     .loadTransferable(type: Data.self),
                     let nsImage = NSImage(data: imageData)
                 {
                     // Set the image
-                    image = Image(nsImage: nsImage)
+                    withAnimation {
+                        image = Image(nsImage: nsImage)
+                    }
 
                     // Define some URL for the image
                     let imageURL = URL(fileURLWithPath: recipe.name)
@@ -171,7 +173,9 @@ extension InspectorView {
                    let nsImage = NSImage(data: fileData)
                 {
                     // Set the image
-                    image = Image(nsImage: nsImage)
+                    withAnimation {
+                        image = Image(nsImage: nsImage)
+                    }
 
                     // Cache the image itself
                     cachePhoto(imageURL: fileURL, itemData: fileData)

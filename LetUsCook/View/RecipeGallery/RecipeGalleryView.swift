@@ -57,8 +57,10 @@ struct RecipeGalleryView: View {
                         name: "New Recipe \(recipes.count + 1)"
                     )
 
-                    modelContext.insert(newRecipe)
-                    navigationContext.selectedRecipe = newRecipe
+                    withAnimation {
+                        modelContext.insert(newRecipe)
+                        navigationContext.selectedRecipe = newRecipe
+                    }
                 }
                 label: {
                     Label("Create new recipe", systemImage: "plus")
