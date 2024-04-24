@@ -74,7 +74,7 @@ extension InspectorView {
                         }
 
                         // Cache the image's data
-                        cachePhoto(imageURL: itemURL, itemData: itemData)
+                        cacheImage(imageURL: itemURL, itemData: itemData)
 
                         return true
                     }
@@ -134,7 +134,6 @@ extension InspectorView {
                     if let imageURL = recipe.imageURL,
                        let nsImage = NSImage(contentsOf: imageURL)
                     {
-                        print(imageURL)
                         image = Image(nsImage: nsImage)
                     } else {
                         image = Image(systemName: "photo")
@@ -149,19 +148,13 @@ extension InspectorView {
                     let nsImage = NSImage(data: imageData)
                 {
                     // Set the image
-                    withAnimation {
-                        image = Image(nsImage: nsImage)
-                    }
+                    setImage(nsImage: nsImage)
 
                     // Define some URL for the image
                     let imageURL = URL(fileURLWithPath: recipe.name)
                         .appendingPathExtension(for: .heic)
 
-                    // TODO: it will actually overwrite the last image that
-                    // was named New Recipe 3's image for example.
-                    // Could tag the imageURL with a datetime as well
-                    // Cache the image itself
-                    cachePhoto(imageURL: imageURL, itemData: imageData)
+                    cacheImage(imageURL: imageURL, itemData: imageData)
                 } else {
                     print("Something went horribly wrong!!!")
                 }
@@ -173,18 +166,21 @@ extension InspectorView {
                    let fileData = try? Data(contentsOf: fileURL),
                    let nsImage = NSImage(data: fileData)
                 {
-                    // Set the image
-                    withAnimation {
-                        image = Image(nsImage: nsImage)
-                    }
-
-                    // Cache the image itself
-                    cachePhoto(imageURL: fileURL, itemData: fileData)
+                    // Set and cache the image
+                    setImage(nsImage: nsImage)
+                    cacheImage(imageURL: fileURL, itemData: fileData)
                 }
             }
         }
 
-        private func cachePhoto(imageURL: URL, itemData: Data) {
+        private func setImage(nsImage: NSImage) {
+            // Set the image
+            withAnimation {
+                image = Image(nsImage: nsImage)
+            }
+        }
+
+        private func cacheImage(imageURL: URL, itemData: Data) {
             // Define the URL to the cached image
             let cachedURL = URL(
                 fileURLWithPath: imageURL.lastPathComponent,

@@ -18,6 +18,8 @@ struct RecipeGalleryView: View {
     @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]
+
+    // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
     private var filteredRecipes: [Recipe] {
         recipes.filter {
             if searchTerm.isEmpty {
@@ -30,23 +32,27 @@ struct RecipeGalleryView: View {
         }
     }
 
-    @State private var searchTerm: String
+    @State private var searchTerm: String = ""
     private let iconSize = 50.0
-
-    // https://www.hackingwithswift.com/quick-start/swiftdata/filtering-the-results-from-a-swiftdata-query
-    init(searchTerm: String = "") {
-        self.searchTerm = searchTerm
-    }
 
     var body: some View {
         @Bindable var navigationContext = navigationContext
 
+        // TODO: weird bug where the list scrolls to the top so you can't see
+        // anything
         // Display each recipe as a clickable element
-        List(filteredRecipes, selection: $navigationContext.selectedRecipe) { recipe in
+        List(filteredRecipes,
+             selection: $navigationContext.selectedRecipe)
+        { recipe in
             GalleryRow(recipe: recipe, iconSize: iconSize)
                 .tag(recipe)
         }
-        .searchable(text: $searchTerm, placement: .automatic)
+        // TODO: i do want to be able to filter by ingredient as well at some point
+        .searchable(
+            text: $searchTerm,
+            placement: .automatic,
+            prompt: "Search by title"
+        )
         // TODO: we should have this option in the menubar so that it's
         // obvious that these are commands we can use
         .toolbar {
