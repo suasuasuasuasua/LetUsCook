@@ -130,13 +130,14 @@ extension InspectorView {
             }
             // TODO: there's a weird flicker
             .task(id: recipe) {
-                withAnimation {
-                    image = if let imageURL = recipe.imageURL,
-                               let nsImage = NSImage(contentsOf: imageURL)
+                withAnimation(.bouncy) {
+                    if let imageURL = recipe.imageURL,
+                       let nsImage = NSImage(contentsOf: imageURL)
                     {
-                        Image(nsImage: nsImage)
+                        print(imageURL)
+                        image = Image(nsImage: nsImage)
                     } else {
-                        Image(systemName: "photo")
+                        image = Image(systemName: "photo")
                     }
                 }
             }

@@ -10,7 +10,7 @@ import Foundation
 // https:developer.apple.com/videos/play/wwdc2022/10054/
 enum SidebarGroup: String, Identifiable, CaseIterable {
     var id: String { rawValue }
-
+ 
     case Create
     case Plan
 

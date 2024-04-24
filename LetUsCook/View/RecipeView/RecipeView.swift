@@ -85,6 +85,8 @@ extension RecipeView {
         @Environment(\.defaultMinListRowHeight) var minRowHeight
         @Bindable var recipe: Recipe
 
+        let creationDate = Date()
+
         var body: some View {
             ScrollView {
                 VStack(spacing: 20.0) {
@@ -100,7 +102,7 @@ extension RecipeView {
 
                 VStack {
                     InstructionsView(recipe: recipe)
-                    IngredientsView(recipe: recipe)
+//                    IngredientsView(recipe: recipe)
                 }
                 .frame(minHeight: minRowHeight * 10)
             }
@@ -115,15 +117,20 @@ extension RecipeView {
             recipes.map { $0.name }
         }
 
-        @State var name: String = ""
+        @State var name: String
         @State private var error: String = ""
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            name = recipe.name
+        }
 
         var body: some View {
             NameBody()
                 // Update the text field on the recipe whenever the recipe
                 // changes. We do this instead of .onAppear because that happens
                 // only when the view itself changes
-                .task(id: recipe) {
+                .onChange(of: recipe) {
                     name = recipe.name
                 }
                 .onChange(of: name) {
@@ -152,8 +159,14 @@ extension RecipeView {
 
     private struct TimeView: View {
         @Bindable var recipe: Recipe
-        @State var prepTime: String = ""
-        @State var cookTime: String = ""
+        @State var prepTime: String
+        @State var cookTime: String
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            prepTime = recipe.prepTime
+            cookTime = recipe.cookTime
+        }
 
         var body: some View {
             VStack(alignment: .leading) {
@@ -172,7 +185,7 @@ extension RecipeView {
                     }
                     .font(.subheadline)
             }
-            .task(id: recipe) {
+            .onChange(of: recipe) {
                 prepTime = recipe.prepTime
                 cookTime = recipe.cookTime
             }
@@ -181,7 +194,12 @@ extension RecipeView {
 
     private struct CommentsView: View {
         @Bindable var recipe: Recipe
-        @State var comments: String = ""
+        @State var comments: String
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            comments = recipe.comments
+        }
 
         var body: some View {
             VStack(alignment: .leading) {
@@ -193,16 +211,28 @@ extension RecipeView {
                     }
                     .font(.subheadline)
             }
-            .task(id: recipe) {
+            .onChange(of: recipe) {
                 comments = recipe.comments
             }
         }
     }
 
-    // TODO: make this an array of textfields?
     private struct InstructionsView: View {
         @Bindable var recipe: Recipe
-        @State var instructions: [Instruction] = []
+        @State var instructions: [Instruction]
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+            instructions = recipe.instructions
+
+            // Give a sample instruction by default -- remember to link it
+            if instructions.isEmpty {
+                let sampleInstruction = Instruction(text: "Step 1...")
+                recipe.updateInstructions(withInstructions: [sampleInstruction])
+
+                instructions = recipe.instructions
+            }
+        }
 
         var body: some View {
             Text("Instructions")
@@ -225,8 +255,7 @@ extension RecipeView {
                     }
                 }
             }
-            .task(id: recipe) {
-                // TODO: fill in the task
+            .onChange(of: recipe) {
                 instructions = recipe.instructions
 
                 if instructions.isEmpty {
