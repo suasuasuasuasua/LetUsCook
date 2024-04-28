@@ -38,62 +38,59 @@ extension InspectorView {
         .appendingPathComponent("letuscook.data")
 
         var body: some View {
-            VStack(alignment: .leading) {
-                image?
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageWidth, height: imageHeight)
-                    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
-                    .dropDestination(for: URL.self) { items, location in
-                        // Get data from URL:
-                        // https://stackoverflow.com/a/44868411
-                        guard let itemURL = items.first,
-                              let itemData = try? Data(contentsOf: itemURL),
-                              let nsImage = NSImage(data: itemData)
-                        else { return false }
+            image?
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: imageWidth, height: imageHeight)
+                // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
+                .dropDestination(for: URL.self) { items, location in
+                    // Get data from URL:
+                    // https://stackoverflow.com/a/44868411
+                    guard let itemURL = items.first,
+                          let itemData = try? Data(contentsOf: itemURL),
+                          let nsImage = NSImage(data: itemData)
+                    else { return false }
 
-                        // Cache and set the image on the view
-                        cacheImage(imageURL: itemURL, itemData: itemData)
-                        setImage(nsImage: nsImage)
+                    // Cache and set the image on the view
+                    cacheImage(imageURL: itemURL, itemData: itemData)
+                    setImage(nsImage: nsImage)
 
-                        return true
-                    }
-
-                // https://stackoverflow.com/a/63764764
-                // TODO: eventually refactor this to the top view so we can
-                // open files that way too
-                HStack {
-                    // Select a file from the macOS file system
-                    Button {
-                        let panel = NSOpenPanel()
-                        panel.allowsMultipleSelection = false
-                        panel.canChooseFiles = true
-                        panel.canChooseDirectories = false
-                        panel.isAccessoryViewDisclosed = true
-
-                        // I think these are all the relevant file types for
-                        // images
-                        panel.allowedContentTypes = [.png, .jpeg, .heic, .heif]
-                        if panel.runModal() == .OK {
-                            fileURL = panel.url
-                        }
-
-                    } label: {
-                        Label("Files", systemImage: "folder")
-                            .foregroundStyle(.accent)
-                    }
-                    // Select an image from the photos gallery
-                    PhotosPicker(
-                        selection: $photosSelection,
-                        matching: .images,
-                        preferredItemEncoding: .automatic
-                    ) {
-                        Label("Photos", systemImage: "photo.on.rectangle")
-                            .foregroundStyle(.darkerAccent)
-                    }
-                    // // TODO: implement taking a picture with your phone
-                    // Text("Take a picture with your phone")
+                    return true
                 }
+            // https://stackoverflow.com/a/63764764
+            // TODO: eventually refactor this to the top view so we can
+            // open files that way too
+            HStack {
+                // Select a file from the macOS file system
+                Button {
+                    let panel = NSOpenPanel()
+                    panel.allowsMultipleSelection = false
+                    panel.canChooseFiles = true
+                    panel.canChooseDirectories = false
+                    panel.isAccessoryViewDisclosed = true
+
+                    // I think these are all the relevant file types for
+                    // images
+                    panel.allowedContentTypes = [.png, .jpeg, .heic, .heif]
+                    if panel.runModal() == .OK {
+                        fileURL = panel.url
+                    }
+
+                } label: {
+                    Label("Files", systemImage: "folder")
+                        .foregroundStyle(.accent)
+                }
+                // Select an image from the photos gallery
+                PhotosPicker(
+                    selection: $photosSelection,
+                    matching: .images,
+                    preferredItemEncoding: .automatic
+                ) {
+                    Label("Photos", systemImage: "photo.on.rectangle")
+                        .foregroundStyle(.darkerAccent)
+                }
+                // // TODO: implement taking a picture with your phone
+                // Text("Take a picture with your phone")
             }
             .task(id: recipe) {
                 withAnimation(.bouncy) {

@@ -14,9 +14,12 @@ final class Ingredient: Identifiable {
     @Attribute(.unique)
     var id = UUID()
     var name: String
-    
-    init(name: String) {
+
+    var index: Int
+
+    init(name: String, index: Int = 0) {
         self.name = name
+        self.index = index
     }
 }
 
@@ -25,24 +28,5 @@ extension Ingredient: CustomStringConvertible {
         """
         Name: \(name)
         """
-    }
-}
-
-extension Ingredient {
-    /// The `ingredient` string from the textfield as an array of
-    /// `Ingredient`
-    static func parseIngredients(_ ingredients: String) -> [Ingredient] {
-        return ingredients.split(whereSeparator: \.isNewline)
-            .map { ingredient in
-                Ingredient(name: ingredient.trimmingCharacters(
-                    in: .whitespaces
-                ))
-            }
-    }
-
-    static func asString(_ ingredients: [Ingredient]) -> String {
-        return ingredients.map { ingredient in
-            ingredient.name
-        }.joined(separator: "\n")
     }
 }

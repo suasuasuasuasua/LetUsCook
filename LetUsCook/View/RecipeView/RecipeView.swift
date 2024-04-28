@@ -105,7 +105,7 @@ extension RecipeView {
 
                 VStack {
                     InstructionsView(recipe: recipe)
-//                    IngredientsView(recipe: recipe)
+                    IngredientsView(recipe: recipe)
                 }
                 .frame(minHeight: minRowHeight * 10)
 
@@ -239,6 +239,7 @@ extension RecipeView {
             if recipe.instructions.isEmpty {
                 print("instructions are empty! Assigning sample")
                 let sampleInstruction = Instruction(
+                    index: 1,
                     text: "Step 1"
                 )
 
@@ -264,7 +265,7 @@ extension RecipeView {
                 // https://stackoverflow.com/a/63145650
                 ForEach(
                     Array(zip(instructions.indices, instructions)),
-                    id: \.1
+                    id: \.0
                 ) { index, instruction in
                     // Dynamically create another text field on enter
                     // Moves the cursor's focus as well
@@ -275,6 +276,7 @@ extension RecipeView {
                             let sampleInstruction = Instruction(
                                 // Offset by one more cause the instructions are
                                 // 1-based
+                                index: nextIndex + 1,
                                 text: "New Step \(nextIndex + 1)"
                             )
 
@@ -316,7 +318,7 @@ extension RecipeView {
                     $0.index < $1.index
                 })
             }
-            .padding()
+            .padding(.horizontal)
         }
 
         private struct InstructionTextField: View {
@@ -324,7 +326,8 @@ extension RecipeView {
 
             var body: some View {
                 LabeledContent {
-                    TextField("", text: $instruction.text)
+                    TextField("", text: $instruction.text, axis: .vertical)
+                        .lineLimit(2)
                         .frame(maxWidth: .infinity)
                 } label: {
                     Text("\(instruction.index).")
@@ -333,19 +336,107 @@ extension RecipeView {
         }
     }
 
-    // TODO: make this an array of textfields?
     private struct IngredientsView: View {
         @Bindable var recipe: Recipe
+        @State var ingredients: [Ingredient]
+
+        // https://stackoverflow.com/a/69151631
+        @FocusState var focusedIngredient: Int?
+
+        init(recipe: Recipe) {
+            self.recipe = recipe
+
+            // Give a sample instruction by default -- remember to link it
+            if recipe.ingredients.isEmpty {
+                print("ingredients are empty! Assigning sample")
+                let sampleIngredient = Ingredient(
+                    name: "Ingredient 1",
+                    index: 1
+                )
+                recipe.updateIngredients(
+                    withIngredients: [sampleIngredient]
+                )
+            }
+
+            // For some reason the array in the recipe is always in a random
+            // order??
+            // Not happy about doing it this way because it feels *wrong*,
+            // but the time crunch is just too much right now
+            // https://stackoverflow.com/questions/76889986/swiftdata-ios-17-array-in-random-order
+            ingredients = recipe.ingredients.sorted(by: {
+                $0.index < $1.index
+            })
+        }
 
         var body: some View {
             Text("Ingredients")
                 .font(.title)
-            List(recipe.ingredients) { ingredient in
-                Text("\(ingredient.name)")
+            ForEach(
+                // https://stackoverflow.com/a/63145650
+                Array(zip(ingredients.indices, ingredients)),
+                id: \.0 // THIS <- do \.0 not \.1 because of indices madness ugh
+            ) { index, ingredient in
+                // Dynamically create another text field on enter
+                // Moves the cursor's focus as well
+                IngredientTextField(ingredient: ingredient)
+                    .focused($focusedIngredient, equals: index)
+                    .onSubmit {
+                        let nextIndex = index + 1
+                        let sampleIngredient = Ingredient(
+                            name: "Ingredient \(nextIndex + 1)",
+                            index: nextIndex + 1
+                        )
+
+                        // https://stackoverflow.com/a/69134653
+                        DispatchQueue.main
+                            .asyncAfter(deadline: .now()) {
+                                focusedIngredient = nextIndex
+                            }
+
+                        // Add a sample instruction
+                        ingredients.insert(
+                            sampleIngredient,
+                            at: nextIndex
+                        )
+
+                        recipe.updateIngredients(
+                            withIngredients: ingredients
+                        )
+                    }
+                    .onChange(of: ingredient.name) {
+                        guard ingredient.name.isEmpty,
+                              ingredients.count > 1 else { return }
+
+                        let nextIndex = index - 1
+                        focusedIngredient = nextIndex
+
+                        // Remove the selected instruction
+                        ingredients.remove(at: index)
+
+                        recipe.updateIngredients(
+                            withIngredients: ingredients
+                        )
+                    }
             }
-            .scrollContentBackground(.hidden)
-            .task(id: recipe) {
-                // TODO: fill in the task
+            .onChange(of: recipe) {
+                // Refer to the init() comments
+                ingredients = recipe.ingredients.sorted(by: {
+                    $0.index < $1.index
+                })
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    private struct IngredientTextField: View {
+        @Bindable var ingredient: Ingredient
+
+        var body: some View {
+            LabeledContent {
+                TextField("", text: $ingredient.name, axis: .vertical)
+                    .frame(maxWidth: .infinity)
+            } label: {
+                Text("\(ingredient.index)")
             }
         }
     }

@@ -90,6 +90,11 @@ extension Recipe {
     }
 
     func updateIngredients(withIngredients ingredients: [Ingredient]) {
+        
+        for (i, ingredient) in ingredients.enumerated() {
+            ingredient.index = i+1
+        }
+
         self.ingredients = ingredients
     }
 }
