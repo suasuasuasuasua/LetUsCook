@@ -262,7 +262,10 @@ extension RecipeView {
                 .font(.title)
             Form {
                 // https://stackoverflow.com/a/63145650
-                ForEach(Array(zip(instructions.indices, instructions)), id: \.1) { index, instruction in
+                ForEach(
+                    Array(zip(instructions.indices, instructions)),
+                    id: \.1
+                ) { index, instruction in
                     // Dynamically create another text field on enter
                     // Moves the cursor's focus as well
                     InstructionTextField(instruction: instruction)
@@ -276,10 +279,12 @@ extension RecipeView {
                             )
 
                             // https://stackoverflow.com/a/69134653
-                            DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-                                focusedInstruction = nextIndex
-                            }
+                            DispatchQueue.main
+                                .asyncAfter(deadline: .now()) {
+                                    focusedInstruction = nextIndex
+                                }
 
+                            // Add a sample instruction
                             instructions.insert(
                                 sampleInstruction,
                                 at: nextIndex
@@ -290,11 +295,13 @@ extension RecipeView {
                             )
                         }
                         .onChange(of: instruction.text) {
-                            guard instruction.text.isEmpty else { return }
+                            guard instruction.text.isEmpty,
+                                  instructions.count > 1 else { return }
 
                             let nextIndex = index - 1
-                            // 5 4
                             focusedInstruction = nextIndex
+
+                            // Remove the selected instruction
                             instructions.remove(at: index)
 
                             recipe.updateInstructions(
