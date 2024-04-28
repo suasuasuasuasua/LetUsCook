@@ -14,13 +14,10 @@ extension RecipeGalleryView {
 
         var body: some View {
             HStack {
-                // TODO: maybe add the same animation here?
                 AsyncImage(url: recipe.imageURL) { image in
-//                    withAnimation {
-                        image.resizable()
-//                    }
+                    image.resizable()
                 } placeholder: {
-                    //                    ProgressView()
+                    // ProgressView()
                 }
                 .frame(width: iconSize, height: iconSize)
                 VStack(alignment: .leading) {

@@ -25,6 +25,17 @@ struct RecipeView: View {
                     isPresented: $isShowingImage
                 ) {
                     InspectorView(recipe: recipe)
+                        .toolbar {
+                            // Toggle the image inspector on the right
+                            ToolbarItem {
+                                Button {
+                                    isShowingImage.toggle()
+                                } label: {
+                                    Label("Show Image",
+                                          systemImage: "sidebar.right")
+                                }
+                            }
+                        }
                 }
                 .toolbar {
                     ToolbarItem(placement: .destructiveAction) {
@@ -33,14 +44,6 @@ struct RecipeView: View {
                             isDeleting = true
                         } label: {
                             Label("Delete", systemImage: "minus")
-                        }
-                    }
-                    ToolbarItemGroup {
-                        // Toggle the image inspector on the right
-                        Button {
-                            isShowingImage.toggle()
-                        } label: {
-                            Label("Show Image", systemImage: "sidebar.right")
                         }
                     }
                 }
@@ -105,6 +108,8 @@ extension RecipeView {
 //                    IngredientsView(recipe: recipe)
                 }
                 .frame(minHeight: minRowHeight * 10)
+
+                Spacer()
             }
         }
     }
@@ -114,10 +119,10 @@ extension RecipeView {
 
         @Query(sort: \Recipe.name) private var recipes: [Recipe]
         private var recipeNames: [String] {
-            recipes.map { $0.name }
+            recipes.map(\.name)
         }
 
-        @State var name: String
+        @State private var name: String
         @State private var error: String = ""
 
         init(recipe: Recipe) {
@@ -147,13 +152,16 @@ extension RecipeView {
 
         @ViewBuilder
         private func NameBody() -> some View {
-            TextField("", text: $name)
-                .font(.title)
-            if !error.isEmpty {
-                Text("\(error)")
-                    .font(.subheadline)
-                    .foregroundStyle(.red)
+            VStack {
+                TextField("", text: $name)
+                    .font(.title)
+                if !error.isEmpty {
+                    Text("\(error)")
+                        .font(.subheadline)
+                        .foregroundStyle(.red)
+                }
             }
+            .scrollContentBackground(.hidden)
         }
     }
 
@@ -221,45 +229,98 @@ extension RecipeView {
         @Bindable var recipe: Recipe
         @State var instructions: [Instruction]
 
+        // https://stackoverflow.com/a/69151631
+        @FocusState var focusedInstruction: Int?
+
         init(recipe: Recipe) {
             self.recipe = recipe
-            instructions = recipe.instructions
 
             // Give a sample instruction by default -- remember to link it
-            if instructions.isEmpty {
-                let sampleInstruction = Instruction(text: "Step 1...")
-                recipe.updateInstructions(withInstructions: [sampleInstruction])
+            if recipe.instructions.isEmpty {
+                print("instructions are empty! Assigning sample")
+                let sampleInstruction = Instruction(
+                    text: "Step 1"
+                )
 
-                instructions = recipe.instructions
+                recipe.updateInstructions(
+                    withInstructions: [sampleInstruction]
+                )
             }
+
+            // For some reason the array in the recipe is always in a random
+            // order??
+            // Not happy about doing it this way because it feels *wrong*,
+            // but the time crunch is just too much right now
+            // https://stackoverflow.com/questions/76889986/swiftdata-ios-17-array-in-random-order
+            instructions = recipe.instructions.sorted(by: {
+                $0.index < $1.index
+            })
         }
 
         var body: some View {
             Text("Instructions")
                 .font(.title)
             Form {
-                ForEach($instructions, id: \.self) { instruction in
-                    TextField(
-                        "",
-                        text: instruction.text
-                    )
-                    .onSubmit {
-                        let instructionTexts = instructions.map { $0.text }
-                        if instructionTexts
-                            .contains(instruction.wrappedValue.text)
-                        {
-                            print("bruh")
-                        }
+                // https://stackoverflow.com/a/63145650
+                ForEach(Array(zip(instructions.indices, instructions)), id: \.1) { index, instruction in
+                    // Dynamically create another text field on enter
+                    // Moves the cursor's focus as well
+                    InstructionTextField(instruction: instruction)
+                        .focused($focusedInstruction, equals: index)
+                        .onSubmit {
+                            let nextIndex = index + 1
+                            let sampleInstruction = Instruction(
+                                // Offset by one more cause the instructions are
+                                // 1-based
+                                text: "New Step \(nextIndex + 1)"
+                            )
 
-                        recipe.instructions = instructions
-                    }
+                            // https://stackoverflow.com/a/69134653
+                            DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                                focusedInstruction = nextIndex
+                            }
+
+                            instructions.insert(
+                                sampleInstruction,
+                                at: nextIndex
+                            )
+
+                            recipe.updateInstructions(
+                                withInstructions: instructions
+                            )
+                        }
+                        .onChange(of: instruction.text) {
+                            guard instruction.text.isEmpty else { return }
+
+                            let nextIndex = index - 1
+                            // 5 4
+                            focusedInstruction = nextIndex
+                            instructions.remove(at: index)
+
+                            recipe.updateInstructions(
+                                withInstructions: instructions
+                            )
+                        }
                 }
             }
             .onChange(of: recipe) {
-                instructions = recipe.instructions
+                // Refer to the init() comments
+                instructions = recipe.instructions.sorted(by: {
+                    $0.index < $1.index
+                })
+            }
+            .padding()
+        }
 
-                if instructions.isEmpty {
-                    instructions = [Instruction(text: "")]
+        private struct InstructionTextField: View {
+            @Bindable var instruction: Instruction
+
+            var body: some View {
+                LabeledContent {
+                    TextField("", text: $instruction.text)
+                        .frame(maxWidth: .infinity)
+                } label: {
+                    Text("\(instruction.index).")
                 }
             }
         }
@@ -275,6 +336,7 @@ extension RecipeView {
             List(recipe.ingredients) { ingredient in
                 Text("\(ingredient.name)")
             }
+            .scrollContentBackground(.hidden)
             .task(id: recipe) {
                 // TODO: fill in the task
             }

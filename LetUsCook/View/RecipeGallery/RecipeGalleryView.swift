@@ -41,11 +41,12 @@ struct RecipeGalleryView: View {
         // TODO: weird bug where the list scrolls to the top so you can't see
         // anything
         // Display each recipe as a clickable element
-        List(filteredRecipes,
-             selection: $navigationContext.selectedRecipe)
-        { recipe in
-            GalleryRow(recipe: recipe, iconSize: iconSize)
-                .tag(recipe)
+        List(selection: $navigationContext.selectedRecipe) {
+            ForEach(recipes, id: \.self) { recipe in
+                GalleryRow(recipe: recipe, iconSize: iconSize)
+                    .tag(recipe)
+                // TODO: add an ondelete action here i think
+            }
         }
         // TODO: i do want to be able to filter by ingredient as well at some point
         .searchable(

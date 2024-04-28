@@ -7,8 +7,8 @@ struct InspectorView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            DateView(recipe: recipe)
             ImageView(recipe: recipe)
+            RecipeDetailedView(recipe: recipe)
             CategoriesView(recipe: recipe)
             Spacer()
         }
@@ -17,22 +17,6 @@ struct InspectorView: View {
 }
 
 extension InspectorView {
-    struct DateView: View {
-        let recipe: Recipe
-
-        var body: some View {
-            VStack(alignment: .leading) {
-                Text("Date created")
-                    .font(.title)
-                Text(recipe.dateCreated.formatted(
-                    date: .abbreviated,
-                    time: .standard
-                ))
-                .font(.subheadline)
-            }
-        }
-    }
-
     struct ImageView: View {
         @Bindable var recipe: Recipe
 
@@ -40,7 +24,6 @@ extension InspectorView {
         @State private var image: Image? = nil
         @State private var photosSelection: PhotosPickerItem?
         @State private var fileURL: URL?
-        @State private var photoDetailsExpanded = false
 
         private let imageWidth = 200.0, imageHeight = 200.0
 
@@ -58,6 +41,7 @@ extension InspectorView {
             VStack(alignment: .leading) {
                 image?
                     .resizable()
+                    .scaledToFit()
                     .frame(width: imageWidth, height: imageHeight)
                     // https://www.hackingwithswift.com/quick-start/swiftui/how-to-support-drag-and-drop-in-swiftui
                     .dropDestination(for: URL.self) { items, location in
@@ -68,36 +52,18 @@ extension InspectorView {
                               let nsImage = NSImage(data: itemData)
                         else { return false }
 
-                        // Set the image on the view
-                        withAnimation {
-                            image = Image(nsImage: nsImage)
-                        }
-
-                        // Cache the image's data
+                        // Cache and set the image on the view
                         cacheImage(imageURL: itemURL, itemData: itemData)
+                        setImage(nsImage: nsImage)
 
                         return true
                     }
-                DisclosureGroup(
-                    isExpanded: $photoDetailsExpanded,
-                    content: {
-                        VStack(alignment: .leading) {
-                            if let url = recipe.imageURL {
-                                Text("\(url.size.B2KB()) KB")
-                            } else {
-                                Text("No photo selected")
-                            }
-                        }
-                    },
-                    label: {
-                        Text("Details")
-                    }
-                )
 
                 // https://stackoverflow.com/a/63764764
                 // TODO: eventually refactor this to the top view so we can
                 // open files that way too
                 HStack {
+                    // Select a file from the macOS file system
                     Button {
                         let panel = NSOpenPanel()
                         panel.allowsMultipleSelection = false
@@ -116,6 +82,7 @@ extension InspectorView {
                         Label("Files", systemImage: "folder")
                             .foregroundStyle(.accent)
                     }
+                    // Select an image from the photos gallery
                     PhotosPicker(
                         selection: $photosSelection,
                         matching: .images,
@@ -128,7 +95,6 @@ extension InspectorView {
                     // Text("Take a picture with your phone")
                 }
             }
-            // TODO: there's a weird flicker
             .task(id: recipe) {
                 withAnimation(.bouncy) {
                     if let imageURL = recipe.imageURL,
@@ -147,28 +113,26 @@ extension InspectorView {
                     .loadTransferable(type: Data.self),
                     let nsImage = NSImage(data: imageData)
                 {
-                    // Set the image
-                    setImage(nsImage: nsImage)
-
                     // Define some URL for the image
                     let imageURL = URL(fileURLWithPath: recipe.name)
                         .appendingPathExtension(for: .heic)
 
+                    // Cache and set the image
                     cacheImage(imageURL: imageURL, itemData: imageData)
+                    setImage(nsImage: nsImage)
                 } else {
                     print("Something went horribly wrong!!!")
                 }
             }
             // https://stackoverflow.com/a/60677690
             .task(id: fileURL) {
-                // https://developer.apple.com/documentation/foundation/filemanager/1407903-copyitem
                 if let fileURL,
                    let fileData = try? Data(contentsOf: fileURL),
                    let nsImage = NSImage(data: fileData)
                 {
-                    // Set and cache the image
-                    setImage(nsImage: nsImage)
+                    // Cache and set the image
                     cacheImage(imageURL: fileURL, itemData: fileData)
+                    setImage(nsImage: nsImage)
                 }
             }
         }
@@ -180,6 +144,7 @@ extension InspectorView {
             }
         }
 
+        // https://developer.apple.com/documentation/foundation/filemanager/1407903-copyitem
         private func cacheImage(imageURL: URL, itemData: Data) {
             // Define the URL to the cached image
             let cachedURL = URL(
@@ -199,6 +164,47 @@ extension InspectorView {
         }
     }
 
+    struct RecipeDetailedView: View {
+        let recipe: Recipe
+        @State private var photoDetailsExpanded = false
+
+        var body: some View {
+            DisclosureGroup(
+                isExpanded: $photoDetailsExpanded,
+                content: {
+                    VStack(alignment: .leading) {
+                        DateView(recipe: recipe)
+                        // TODO: not actually updating when image is first
+                        // added
+                        if let url = recipe.imageURL {
+                            Text("Size: \(url.size.B2KB)KB")
+                        } else {
+                            Text("No photo selected")
+                        }
+                    }
+                },
+                label: {
+                    Text("Details")
+                }
+            )
+        }
+    }
+
+    struct DateView: View {
+        let recipe: Recipe
+
+        var date: String {
+            recipe.dateCreated.formatted(
+                date: .abbreviated,
+                time: .shortened
+            )
+        }
+
+        var body: some View {
+            Text("Date created: \(date)")
+        }
+    }
+
     private struct CategoriesView: View {
         @Bindable var recipe: Recipe
         @State var selectedRecipe: Recipe? = nil
@@ -215,6 +221,7 @@ extension InspectorView {
                             .foregroundStyle(.primary)
                     }
                 }
+                .scrollContentBackground(.hidden)
             }
         }
     }

@@ -19,7 +19,7 @@ final class Recipe: Identifiable {
     var id = UUID()
 
     var name: String
-    
+
     var dateCreated: Date = Date.now
 
     /// Store a reference URL to the image on the users' system
@@ -86,7 +86,6 @@ extension Recipe {
             instruction.index = i + 1
             instruction.recipe = self
         }
-
         self.instructions = instructions
     }
 

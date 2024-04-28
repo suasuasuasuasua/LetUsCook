@@ -24,7 +24,7 @@ extension URL {
 }
 
 extension UInt64 {
-    func B2KB() -> UInt64 {
+    var B2KB: Self {
         return self / UInt64(pow(2.0, 10))
     }
 }

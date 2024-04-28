@@ -10,6 +10,9 @@ import SwiftData
 
 @Model
 final class Instruction {
+    @Attribute(.unique)
+    var id = UUID()
+
     /// The instruction counter of the instruction
     var index: Int
     /// The recipe that this instruction belongs to
@@ -52,8 +55,8 @@ extension Instruction {
     }
     
     static func asString(_ instructions: [Instruction]) -> String {
-        return instructions.map { ingredient in
-            ingredient.text
+        return instructions.map { instruction in
+            instruction.text
         }.joined(separator: "\n")
     }
 }

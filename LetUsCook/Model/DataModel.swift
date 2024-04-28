@@ -14,7 +14,7 @@ class DataModel {
     var modelContext: ModelContext
 
     var recipes: [Recipe] = []
-    var sortRecipes: [KeyPathComparator<Recipe>] = [.init(\.name)]
+    var sortedRecipes: [KeyPathComparator<Recipe>] = [.init(\.name)]
 
     init() {
         /// Define a model container to store the context for the data in the
