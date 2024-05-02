@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension RecipeGalleryView {
+extension GalleryView {
     struct GalleryRow: View {
         let recipe: Recipe
         let iconSize: CGFloat

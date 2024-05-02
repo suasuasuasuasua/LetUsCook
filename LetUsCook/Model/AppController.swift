@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+@Observable
+class AppController {
+    var dataModel: DataModel
+    var navigationContext: NavigationContext
+
+    init() {
+        self.dataModel = .init()
+        self.navigationContext = .init()
+    }
+}

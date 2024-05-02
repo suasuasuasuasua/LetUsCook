@@ -14,7 +14,7 @@ import SwiftUI
 /// - Allow list and grid view with fine tuner selector
 /// - Show preview picture and estimated cooking time of the meal
 /// - Quick edit or delete from the gallery using a right-click
-struct RecipeGalleryView: View {
+struct GalleryView: View {
     @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Recipe.name) private var recipes: [Recipe]

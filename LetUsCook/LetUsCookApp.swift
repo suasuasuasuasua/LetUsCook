@@ -10,16 +10,15 @@ import SwiftUI
 
 @main
 struct LetUsCookApp: App {
-    let dataModel: DataModel = DataModel()
-    @State private var navigationContext = NavigationContext()
+    let appController: AppController = AppController()
 
     var body: some Scene {
         // Change `WindowGroup` to `Window` so that we can't have multiple
         // windows of the same app open.
         WindowGroup {
             MainView()
-                .modelContext(dataModel.modelContext)
-                .environment(navigationContext)
+                .modelContext(appController.dataModel.modelContext)
+                .environment(appController.navigationContext)
         }
         .commands {
             SidebarCommands()

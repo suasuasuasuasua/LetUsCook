@@ -19,13 +19,17 @@ struct ContentView: View {
         if let selectedSidebarItem {
             switch selectedSidebarItem {
             case .Gallery:
-                RecipeGalleryView()
+                GalleryView()
+                    .background(.white)
             case .Feed:
-                RecipeFeedView()
+                FeedView()
+                    .background(.white)
             case .Calendar:
                 CalendarView()
+                    .background(.white)
             case .Groceries:
                 GroceriesView()
+                    .background(.white)
             }
         } else {
             ContentUnavailableView {

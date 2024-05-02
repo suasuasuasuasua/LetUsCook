@@ -37,6 +37,7 @@ struct RecipeView: View {
                             }
                         }
                 }
+                .textFieldStyle(.plain)
                 .toolbar {
                     ToolbarItem(placement: .destructiveAction) {
                         // Delete the recipe
@@ -153,7 +154,7 @@ extension RecipeView {
         @ViewBuilder
         private func NameBody() -> some View {
             VStack {
-                TextField("", text: $name)
+                TextField("What's the recipe's name?", text: $name)
                     .font(.title)
                 if !error.isEmpty {
                     Text("\(error)")
@@ -180,14 +181,14 @@ extension RecipeView {
             VStack(alignment: .leading) {
                 Text("Preparation Time")
                     .font(.headline)
-                TextField("", text: $prepTime)
+                TextField("How long does it take to prepare?", text: $prepTime)
                     .onChange(of: prepTime) {
                         recipe.prepTime = prepTime
                     }
                     .font(.subheadline)
                 Text("Cooking Time")
                     .font(.headline)
-                TextField("", text: $cookTime)
+                TextField("How long does it take to cook?", text: $cookTime)
                     .onChange(of: cookTime) {
                         recipe.cookTime = cookTime
                     }
@@ -213,7 +214,7 @@ extension RecipeView {
             VStack(alignment: .leading) {
                 Text("Comments")
                     .font(.headline)
-                TextField("", text: $comments)
+                TextField("Any comments?", text: $comments)
                     .onChange(of: comments) {
                         recipe.comments = comments
                     }
@@ -287,10 +288,12 @@ extension RecipeView {
                                 }
 
                             // Add a sample instruction
-                            instructions.insert(
-                                sampleInstruction,
-                                at: nextIndex
-                            )
+                            withAnimation(.bouncy) {
+                                instructions.insert(
+                                    sampleInstruction,
+                                    at: nextIndex
+                                )
+                            }
 
                             recipe.updateInstructions(
                                 withInstructions: instructions
@@ -304,12 +307,14 @@ extension RecipeView {
                             focusedInstruction = nextIndex
 
                             // Remove the selected instruction
-                            instructions.remove(at: index)
-
-                            recipe.updateInstructions(
-                                withInstructions: instructions
-                            )
+                            withAnimation(.bouncy) {
+                                instructions.remove(at: index)
+                                recipe.updateInstructions(
+                                    withInstructions: instructions
+                                )
+                            }
                         }
+                    Divider()
                 }
             }
             .onChange(of: recipe) {
@@ -331,6 +336,7 @@ extension RecipeView {
                         .frame(maxWidth: .infinity)
                 } label: {
                     Text("\(instruction.index).")
+                        .foregroundStyle(.darkerAccent)
                 }
             }
         }
@@ -339,6 +345,8 @@ extension RecipeView {
     private struct IngredientsView: View {
         @Bindable var recipe: Recipe
         @State var ingredients: [Ingredient]
+
+        @Query private var allIngredients: [Ingredient]
 
         // https://stackoverflow.com/a/69151631
         @FocusState var focusedIngredient: Int?
@@ -371,52 +379,69 @@ extension RecipeView {
         var body: some View {
             Text("Ingredients")
                 .font(.title)
-            ForEach(
-                // https://stackoverflow.com/a/63145650
-                Array(zip(ingredients.indices, ingredients)),
-                id: \.0 // THIS <- do \.0 not \.1 because of indices madness ugh
-            ) { index, ingredient in
-                // Dynamically create another text field on enter
-                // Moves the cursor's focus as well
-                IngredientTextField(ingredient: ingredient)
-                    .focused($focusedIngredient, equals: index)
-                    .onSubmit {
-                        let nextIndex = index + 1
-                        let sampleIngredient = Ingredient(
-                            name: "Ingredient \(nextIndex + 1)",
-                            index: nextIndex + 1
-                        )
+            Form {
+                ForEach(
+                    // https://stackoverflow.com/a/63145650
+                    Array(zip(ingredients.indices, ingredients)),
+                    id: \.0 // THIS <- do \.0 not \.1 because of indices madness
+                    // ugh
+                ) { index, ingredient in
+                    // Dynamically create another text field on enter
+                    // Moves the cursor's focus as well
+                    IngredientTextField(ingredient: ingredient)
+                        .focused($focusedIngredient, equals: index)
+                        .onSubmit {
+                            //                        // TODO: i don't want to
+                            //                        /add duplicate
+                            //                        /ingredients!!
+                            //                        guard allIngredients
+                            //                            .contains(where: { $0.name == sampleIngredient.name
+                            //                            })
+                            //                        else {
+                            //                            return
+                            //                        }
 
-                        // https://stackoverflow.com/a/69134653
-                        DispatchQueue.main
-                            .asyncAfter(deadline: .now()) {
-                                focusedIngredient = nextIndex
+                            let nextIndex = index + 1
+                            let sampleIngredient = Ingredient(
+                                name: "Ingredient \(nextIndex + 1)",
+                                index: nextIndex + 1
+                            )
+
+                            // https://stackoverflow.com/a/69134653
+                            DispatchQueue.main
+                                .asyncAfter(deadline: .now()) {
+                                    focusedIngredient = nextIndex
+                                }
+
+                            // Add a sample ingredient
+                            withAnimation(.bouncy) {
+                                ingredients.insert(
+                                    sampleIngredient,
+                                    at: nextIndex
+                                )
                             }
 
-                        // Add a sample instruction
-                        ingredients.insert(
-                            sampleIngredient,
-                            at: nextIndex
-                        )
+                            recipe.updateIngredients(
+                                withIngredients: ingredients
+                            )
+                        }
+                        .onChange(of: ingredient.name) {
+                            guard ingredient.name.isEmpty,
+                                  ingredients.count > 1 else { return }
 
-                        recipe.updateIngredients(
-                            withIngredients: ingredients
-                        )
-                    }
-                    .onChange(of: ingredient.name) {
-                        guard ingredient.name.isEmpty,
-                              ingredients.count > 1 else { return }
+                            let nextIndex = index - 1
+                            focusedIngredient = nextIndex
 
-                        let nextIndex = index - 1
-                        focusedIngredient = nextIndex
-
-                        // Remove the selected instruction
-                        ingredients.remove(at: index)
-
-                        recipe.updateIngredients(
-                            withIngredients: ingredients
-                        )
-                    }
+                            // Remove the selected ingredient
+                            withAnimation(.bouncy) {
+                                ingredients.remove(at: index)
+                                recipe.updateIngredients(
+                                    withIngredients: ingredients
+                                )
+                            }
+                        }
+                    Divider()
+                }
             }
             .onChange(of: recipe) {
                 // Refer to the init() comments
@@ -430,13 +455,49 @@ extension RecipeView {
 
     private struct IngredientTextField: View {
         @Bindable var ingredient: Ingredient
+//        @Environment(\.modelContext) private var modelContext
+//        @Query private var ingredients: [Ingredient]
+
+//        @State private var popupTagPresented = false
+
+//        private var filteredRecipes: [Ingredient] {
+//            ingredients.filter {
+//                $0.name.localizedStandardContains(ingredient.name) &&
+//                    $0.id != ingredient.id
+//            }
+//        }
+
+        init(ingredient: Ingredient) {
+            self.ingredient = ingredient
+        }
 
         var body: some View {
             LabeledContent {
                 TextField("", text: $ingredient.name, axis: .vertical)
+                    .lineLimit(2)
                     .frame(maxWidth: .infinity)
+//                    .onChange(of: ingredient.name) {
+//                        popupTagPresented = true
+//                    }
+                // TODO: this feels too buggy for the demo
+//                    // https://bluelemonbits.com/2022/03/21/textfield-recommendations-autocomplete-swiftui-macos-and-ios/
+//                    .popover(isPresented: $popupTagPresented, arrowEdge: .top) {
+//                        VStack(alignment: .leading, spacing: 4) {
+//                            ForEach(filteredRecipes) { suggestion in
+//                                Button {
+//                                    ingredient.name = suggestion.name
+//                                } label: {
+//                                    Text("\(suggestion.name)")
+//                                }
+//                                .buttonStyle(.borderless)
+//                            }
+//                        }
+//                        .frame(width: 400)
+//                        .padding()
+//                    }
             } label: {
-                Text("\(ingredient.index)")
+                Text("\(ingredient.index).")
+                    .foregroundStyle(.darkerAccent)
             }
         }
     }

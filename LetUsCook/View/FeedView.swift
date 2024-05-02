@@ -19,7 +19,7 @@ import SwiftUI
 ///     - This may require me to parse through the RSS to ensure that it is
 ///       indeed a cooking blog
 /// - Favorite recipes and add it to the user's gallery
-struct RecipeFeedView: View {
+struct FeedView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
@@ -28,5 +28,5 @@ struct RecipeFeedView: View {
 }
 
 #Preview {
-    RecipeFeedView()
+    FeedView()
 }

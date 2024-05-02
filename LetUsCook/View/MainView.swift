@@ -28,7 +28,19 @@ struct MainView: View {
             .navigationTitle(navigationContext.contentListTitle)
         }
         detail: {
-            RecipeView(recipe: navigationContext.selectedRecipe)
+            switch navigationContext.selectedSidebarItem {
+            case .Gallery:
+                RecipeView(recipe: navigationContext.selectedRecipe)
+            case .Calendar:
+                CalendarDetailedView()
+
+            default:
+                Text("Default")
+            }
+        }
+        .onChange(of: navigationContext.selectedSidebarItem) {
+            navigationContext.selectedRecipe = nil
+            navigationContext.selectedDate = nil
         }
     }
 }

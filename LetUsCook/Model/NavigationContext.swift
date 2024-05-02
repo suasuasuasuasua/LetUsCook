@@ -14,6 +14,11 @@ import SwiftUI
 class NavigationContext {
     var selectedSidebarItem: SidebarItem?
     var selectedRecipe: Recipe?
+    var selectedDate: Date? {
+        didSet {
+            print(selectedDate)
+        }
+    }
     var columnVisibility: NavigationSplitViewVisibility
 
     var sidebarTitle = "Categories"
@@ -27,12 +32,14 @@ class NavigationContext {
     }
 
     init(
-        selectedSidebarItem: SidebarItem? = .Gallery,
+        selectedSidebarItem: SidebarItem? = .Calendar,
         selectedRecipe: Recipe? = nil,
+        selectedDate: Date? = nil,
         columnVisibility: NavigationSplitViewVisibility = .automatic
     ) {
         self.selectedSidebarItem = selectedSidebarItem
         self.selectedRecipe = selectedRecipe
+        self.selectedDate = selectedDate
         self.columnVisibility = columnVisibility
     }
 }
