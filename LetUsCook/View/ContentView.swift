@@ -11,12 +11,10 @@ struct ContentView: View {
     @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
 
-    var selectedSidebarItem: SidebarItem?
-
     var body: some View {
         @Bindable var navigationContext = navigationContext
 
-        if let selectedSidebarItem {
+        if let selectedSidebarItem = navigationContext.selectedSidebarItem {
             switch selectedSidebarItem {
             case .Gallery:
                 GalleryView()

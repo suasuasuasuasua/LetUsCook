@@ -21,17 +21,45 @@ import SwiftUI
 struct CalendarView: View {
     @Environment(NavigationContext.self) private var navigationContext
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Recipe.name) private var recipes: [Recipe]
-    // For some reason when I copied the calendar, it didn't have the labels
-    // at the top...
-    private var dates = ["M", "Tu", "W", "Th", "F", "Sa", "Su"]
+    @Query private var allCalendarDays: [CalendarDay]
+
+    @State private var selectedDate: Date?
 
     var body: some View {
         createContent()
+            // Change the navigation context's actual day
+            // Insert a day if it doesn't exist
+            .onChange(of: selectedDate) {
+                @Bindable var navigationContext = navigationContext
+
+                if let selectedDate {
+                    // Find the existing day
+                    if let existingDay = allCalendarDays.first(where: { day in
+                        Calendar.current.isDate(
+                            day.date,
+                            inSameDayAs: selectedDate
+                        )
+                    }) {
+                        navigationContext.selectedDay = existingDay
+                    }
+                    // Otherwise, create a new day and insert it into the model
+                    else {
+                        let newDay = CalendarDay(
+                            date: selectedDate
+                        )
+
+                        modelContext.insert(newDay)
+                        navigationContext.selectedDay = newDay
+                    }
+
+                } else {
+                    navigationContext.selectedDay = nil
+                }
+            }
     }
 }
 
-// MARK: - The Calendar
+// MARK: - Calendar
 
 private extension WeekdayLabel {
     func createDefaultContent() -> some View {
@@ -52,10 +80,8 @@ private extension CalendarView {
 
 private extension CalendarView {
     func createCalendarView() -> some View {
-        @Bindable var navigationContext = navigationContext
-
         return MCalendarView(
-            selectedDate: $navigationContext.selectedDate,
+            selectedDate: $selectedDate,
             selectedRange: nil,
             configBuilder: configureCalendar
         )
@@ -159,9 +185,3 @@ private extension CalendarView {
 // MARK: - Modifiers
 
 private let margins: CGFloat = 28
-
-// MARK: - Preview
-
-#Preview {
-    CalendarView()
-}

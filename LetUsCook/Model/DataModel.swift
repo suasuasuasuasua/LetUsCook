@@ -22,6 +22,7 @@ class DataModel {
         let sharedModelContainer: ModelContainer = {
             let schema = Schema([
                 Recipe.self,
+                CalendarDay.self
             ])
             let modelConfiguration = ModelConfiguration(
                 schema: schema,

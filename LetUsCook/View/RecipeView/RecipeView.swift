@@ -19,12 +19,14 @@ struct RecipeView: View {
     var recipe: Recipe?
 
     var body: some View {
+        // MARK: - Valid Recipe
         if let recipe {
             RecipeContent(recipe: recipe)
                 .inspector(
                     isPresented: $isShowingImage
                 ) {
                     InspectorView(recipe: recipe)
+                        .padding()
                         .toolbar {
                             // Toggle the image inspector on the right
                             ToolbarItem {
@@ -69,7 +71,9 @@ struct RecipeView: View {
                     Text("You cannot undo this action.")
                 }
                 .padding()
-        } else {
+        } 
+        // MARK: - Invalid Recipe
+        else {
             ContentUnavailableView(
                 "Select a recipe!",
                 systemImage: "fork.knife"
@@ -77,6 +81,7 @@ struct RecipeView: View {
         }
     }
 
+    // MARK: - Delete
     private func delete(_ recipe: Recipe) {
         navigationContext.selectedRecipe = nil
         modelContext.delete(recipe)
@@ -84,6 +89,7 @@ struct RecipeView: View {
 }
 
 extension RecipeView {
+    // MARK: - Recipe Body
     private struct RecipeContent: View {
         // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
         @Environment(\.defaultMinListRowHeight) var minRowHeight
@@ -115,6 +121,7 @@ extension RecipeView {
         }
     }
 
+    // MARK: - Recipe Name
     private struct NameView: View {
         @Bindable var recipe: Recipe
 
@@ -166,6 +173,7 @@ extension RecipeView {
         }
     }
 
+    // MARK: - Recipe Time
     private struct TimeView: View {
         @Bindable var recipe: Recipe
         @State var prepTime: String
@@ -201,6 +209,7 @@ extension RecipeView {
         }
     }
 
+    // MARK: - Recipe Comments
     private struct CommentsView: View {
         @Bindable var recipe: Recipe
         @State var comments: String
@@ -226,6 +235,7 @@ extension RecipeView {
         }
     }
 
+    // MARK: - Recipe Instructions
     private struct InstructionsView: View {
         @Bindable var recipe: Recipe
         @State var instructions: [Instruction]
@@ -342,6 +352,7 @@ extension RecipeView {
         }
     }
 
+    // MARK: - Recipe Ingredients
     private struct IngredientsView: View {
         @Bindable var recipe: Recipe
         @State var ingredients: [Ingredient]
