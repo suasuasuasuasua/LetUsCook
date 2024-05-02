@@ -13,15 +13,16 @@ class DataModel {
     private var container: ModelContainer
     var modelContext: ModelContext
 
-    var recipes: [Recipe] = []
-    var sortedRecipes: [KeyPathComparator<Recipe>] = [.init(\.name)]
-
     init() {
         /// Define a model container to store the context for the data in the
         /// application
         let sharedModelContainer: ModelContainer = {
             let schema = Schema([
                 Recipe.self,
+                Category.self,
+                Instruction.self,
+                Ingredient.self,
+                Meal.self,
                 CalendarDay.self
             ])
             let modelConfiguration = ModelConfiguration(

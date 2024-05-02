@@ -19,15 +19,11 @@ struct ContentView: View {
             case .Gallery:
                 GalleryView()
                     .background(.white)
-            case .Feed:
-                FeedView()
-                    .background(.white)
             case .Calendar:
                 CalendarView()
                     .background(.white)
             case .Groceries:
                 GroceriesView()
-                    .background(.white)
             }
         } else {
             ContentUnavailableView {

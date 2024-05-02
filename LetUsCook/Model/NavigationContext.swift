@@ -28,9 +28,9 @@ class NavigationContext {
     }
 
     init(
-        selectedSidebarItem: SidebarItem? = .Calendar,
+        selectedSidebarItem: SidebarItem? = .Gallery,
         selectedRecipe: Recipe? = nil,
-        selectedDate: CalendarDay? = nil,
+        selectedDate: CalendarDay? = .init(date: .now),
         columnVisibility: NavigationSplitViewVisibility = .automatic
     ) {
         self.selectedSidebarItem = selectedSidebarItem

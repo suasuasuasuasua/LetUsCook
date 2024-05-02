@@ -19,10 +19,17 @@ struct DetailedView: View {
             RecipeView(recipe: navigationContext.selectedRecipe)
                 .padding()
         case .Calendar:
-            NavigationStack {
-                CalendarDetailedView(day: navigationContext.selectedDay)
+            if let selectedDay = navigationContext.selectedDay {
+                CalendarDetailedView(selectedDay: selectedDay)
                     .padding()
+            } else {
+                ContentUnavailableView(
+                    "Select a date!",
+                    systemImage: "calendar"
+                )
             }
+        case .Groceries:
+            GroceriesDetailedView()
         default:
             Text("Detailed View")
         }

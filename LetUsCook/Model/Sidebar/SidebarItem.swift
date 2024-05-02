@@ -12,7 +12,7 @@ enum SidebarItem: String, Identifiable, CaseIterable {
     var id: String { rawValue }
 
     case Gallery
-    case Feed
+//    case Feed
     case Calendar
     case Groceries
 
@@ -20,8 +20,8 @@ enum SidebarItem: String, Identifiable, CaseIterable {
         switch self {
         case .Gallery:
             "book"
-        case .Feed:
-            "newspaper"
+//        case .Feed:
+//            "newspaper"
         case .Calendar:
             "calendar"
         case .Groceries:

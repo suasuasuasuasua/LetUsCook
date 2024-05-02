@@ -8,14 +8,31 @@
 import SwiftUI
 
 struct SettingsView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .padding()
-            .frame(minWidth: 400, minHeight: 300)
-            .navigationTitle("Settings")
-    }
-}
+    @State var saveLocation: String
 
-#Preview {
-    SettingsView()
+    init() {
+        let localCachePath: URL? = try? FileManager.default.url(
+            for: .cachesDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
+        .appendingPathComponent("letuscook.data")
+
+        if let localCachePath {
+            saveLocation = localCachePath.absoluteString
+        } else {
+            saveLocation = ""
+        }
+    }
+
+    var body: some View {
+        VStack {
+            LabeledContent {
+                TextField("Image Cache Directory", text: $saveLocation)
+            } label: {
+                Text("Image Cache Directory")
+            }
+        }.padding()
+    }
 }

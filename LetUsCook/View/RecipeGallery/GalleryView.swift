@@ -75,7 +75,6 @@ struct GalleryView: View {
                 .keyboardShortcut("n")
             }
         }
-        .padding()
         // TODO: i want this frame size to be global
         .frame(minWidth: iconSize * 6)
     }
