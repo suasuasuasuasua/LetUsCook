@@ -91,7 +91,7 @@ struct RecipeView: View {
 extension RecipeView {
     // MARK: - Recipe Body
     private struct RecipeContent: View {
-        // https://stackoverflow.com/questions/61437905/swiftui-list-is-not-showing-any-items
+        // https://stackoverflow.com/a/61438156
         @Environment(\.defaultMinListRowHeight) var minRowHeight
         @Bindable var recipe: Recipe
 

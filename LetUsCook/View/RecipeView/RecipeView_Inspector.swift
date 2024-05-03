@@ -121,7 +121,6 @@ extension InspectorView {
                     print("Something went horribly wrong!!!")
                 }
             }
-            // https://stackoverflow.com/a/60677690
             .task(id: fileURL) {
                 if let fileURL,
                    let fileData = try? Data(contentsOf: fileURL),

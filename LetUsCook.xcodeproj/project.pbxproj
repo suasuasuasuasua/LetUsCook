@@ -64,9 +64,30 @@
 		D8675D492BB8D79A002D0844 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8675D482BB8D79A002D0844 /* MainView.swift */; };
 		D8756AC72BCC44AE0070D406 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8756AC62BCC44AD0070D406 /* DataModel.swift */; };
 		D8A7E9EF2BC4A96C00B895C2 /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A7E9EE2BC4A96C00B895C2 /* SidebarItem.swift */; };
+		D8C8BE432BE56138008BB760 /* Citation 19 - Array in Random Order.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE2E2BE56137008BB760 /* Citation 19 - Array in Random Order.pdf */; };
+		D8C8BE442BE56138008BB760 /* Citation 14 - File Dialog Picker.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE2F2BE56137008BB760 /* Citation 14 - File Dialog Picker.pdf */; };
+		D8C8BE452BE56138008BB760 /* Citation 8 - Nil Picker Option.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE302BE56137008BB760 /* Citation 8 - Nil Picker Option.pdf */; };
+		D8C8BE462BE56138008BB760 /* Citation 21 - Delayed FocusState Textfield Update.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE312BE56137008BB760 /* Citation 21 - Delayed FocusState Textfield Update.pdf */; };
+		D8C8BE472BE56138008BB760 /* Citation 1 - NavigationContext Setup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE322BE56137008BB760 /* Citation 1 - NavigationContext Setup.pdf */; };
+		D8C8BE482BE56138008BB760 /* Citation 6 - Sidebar Grouping.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE332BE56137008BB760 /* Citation 6 - Sidebar Grouping.pdf */; };
+		D8C8BE492BE56138008BB760 /* Citation 5 - Set Start Day of Week.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE342BE56137008BB760 /* Citation 5 - Set Start Day of Week.pdf */; };
+		D8C8BE4A2BE56138008BB760 /* Citation 11 - PhotosPicker.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE352BE56137008BB760 /* Citation 11 - PhotosPicker.pdf */; };
+		D8C8BE4B2BE56138008BB760 /* Citation 15 - Asynchronously Save the Photo Selection.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE362BE56137008BB760 /* Citation 15 - Asynchronously Save the Photo Selection.pdf */; };
+		D8C8BE4C2BE56138008BB760 /* Citation 18 - Programmatically Switch Focus State For Text Fields.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE372BE56137008BB760 /* Citation 18 - Programmatically Switch Focus State For Text Fields.pdf */; };
+		D8C8BE4D2BE56138008BB760 /* Citation 10 - Filtering SwiftData Query for Search.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE382BE56137008BB760 /* Citation 10 - Filtering SwiftData Query for Search.pdf */; };
+		D8C8BE4E2BE56138008BB760 /* Citation 16 - Cache the Recipe Image.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE392BE56138008BB760 /* Citation 16 - Cache the Recipe Image.pdf */; };
+		D8C8BE4F2BE56138008BB760 /* Citation 12 - Cache Data in Container Storage.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3A2BE56138008BB760 /* Citation 12 - Cache Data in Container Storage.pdf */; };
+		D8C8BE502BE56138008BB760 /* Citation 9 - Calendar View.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3B2BE56138008BB760 /* Citation 9 - Calendar View.pdf */; };
+		D8C8BE512BE56138008BB760 /* Citation 17 - Set a Minimum Row Height.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3C2BE56138008BB760 /* Citation 17 - Set a Minimum Row Height.pdf */; };
+		D8C8BE522BE56138008BB760 /* Citation 2 - Unique Array Elements.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3D2BE56138008BB760 /* Citation 2 - Unique Array Elements.pdf */; };
+		D8C8BE532BE56138008BB760 /* Citation 7 - NavigationSplitView Setup.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3E2BE56138008BB760 /* Citation 7 - NavigationSplitView Setup.pdf */; };
+		D8C8BE542BE56138008BB760 /* Citation 20 - ForEach Iteration For Array of Textfields.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE3F2BE56138008BB760 /* Citation 20 - ForEach Iteration For Array of Textfields.pdf */; };
+		D8C8BE552BE56138008BB760 /* Citation 4 - Start Date of Week.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE402BE56138008BB760 /* Citation 4 - Start Date of Week.pdf */; };
+		D8C8BE562BE56138008BB760 /* Citation 3 - Day of Week.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE412BE56138008BB760 /* Citation 3 - Day of Week.pdf */; };
+		D8C8BE572BE56138008BB760 /* Citation 13 - Drag and Drop.pdf in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE422BE56138008BB760 /* Citation 13 - Drag and Drop.pdf */; };
+		D8C8BE592BE56150008BB760 /* Project 3 Sources - Justin Hoang.numbers in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE582BE56150008BB760 /* Project 3 Sources - Justin Hoang.numbers */; };
+		D8C8BE5C2BE561DF008BB760 /* Project 3 Deliverable.pages in Resources */ = {isa = PBXBuildFile; fileRef = D8C8BE5B2BE561DF008BB760 /* Project 3 Deliverable.pages */; };
 		D8C9910B2BC6FCF2003B77DA /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9910A2BC6FCF2003B77DA /* SidebarView.swift */; };
-		D8CFBDFD2BB9BB04002D982C /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CFBDFC2BB9BB04002D982C /* PreviewSampleData.swift */; };
-		D8CFBDFF2BB9BCB3002D982C /* SampleRecipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CFBDFE2BB9BCB3002D982C /* SampleRecipes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,9 +149,30 @@
 		D8675D482BB8D79A002D0844 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D8756AC62BCC44AD0070D406 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		D8A7E9EE2BC4A96C00B895C2 /* SidebarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
+		D8C8BE2E2BE56137008BB760 /* Citation 19 - Array in Random Order.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 19 - Array in Random Order.pdf"; sourceTree = "<group>"; };
+		D8C8BE2F2BE56137008BB760 /* Citation 14 - File Dialog Picker.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 14 - File Dialog Picker.pdf"; sourceTree = "<group>"; };
+		D8C8BE302BE56137008BB760 /* Citation 8 - Nil Picker Option.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 8 - Nil Picker Option.pdf"; sourceTree = "<group>"; };
+		D8C8BE312BE56137008BB760 /* Citation 21 - Delayed FocusState Textfield Update.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 21 - Delayed FocusState Textfield Update.pdf"; sourceTree = "<group>"; };
+		D8C8BE322BE56137008BB760 /* Citation 1 - NavigationContext Setup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 1 - NavigationContext Setup.pdf"; sourceTree = "<group>"; };
+		D8C8BE332BE56137008BB760 /* Citation 6 - Sidebar Grouping.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 6 - Sidebar Grouping.pdf"; sourceTree = "<group>"; };
+		D8C8BE342BE56137008BB760 /* Citation 5 - Set Start Day of Week.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 5 - Set Start Day of Week.pdf"; sourceTree = "<group>"; };
+		D8C8BE352BE56137008BB760 /* Citation 11 - PhotosPicker.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 11 - PhotosPicker.pdf"; sourceTree = "<group>"; };
+		D8C8BE362BE56137008BB760 /* Citation 15 - Asynchronously Save the Photo Selection.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 15 - Asynchronously Save the Photo Selection.pdf"; sourceTree = "<group>"; };
+		D8C8BE372BE56137008BB760 /* Citation 18 - Programmatically Switch Focus State For Text Fields.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 18 - Programmatically Switch Focus State For Text Fields.pdf"; sourceTree = "<group>"; };
+		D8C8BE382BE56137008BB760 /* Citation 10 - Filtering SwiftData Query for Search.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 10 - Filtering SwiftData Query for Search.pdf"; sourceTree = "<group>"; };
+		D8C8BE392BE56138008BB760 /* Citation 16 - Cache the Recipe Image.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 16 - Cache the Recipe Image.pdf"; sourceTree = "<group>"; };
+		D8C8BE3A2BE56138008BB760 /* Citation 12 - Cache Data in Container Storage.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 12 - Cache Data in Container Storage.pdf"; sourceTree = "<group>"; };
+		D8C8BE3B2BE56138008BB760 /* Citation 9 - Calendar View.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 9 - Calendar View.pdf"; sourceTree = "<group>"; };
+		D8C8BE3C2BE56138008BB760 /* Citation 17 - Set a Minimum Row Height.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 17 - Set a Minimum Row Height.pdf"; sourceTree = "<group>"; };
+		D8C8BE3D2BE56138008BB760 /* Citation 2 - Unique Array Elements.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 2 - Unique Array Elements.pdf"; sourceTree = "<group>"; };
+		D8C8BE3E2BE56138008BB760 /* Citation 7 - NavigationSplitView Setup.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 7 - NavigationSplitView Setup.pdf"; sourceTree = "<group>"; };
+		D8C8BE3F2BE56138008BB760 /* Citation 20 - ForEach Iteration For Array of Textfields.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 20 - ForEach Iteration For Array of Textfields.pdf"; sourceTree = "<group>"; };
+		D8C8BE402BE56138008BB760 /* Citation 4 - Start Date of Week.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 4 - Start Date of Week.pdf"; sourceTree = "<group>"; };
+		D8C8BE412BE56138008BB760 /* Citation 3 - Day of Week.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 3 - Day of Week.pdf"; sourceTree = "<group>"; };
+		D8C8BE422BE56138008BB760 /* Citation 13 - Drag and Drop.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Citation 13 - Drag and Drop.pdf"; sourceTree = "<group>"; };
+		D8C8BE582BE56150008BB760 /* Project 3 Sources - Justin Hoang.numbers */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Project 3 Sources - Justin Hoang.numbers"; sourceTree = "<group>"; };
+		D8C8BE5B2BE561DF008BB760 /* Project 3 Deliverable.pages */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Project 3 Deliverable.pages"; sourceTree = "<group>"; };
 		D8C9910A2BC6FCF2003B77DA /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
-		D8CFBDFC2BB9BB04002D982C /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; wrapsLines = 1; };
-		D8CFBDFE2BB9BCB3002D982C /* SampleRecipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRecipes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +190,7 @@
 		D806B7432BB6039F0043400B = {
 			isa = PBXGroup;
 			children = (
+				D8C8BE5A2BE5617C008BB760 /* Documentation */,
 				D806B74E2BB6039F0043400B /* LetUsCook */,
 				D806B74D2BB6039F0043400B /* Products */,
 			);
@@ -167,7 +210,6 @@
 				D806B74F2BB6039F0043400B /* LetUsCookApp.swift */,
 				D8675D192BB8B350002D0844 /* Model */,
 				D8675D0F2BB8B2E3002D0844 /* View */,
-				D8CFBDFB2BB9BAE0002D982C /* Support */,
 				D806B7552BB603A00043400B /* Assets.xcassets */,
 				D806B75A2BB603A00043400B /* LetUsCook.entitlements */,
 				D806B7572BB603A00043400B /* Preview Content */,
@@ -370,6 +412,36 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D8C8BE5A2BE5617C008BB760 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				D8C8BE5B2BE561DF008BB760 /* Project 3 Deliverable.pages */,
+				D8C8BE582BE56150008BB760 /* Project 3 Sources - Justin Hoang.numbers */,
+				D8C8BE322BE56137008BB760 /* Citation 1 - NavigationContext Setup.pdf */,
+				D8C8BE3D2BE56138008BB760 /* Citation 2 - Unique Array Elements.pdf */,
+				D8C8BE412BE56138008BB760 /* Citation 3 - Day of Week.pdf */,
+				D8C8BE402BE56138008BB760 /* Citation 4 - Start Date of Week.pdf */,
+				D8C8BE342BE56137008BB760 /* Citation 5 - Set Start Day of Week.pdf */,
+				D8C8BE332BE56137008BB760 /* Citation 6 - Sidebar Grouping.pdf */,
+				D8C8BE3E2BE56138008BB760 /* Citation 7 - NavigationSplitView Setup.pdf */,
+				D8C8BE302BE56137008BB760 /* Citation 8 - Nil Picker Option.pdf */,
+				D8C8BE3B2BE56138008BB760 /* Citation 9 - Calendar View.pdf */,
+				D8C8BE382BE56137008BB760 /* Citation 10 - Filtering SwiftData Query for Search.pdf */,
+				D8C8BE352BE56137008BB760 /* Citation 11 - PhotosPicker.pdf */,
+				D8C8BE3A2BE56138008BB760 /* Citation 12 - Cache Data in Container Storage.pdf */,
+				D8C8BE422BE56138008BB760 /* Citation 13 - Drag and Drop.pdf */,
+				D8C8BE2F2BE56137008BB760 /* Citation 14 - File Dialog Picker.pdf */,
+				D8C8BE362BE56137008BB760 /* Citation 15 - Asynchronously Save the Photo Selection.pdf */,
+				D8C8BE392BE56138008BB760 /* Citation 16 - Cache the Recipe Image.pdf */,
+				D8C8BE3C2BE56138008BB760 /* Citation 17 - Set a Minimum Row Height.pdf */,
+				D8C8BE372BE56137008BB760 /* Citation 18 - Programmatically Switch Focus State For Text Fields.pdf */,
+				D8C8BE2E2BE56137008BB760 /* Citation 19 - Array in Random Order.pdf */,
+				D8C8BE3F2BE56138008BB760 /* Citation 20 - ForEach Iteration For Array of Textfields.pdf */,
+				D8C8BE312BE56137008BB760 /* Citation 21 - Delayed FocusState Textfield Update.pdf */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
 		D8CFBDF82BB9A98F002D982C /* RecipeGallery */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,15 +449,6 @@
 				D80EE8AD2BC73919009D13F0 /* GalleryRow.swift */,
 			);
 			path = RecipeGallery;
-			sourceTree = "<group>";
-		};
-		D8CFBDFB2BB9BAE0002D982C /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				D8CFBDFC2BB9BB04002D982C /* PreviewSampleData.swift */,
-				D8CFBDFE2BB9BCB3002D982C /* SampleRecipes.swift */,
-			);
-			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -455,13 +518,36 @@
 				D83F6C462BE3DA15006F9B2E /* Inter-Bold.ttf in Resources */,
 				D83F6C4A2BE3DA15006F9B2E /* Lora-Bold.ttf in Resources */,
 				D806B7592BB603A00043400B /* Preview Assets.xcassets in Resources */,
+				D8C8BE542BE56138008BB760 /* Citation 20 - ForEach Iteration For Array of Textfields.pdf in Resources */,
 				D83F6C492BE3DA15006F9B2E /* Inter-Thin.ttf in Resources */,
+				D8C8BE552BE56138008BB760 /* Citation 4 - Start Date of Week.pdf in Resources */,
+				D8C8BE4D2BE56138008BB760 /* Citation 10 - Filtering SwiftData Query for Search.pdf in Resources */,
+				D8C8BE532BE56138008BB760 /* Citation 7 - NavigationSplitView Setup.pdf in Resources */,
+				D8C8BE482BE56138008BB760 /* Citation 6 - Sidebar Grouping.pdf in Resources */,
+				D8C8BE4F2BE56138008BB760 /* Citation 12 - Cache Data in Container Storage.pdf in Resources */,
 				D83F6C472BE3DA15006F9B2E /* Inter-Regular.ttf in Resources */,
+				D8C8BE462BE56138008BB760 /* Citation 21 - Delayed FocusState Textfield Update.pdf in Resources */,
 				D83F6C482BE3DA15006F9B2E /* Inter-SemiBold.ttf in Resources */,
+				D8C8BE452BE56138008BB760 /* Citation 8 - Nil Picker Option.pdf in Resources */,
 				D83F6C4B2BE3DA15006F9B2E /* Assets.xcassets in Resources */,
+				D8C8BE442BE56138008BB760 /* Citation 14 - File Dialog Picker.pdf in Resources */,
+				D8C8BE4B2BE56138008BB760 /* Citation 15 - Asynchronously Save the Photo Selection.pdf in Resources */,
+				D8C8BE492BE56138008BB760 /* Citation 5 - Set Start Day of Week.pdf in Resources */,
+				D8C8BE522BE56138008BB760 /* Citation 2 - Unique Array Elements.pdf in Resources */,
 				D83F6C4C2BE3DA15006F9B2E /* Colours.xcassets in Resources */,
+				D8C8BE572BE56138008BB760 /* Citation 13 - Drag and Drop.pdf in Resources */,
 				D83F6C4D2BE3DA15006F9B2E /* Info.plist in Resources */,
+				D8C8BE472BE56138008BB760 /* Citation 1 - NavigationContext Setup.pdf in Resources */,
+				D8C8BE592BE56150008BB760 /* Project 3 Sources - Justin Hoang.numbers in Resources */,
+				D8C8BE562BE56138008BB760 /* Citation 3 - Day of Week.pdf in Resources */,
+				D8C8BE4E2BE56138008BB760 /* Citation 16 - Cache the Recipe Image.pdf in Resources */,
+				D8C8BE4C2BE56138008BB760 /* Citation 18 - Programmatically Switch Focus State For Text Fields.pdf in Resources */,
+				D8C8BE502BE56138008BB760 /* Citation 9 - Calendar View.pdf in Resources */,
+				D8C8BE512BE56138008BB760 /* Citation 17 - Set a Minimum Row Height.pdf in Resources */,
 				D806B7562BB603A00043400B /* Assets.xcassets in Resources */,
+				D8C8BE432BE56138008BB760 /* Citation 19 - Array in Random Order.pdf in Resources */,
+				D8C8BE4A2BE56138008BB760 /* Citation 11 - PhotosPicker.pdf in Resources */,
+				D8C8BE5C2BE561DF008BB760 /* Project 3 Deliverable.pages in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,12 +595,10 @@
 				D83F6C522BE3DA15006F9B2E /* DayView.ColoredCircle.swift in Sources */,
 				D83F6C4E2BE3DA15006F9B2E /* Button.Circle.swift in Sources */,
 				D8675D392BB8B4DE002D0844 /* FeedView.swift in Sources */,
-				D8CFBDFF2BB9BCB3002D982C /* SampleRecipes.swift in Sources */,
 				D83F6C5B2BE3DA15006F9B2E /* Color++.swift in Sources */,
 				D83F6C572BE3DA15006F9B2E /* MonthLabel.Leading.swift in Sources */,
 				D83F6C542BE3DA15006F9B2E /* DayView.Price.swift in Sources */,
 				D8756AC72BCC44AE0070D406 /* DataModel.swift in Sources */,
-				D8CFBDFD2BB9BB04002D982C /* PreviewSampleData.swift in Sources */,
 				D806B7502BB6039F0043400B /* LetUsCookApp.swift in Sources */,
 				D84AB6452BD9734E0087D107 /* URL_size.swift in Sources */,
 				D83F6C532BE3DA15006F9B2E /* DayView.ColoredRectangle.swift in Sources */,

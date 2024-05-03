@@ -7,7 +7,7 @@
 
 import Foundation
 
-// https:developer.apple.com/videos/play/wwdc2022/10054/
+// https://www.youtube.com/watch?v=uE8RCE45Yxc
 enum SidebarGroup: String, Identifiable, CaseIterable {
     var id: String { rawValue }
 

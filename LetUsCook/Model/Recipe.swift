@@ -90,15 +90,7 @@ extension Recipe {
     }
 
     func updateIngredients(withIngredients ingredients: [Ingredient]) {
-//        https://stackoverflow.com/a/27624476
-        var uniqueIngredients: [Ingredient] = []
-        for item in ingredients {
-            if !uniqueIngredients.contains(item) {
-                uniqueIngredients.append(item)
-            }
-        }
-
-        for (i, ingredient) in uniqueIngredients.enumerated() {
+        for (i, ingredient) in ingredient.unique.enumerated() {
             ingredient.index = i + 1
         }
 
@@ -106,7 +98,7 @@ extension Recipe {
     }
 }
 
-// https://stackoverflow.com/questions/27624331/unique-values-of-array-in-swift
+// https://stackoverflow.com/a/27624476
 extension Array where Element: Equatable {
     var unique: [Element] {
         var uniqueValues: [Element] = []
