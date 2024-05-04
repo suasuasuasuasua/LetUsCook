@@ -29,7 +29,7 @@ These features define the core of the app.
   - [x] The user will be able to search for recipes by name.
   - [ ] Add a drag-and-drop feature to add recipes to the calendar.
   - [x] The user will be able to visualize the recipes as templates.
-- [ ] The user can preview all the meals in a calendar view with the ability to
+- [x] The user can preview all the meals in a calendar view with the ability to
       fine-tune to the current day, week, and month.
 - [ ] The user's calendar app will also be able to sync with the app to give you
       a visualization of what you plan to eat.
